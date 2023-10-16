@@ -22,19 +22,63 @@ mvn checkstyle:check
 
 ## Building and Running the Project
 
-To build project:
+### GCP credential Setup
+Download GCP SDK - MacOS
+```
+brew install --cask google-cloud-sdk   
+```
+
+Initiate and Login to GCP Console and Select Project Adv-sWE-SOME
+(group-member and teaching staff team are granted access. Login using your lion mail)
+
+access member:
+- yq2339@columbia.edu (Team Member)
+- fz2356@columbia.edu (Team Member)
+- yw3959@columbia.edu (Team Member)
+- zz2919@columbia.edu (Team Member)
+- zz2978@columbia.edu (Team Member)
+- rs4489@columbia.edu (TA)
+
+Please contact yq2339@columbia.edu for access grant.
+
+```
+gcloud init
+
+gcloud auth application-default login  
+```
+
+### To build project:
 ```
 mvn clean install
 ```
 
-Run Project: 
+or 
+
+```
+./mvnw clean install
+```
+
+### Run Project: 
+
 ```
 mvn spring-boot:run
 ```
 
-Run All Unit Tests:
+or
+
+```
+ ./mvnw spring-boot:run
+```
+
+### Run All Unit Tests:
 ```
 mvn test
+```
+
+or 
+
+```
+./mvnw test
 ```
 
 ## API documentations
