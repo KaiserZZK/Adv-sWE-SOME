@@ -44,6 +44,7 @@ public class Profile {
         this.sex = sex;
     }
 
+
     public static class MedicalHistory {
         private String diseaseName;
         private String diagnosedAt;
