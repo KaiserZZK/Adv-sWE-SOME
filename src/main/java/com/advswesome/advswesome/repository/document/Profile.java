@@ -44,6 +44,37 @@ public class Profile {
         this.sex = sex;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location; 
+    }
+
+    public String getPhysicalFitness() {
+        return physicalFitness;
+    }
+
+    public void setPhysicalFitness(String physicalFitness) {
+        this.physicalFitness = physicalFitness; 
+    }
+
+    public String getLanguagePreference() {
+        return languagePreference;
+    }
+
+    public void setLanguagePreference() {
+        this.languagePreference = languagePreference; 
+    }
+
+    public List<MedicalHistory> getMedicalHistory() {
+        return medicalHistory;
+    }
+
+    public void setMedicalHistory(List<MedicalHistory> medicalHistory) {
+        this.medicalHistory = medicalHistory;
+    }
 
     public static class MedicalHistory {
         private String diseaseName;
@@ -51,5 +82,41 @@ public class Profile {
         private String treatment;
 
         // Constructors
+
+        public MedicalHistory() {
+            // Default constructor for deserialization
+        }
+
+        public MedicalHistory(String diseaseName, String diagnosedAt, String treatment) {
+            this.diseaseName = diseaseName;
+            this.diagnosedAt = diagnosedAt;
+            this.treatment = treatment;
+        }
+
+        public String getDiseaseName() {
+            return diseaseName;
+        }
+
+        public void setDiseaseName(String diseaseName) {
+            this.diseaseName = diseaseName;
+        }
+
+        public String getDiagnosedAt() {
+            return diagnosedAt;
+        }
+
+        public void setDiagnosedAt(String diagnosedAt) {
+            this.diagnosedAt = diagnosedAt;
+        }
+
+        public String getTreatment() {
+            return treatment;
+        }
+
+        public void setTreatment(String treatment) {
+            this.treatment = treatment;
+        }
+
     }
+
 }
