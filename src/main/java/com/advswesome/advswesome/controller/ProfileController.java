@@ -28,9 +28,16 @@ public class ProfileController {
 
     @PutMapping("/{profileId}")
     public Mono<Profile> updateProfile(@PathVariable String profileId, @RequestBody Profile profile) {
-        // Assuming profileId in the path is used to ensure you update the correct profile
-        profile.setProfileId(profileId);
-        return profileService.updateProfile(profile);
+
+        // Check if the profile with the given ID exists
+        Mono<Profile> existingProfile = profileService.getProfileById(profileId);
+
+        return existingProfile.flatMap(existing -> {
+            // Assuming profileId in the path is used to ensure you update the correct profile
+            profile.setProfileId(profileId);
+            return profileService.updateProfile(profile);
+        }); 
+   
     }
 
     @DeleteMapping("/{profileId}")
