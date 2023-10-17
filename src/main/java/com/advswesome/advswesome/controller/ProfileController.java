@@ -24,7 +24,7 @@ public class ProfileController {
     @GetMapping("/{profileId}")
     public Mono<Profile> getProfileById(@PathVariable String profileId) {
         return profileService.getProfileById(profileId);
-    }
+    } 
 
     @PutMapping("/{profileId}")
     public Mono<Profile> updateProfile(@PathVariable String profileId, @RequestBody Profile profile) {
@@ -37,4 +37,5 @@ public class ProfileController {
     public Mono<Void> deleteProfile(@PathVariable String profileId) {
         return profileService.deleteProfile(profileId);
     }
+
 }
