@@ -24,8 +24,8 @@ public class PrescriptionService {
         return prescriptionRepository.findById(prescriptionId);
     }
 
-    public Mono<Prescription> updatePrescription(Prescription profile) {
-        return prescriptionRepository.save(profile);
+    public Mono<Prescription> updatePrescription(Prescription prescription) {
+        return prescriptionRepository.save(prescription);
     }
 
     public Mono<Void> deletePrescription(String prescriptionId) {

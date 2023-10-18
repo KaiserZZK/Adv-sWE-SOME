@@ -19,7 +19,7 @@ public class PrescriptionController {
     }
 
     @PostMapping
-    public Mono<Prescription> createProfile(@RequestBody Prescription prescription) {
+    public Mono<Prescription> createPrescription(@RequestBody Prescription prescription) {
         return prescriptionService.createPrescription(prescription);
     }
 
@@ -29,13 +29,13 @@ public class PrescriptionController {
     }
 
     @PutMapping("/{prescriptionId}")
-    public Mono<Prescription> updateProfile(@PathVariable String prescriptionId, @RequestBody Prescription prescription) {
+    public Mono<Prescription> updatePrescription(@PathVariable String prescriptionId, @RequestBody Prescription prescription) {
 
-        // Check if the profile with the given ID exists
-        Mono<Prescription> existingProfile = prescriptionService.getPrescriptionById(prescriptionId);
+        // Check if the prescription with the given ID exists
+        Mono<Prescription> existingPrescription = prescriptionService.getPrescriptionById(prescriptionId);
 
-        return existingProfile.flatMap(existing -> {
-            // Assuming profileId in the path is used to ensure you update the correct profile
+        return existingPrescription.flatMap(existing -> {
+            // Assuming prescriptionId in the path is used to ensure you update the correct prescription
             prescription.setPrescriptionId(prescriptionId);
             return prescriptionService.updatePrescription(prescription);
         });
