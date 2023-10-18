@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -101,6 +103,32 @@ public class PrescriptionServiceTest {
         prescriptionService.deletePrescription("12345").block();
         // make sure deletion has effect and only be called once
         verify(prescriptionRepository, times(1)).deleteById("12345");
+    }
+
+    @Test
+    void testGetMultiplePrescriptionsByProfileId() {
+        String profileId = "testProfileId";
+
+        // Create mock prescriptions
+        Prescription prescription1 = new Prescription();
+        prescription1.setPrescriptionId("rx1");
+        prescription1.setProfileId(profileId);
+
+        Prescription prescription2 = new Prescription();
+        prescription2.setPrescriptionId("rx2");
+        prescription2.setProfileId(profileId);
+
+        when(prescriptionRepository.findByProfileId(profileId)).thenReturn(Flux.just(prescription1, prescription2));
+
+        Flux<Prescription> prescriptions = prescriptionService.getPrescriptionsByProfileId(profileId);
+
+        // verify each item in the returning prescriptions
+        StepVerifier.create(prescriptions)
+                .expectNext(prescription1)
+                .expectNext(prescription2)
+                .verifyComplete();
+
+        verify(prescriptionRepository, times(1)).findByProfileId(profileId);
     }
 
 }
