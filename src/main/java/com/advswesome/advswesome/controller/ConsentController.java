@@ -36,6 +36,7 @@ public class ConsentController {
 
         return existingConsent.flatMap(existing -> {
             // Assuming consentId in the path is used to ensure you update the correct consent
+            // Every time we update the consent, we need to update the time here
             Date date = new Date();
             consent.setUpdatedAt(date);
             consent.setConsentId(consentId);
@@ -46,5 +47,10 @@ public class ConsentController {
     @DeleteMapping("/{consentId}")
     public Mono<Void> deleteConsent(@PathVariable String consentId) {
         return consentService.deleteConsent(consentId);
+    }
+
+    @GetMapping("/profile/{profileId}")
+    public Mono<Consent> getConsentByProfileId(@PathVariable String profileId) {
+        return consentService.getConsentByProfileId(profileId);
     }
 }

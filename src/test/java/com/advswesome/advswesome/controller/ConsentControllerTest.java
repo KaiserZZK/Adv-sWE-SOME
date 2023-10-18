@@ -69,7 +69,7 @@ public class ConsentControllerTest {
     }
 
     @Test
-    void testDeleteRx() {
+    void testDeleteConsent() {
         Date date = new Date();
         Consent consent = new Consent("123", "A2", true, date);
 
