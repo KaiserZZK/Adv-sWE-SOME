@@ -10,6 +10,7 @@ public class Prescription {
     private String prescriptionId;
 
     // TODO: add profile id later
+    private String profile_id;
     private String rx_number;
     private String rx_provider;
     private String rx_name;
@@ -65,7 +66,11 @@ public class Prescription {
         this.quantity = quantity;
     }
 
+    public String getProfile_id() {
+        return profile_id;
+    }
 
-
-
+    public void setProfile_id(String profile_id) {
+        this.profile_id = profile_id;
+    }
 }

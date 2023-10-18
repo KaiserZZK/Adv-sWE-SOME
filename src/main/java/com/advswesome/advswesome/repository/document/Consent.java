@@ -12,6 +12,7 @@ public class Consent {
     private String consentId;
 
     // TODO: add profile id later
+    private String profileId;
     private boolean permission;
     private Date updatedAt;
 
@@ -46,5 +47,13 @@ public class Consent {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getProfileId() {
+        return profileId;
+    }
+
+    public void setProfileId(String profileId) {
+        this.profileId = profileId;
     }
 }

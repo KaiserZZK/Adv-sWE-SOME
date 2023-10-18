@@ -29,6 +29,7 @@ public class PrescriptionServiceTest {
 
         Prescription p = new Prescription();
         p.setRx_number("12345");
+        p.setProfile_id("pp");
         p.setRx_provider("ProviderA");
         p.setRx_name("MedicineA");
         p.setRefills(2);
@@ -48,6 +49,7 @@ public class PrescriptionServiceTest {
     void testGetRxByID(){
         Prescription p = new Prescription();
         p.setRx_number("12345");
+        p.setProfile_id("pp");
         p.setRx_provider("ProviderA");
         p.setRx_name("MedicineA");
         p.setRefills(2);
@@ -66,6 +68,7 @@ public class PrescriptionServiceTest {
     void testUpdate(){
         Prescription p = new Prescription();
         p.setRx_number("12345");
+        p.setProfile_id("pp");
         p.setRx_provider("ProviderA");
         p.setRx_name("MedicineA");
         p.setRefills(2);
@@ -85,6 +88,7 @@ public class PrescriptionServiceTest {
     void testDeleteRx() {
         Prescription p = new Prescription();
         p.setRx_number("12345");
+        p.setProfile_id("pp");
         p.setRx_provider("ProviderA");
         p.setRx_name("MedicineA");
         p.setRefills(2);
