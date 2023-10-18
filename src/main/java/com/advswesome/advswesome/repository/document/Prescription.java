@@ -3,7 +3,7 @@ package com.advswesome.advswesome.repository.document;
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
 
-@Document(collectionName = "prescription")
+@Document(collectionName = "prescriptions")
 public class Prescription {
 
     @DocumentId
