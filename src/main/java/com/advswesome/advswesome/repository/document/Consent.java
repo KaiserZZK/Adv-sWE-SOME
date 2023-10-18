@@ -15,6 +15,15 @@ public class Consent {
     private boolean permission;
     private Date updatedAt;
 
+    public Consent() {
+    }
+
+    public Consent(String consentId, boolean permission, Date updatedAt) {
+        this.consentId = consentId;
+        this.permission = permission;
+        this.updatedAt = updatedAt;
+    }
+
     public String getConsentId() {
         return consentId;
     }

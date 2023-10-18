@@ -5,6 +5,7 @@ import com.advswesome.advswesome.service.ConsentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/consents")
@@ -35,6 +36,8 @@ public class ConsentController {
 
         return existingConsent.flatMap(existing -> {
             // Assuming consentId in the path is used to ensure you update the correct consent
+            Date date = new Date();
+            consent.setUpdatedAt(date);
             consent.setConsentId(consentId);
             return consentService.updateConsent(consent);
         });
