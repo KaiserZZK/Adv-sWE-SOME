@@ -8,15 +8,12 @@ public class Prescription {
 
     @DocumentId
     private String prescriptionId;
-
-    // TODO: add profile id later
-    private String profile_id;
+    private String profileId;
     private String rx_number;
     private String rx_provider;
     private String rx_name;
     private int refills;
     private int quantity;
-
 
     public String getPrescriptionId() {
         return prescriptionId;
@@ -66,11 +63,11 @@ public class Prescription {
         this.quantity = quantity;
     }
 
-    public String getProfile_id() {
-        return profile_id;
+    public String getProfileId() {
+        return profileId;
     }
 
-    public void setProfile_id(String profile_id) {
-        this.profile_id = profile_id;
+    public void setProfileId(String profile_id) {
+        this.profileId = profile_id;
     }
 }

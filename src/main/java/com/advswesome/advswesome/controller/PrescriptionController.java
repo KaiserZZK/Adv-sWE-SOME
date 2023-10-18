@@ -5,6 +5,7 @@ import com.advswesome.advswesome.repository.document.Prescription;
 import com.advswesome.advswesome.service.PrescriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -45,5 +46,10 @@ public class PrescriptionController {
     @DeleteMapping("/{prescriptionId}")
     public Mono<Void> deletePrescription(@PathVariable String prescriptionId) {
         return prescriptionService.deletePrescription(prescriptionId);
+    }
+
+    @GetMapping("/profile/{profileId}")
+    public Flux<Prescription> getPrescriptionsByProfileId(@PathVariable String profileId) {
+        return prescriptionService.getPrescriptionsByProfileId(profileId);
     }
 }

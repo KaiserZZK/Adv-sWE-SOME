@@ -4,6 +4,7 @@ import com.advswesome.advswesome.repository.PrescriptionRepository;
 import com.advswesome.advswesome.repository.document.Prescription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -30,6 +31,10 @@ public class PrescriptionService {
 
     public Mono<Void> deletePrescription(String prescriptionId) {
         return prescriptionRepository.deleteById(prescriptionId);
+    }
+
+    public Flux<Prescription> getPrescriptionsByProfileId(String profileId) {
+        return prescriptionRepository.findByProfileId(profileId);
     }
 
 }

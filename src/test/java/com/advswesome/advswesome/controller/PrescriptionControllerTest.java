@@ -46,7 +46,7 @@ public class PrescriptionControllerTest {
     void testGetbyRxId(){
         Prescription p = new Prescription();
         p.setRx_number("12345");
-        p.setProfile_id("pp");
+        p.setProfileId("pp");
         p.setRx_provider("ProviderA");
         p.setRx_name("MedicineA");
         p.setRefills(2);
@@ -63,7 +63,7 @@ public class PrescriptionControllerTest {
     void testUpdatebyRxId(){
         Prescription p = new Prescription();
         p.setRx_number("12345");
-        p.setProfile_id("pp");
+        p.setProfileId("pp");
         p.setRx_provider("ProviderA");
         p.setRx_name("MedicineA");
         p.setRefills(2);
@@ -81,7 +81,7 @@ public class PrescriptionControllerTest {
     void testDeleteRx() {
         Prescription p = new Prescription();
         p.setRx_number("12345");
-        p.setProfile_id("pp");
+        p.setProfileId("pp");
         p.setRx_provider("ProviderA");
         p.setRx_name("MedicineA");
         p.setRefills(2);
