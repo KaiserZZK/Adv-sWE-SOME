@@ -19,8 +19,9 @@ public class Consent {
     public Consent() {
     }
 
-    public Consent(String consentId, boolean permission, Date updatedAt) {
+    public Consent(String consentId, String profileId, boolean permission, Date updatedAt) {
         this.consentId = consentId;
+        this.profileId = profileId;
         this.permission = permission;
         this.updatedAt = updatedAt;
     }
