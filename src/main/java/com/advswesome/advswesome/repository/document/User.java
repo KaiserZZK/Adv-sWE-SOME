@@ -3,18 +3,25 @@ package com.advswesome.advswesome.repository.document;
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import java.security.SecureRandom;
+
 @Document(collectionName = "users")
 public class User {
     @DocumentId
     private String userId;
 
+    private String clientApiKey; // Provided by services/apps, but the human end-users
+
+    private String username;
+    private String password;
     private String email;
 
-    public User() {}
+    private String createdAt; // Provided by services/apps, but the human end-users
+    private String updatedAt; // Provided by services/apps, but the human end-users
 
-    public User(String email){
-        this.email = email;
-    }
+
+    // public User() {}
 
     public String getUserId() {
         return userId;
@@ -24,6 +31,35 @@ public class User {
         this.userId = userId;
     }
 
+    public String getClientApiKey() {
+        return clientApiKey;
+    }
+
+    public void setClientApiKey(String clientApiKey) {
+        this.clientApiKey = clientApiKey;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    // Method to hash a password and set the hashed value
+    public void setPassword(String password) {
+        // Generate a salt and hash the password
+        int strength = 10;
+        BCryptPasswordEncoder bCryptPasswordEncoder =
+            new BCryptPasswordEncoder(strength, new SecureRandom());
+        this.password =  bCryptPasswordEncoder.encode(password);
+    }
+
     public String getEmail() {
         return email;
     }
@@ -31,4 +67,21 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
 }
