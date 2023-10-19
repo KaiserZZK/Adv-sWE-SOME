@@ -4,6 +4,7 @@ package com.advswesome.advswesome.controller;
 import com.advswesome.advswesome.repository.document.Prescription;
 import com.advswesome.advswesome.service.PrescriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -25,27 +26,29 @@ public class PrescriptionController {
     }
 
     @GetMapping("/{prescriptionId}")
-    public Mono<Prescription> getPrescriptionById(@PathVariable String prescriptionId) {
-        return prescriptionService.getPrescriptionById(prescriptionId);
+    public Mono<ResponseEntity<Prescription>> getPrescriptionById(@PathVariable String prescriptionId) {
+        return prescriptionService.getPrescriptionById(prescriptionId)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{prescriptionId}")
-    public Mono<Prescription> updatePrescription(@PathVariable String prescriptionId, @RequestBody Prescription prescription) {
-
-        // Check if the prescription with the given ID exists
-        Mono<Prescription> existingPrescription = prescriptionService.getPrescriptionById(prescriptionId);
-
-        return existingPrescription.flatMap(existing -> {
-            // Assuming prescriptionId in the path is used to ensure you update the correct prescription
-            prescription.setPrescriptionId(prescriptionId);
-            return prescriptionService.updatePrescription(prescription);
-        });
-
+    public Mono<ResponseEntity<Prescription>> updatePrescription(@PathVariable String prescriptionId, @RequestBody Prescription prescription) {
+        return prescriptionService.getPrescriptionById(prescriptionId)
+                .flatMap(existing -> {
+                    prescription.setPrescriptionId(prescriptionId);
+                    return prescriptionService.updatePrescription(prescription);
+                })
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{prescriptionId}")
-    public Mono<Void> deletePrescription(@PathVariable String prescriptionId) {
-        return prescriptionService.deletePrescription(prescriptionId);
+    public Mono<ResponseEntity<Void>> deletePrescription(@PathVariable String prescriptionId) {
+        return prescriptionService.getPrescriptionById(prescriptionId)
+                .flatMap(existing -> prescriptionService.deletePrescription(prescriptionId).thenReturn(existing))
+                .map(prescription -> ResponseEntity.noContent().<Void>build())
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
 
