@@ -9,6 +9,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import reactor.core.publisher.Mono;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 public class ProfileControllerTest {
 
@@ -77,5 +79,59 @@ public class ProfileControllerTest {
         // Verify that the deleteProfile method of profileService was called exactly once with ID "3959".
         verify(profileService, times(1)).deleteProfile("3959");
     }
+
+    @Test
+    void createProfileWithInvalidData() {
+        Profile invalidProfile = new Profile();
+
+        //
+        // Throw an exception from the profileService when given invalid data
+        when(profileService.createProfile(invalidProfile)).thenThrow(new IllegalArgumentException());
+        // OR
+        // Return a custom error response
+
+        // Validate that an exception is thrown OR the response matches your error response.
+        assertThrows(IllegalArgumentException.class, () -> profileController.createProfile(invalidProfile).block());
+    }
+
+    //TODO: Add Test Profile Not Found Exception
+//    @Test
+//    void getNonExistentProfileById() {
+//        String nonExistentId = "1000"; // An ID that doesn't exist in your database
+//        when(profileService.getProfileById(nonExistentId)).thenReturn(Mono.empty());
+//
+//        // Here, you can either expect an exception OR a custom not found response
+//        assertThrows(ProfileNotFoundException.class, () -> profileController.getProfileById(nonExistentId).block());
+//    }
+
+
+
+    //TODO: MOCK INVALID INPUT, NEED TO IMPLEMENT IT
+    @Test
+    void createProfileWithInvalidAge() {
+        Profile invalidProfile = new Profile();
+        invalidProfile.setAge(-5); // Setting an invalid age
+
+        when(profileService.createProfile(invalidProfile)).thenThrow(new IllegalArgumentException("Age cannot be negative"));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> profileController.createProfile(invalidProfile).block());
+
+        assertTrue(exception.getMessage().contains("Age cannot be negative"));
+    }
+
+    //TODO: MOCK INVALID INPUT, NEED TO IMPLEMENT IT
+    @Test
+    void createProfileWithMissingName() {
+        Profile invalidProfile = new Profile();
+        // Assuming name is a mandatory field, not setting it should make the profile invalid.
+
+        when(profileService.createProfile(invalidProfile)).thenThrow(new IllegalArgumentException("Name field is mandatory"));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> profileController.createProfile(invalidProfile).block());
+
+        assertTrue(exception.getMessage().contains("Name field is mandatory"));
+    }
+
+
 
 }

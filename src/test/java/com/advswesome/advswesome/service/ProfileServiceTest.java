@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import reactor.core.publisher.Mono;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class ProfileServiceTest {
@@ -81,5 +82,24 @@ class ProfileServiceTest {
         // Verifying that the 'deleteById' method of ProfileRepository is called exactly once
         verify(profileRepository, times(1)).deleteById("3959");
     }
+
+    // TODO: Test Saving Invalid Profile:
+//    @Test
+//    void createInvalidProfile() {
+
+//    }
+
+    // TODO: Test Retrieving Non-Existent Profile:
+//    @Test
+//    void getNonExistentProfile() {
+//    }
+
+    // TODO: Test Handling of DB Exceptions:
+//    @Test
+//    void handleDatabaseExceptionDuringCreation() {
+//
+//    }
+
+
 
 }
