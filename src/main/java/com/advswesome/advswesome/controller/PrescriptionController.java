@@ -48,6 +48,7 @@ public class PrescriptionController {
         return prescriptionService.deletePrescription(prescriptionId);
     }
 
+
     @GetMapping("/profile/{profileId}")
     public Flux<Prescription> getPrescriptionsByProfileId(@PathVariable String profileId) {
         return prescriptionService.getPrescriptionsByProfileId(profileId);

@@ -33,6 +33,7 @@ public class PrescriptionService {
         return prescriptionRepository.deleteById(prescriptionId);
     }
 
+    // return a list of rx under the given profileId
     public Flux<Prescription> getPrescriptionsByProfileId(String profileId) {
         return prescriptionRepository.findByProfileId(profileId);
     }

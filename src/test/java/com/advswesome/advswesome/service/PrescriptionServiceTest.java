@@ -37,6 +37,7 @@ public class PrescriptionServiceTest {
         p.setRefills(2);
         p.setQuantity(30);
 
+        // when new prescription added to the repository, use Mockito to return a Mono of Prescription
         when(prescriptionRepository.save(p)).thenReturn(Mono.just(p));
         Prescription savedPrescription = prescriptionService.createPrescription(p).block();
         // testing if the new prescription object exists and the value match
@@ -56,6 +57,7 @@ public class PrescriptionServiceTest {
         p.setRefills(2);
         p.setQuantity(30);
 
+        // when findById method is called, use Mockito to return a Mono of Prescription
         when(prescriptionRepository.findById("12345")).thenReturn(Mono.just(p));
         Prescription fetchedP = prescriptionService.getPrescriptionById("12345").block();
 
@@ -76,6 +78,7 @@ public class PrescriptionServiceTest {
         p.setRefills(2);
         p.setQuantity(30);
 
+        // when findById method is called, use Mockito to return a Mono of Prescription
         when(prescriptionRepository.findById("12345")).thenReturn(Mono.just(p));
         when(prescriptionRepository.save(any(Prescription.class))).thenReturn(Mono.just(p));
 
@@ -97,6 +100,7 @@ public class PrescriptionServiceTest {
         p.setRefills(2);
         p.setQuantity(10);
 
+        // when findById method is called, use Mockito to return a Mono of Prescription
         when(prescriptionRepository.findById("12345")).thenReturn(Mono.just(p));
         when(prescriptionRepository.deleteById("12345")).thenReturn(Mono.empty());
 
@@ -109,7 +113,6 @@ public class PrescriptionServiceTest {
     void testGetMultiplePrescriptionsByProfileId() {
         String profileId = "testProfileId";
 
-        // Create mock prescriptions
         Prescription prescription1 = new Prescription();
         prescription1.setPrescriptionId("rx1");
         prescription1.setProfileId(profileId);
@@ -118,6 +121,7 @@ public class PrescriptionServiceTest {
         prescription2.setPrescriptionId("rx2");
         prescription2.setProfileId(profileId);
 
+        // when findByProfileId method is called, use Mockito to return a flux of Prescriptions
         when(prescriptionRepository.findByProfileId(profileId)).thenReturn(Flux.just(prescription1, prescription2));
 
         Flux<Prescription> prescriptions = prescriptionService.getPrescriptionsByProfileId(profileId);
