@@ -4,6 +4,7 @@ package com.advswesome.advswesome.controller;
 import com.advswesome.advswesome.repository.document.Prescription;
 import com.advswesome.advswesome.service.PrescriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -21,8 +22,14 @@ public class PrescriptionController {
     }
 
     @PostMapping
-    public Mono<Prescription> createPrescription(@RequestBody Prescription prescription) {
-        return prescriptionService.createPrescription(prescription);
+    public Mono<ResponseEntity<String>> createPrescription(@RequestBody Prescription prescription) {
+        return prescriptionService.getPrescriptionById(prescription.getPrescriptionId())
+                .flatMap(existingPrescription ->
+                        Mono.just(new ResponseEntity<String>("Prescription with ID " + prescription.getPrescriptionId() + " already exists.", HttpStatus.CONFLICT)))
+                .switchIfEmpty(
+                        prescriptionService.createPrescription(prescription)
+                                .then(Mono.just(new ResponseEntity<String>("Prescription created successfully", HttpStatus.CREATED)))
+                );
     }
 
     @GetMapping("/{prescriptionId}")
