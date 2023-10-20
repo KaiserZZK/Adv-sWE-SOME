@@ -7,11 +7,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
+
+import java.util.Objects;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class PrescriptionControllerTest {
-
 
     @InjectMocks
     private PrescriptionController prescriptionController;
@@ -19,80 +23,89 @@ public class PrescriptionControllerTest {
     @Mock
     private PrescriptionService prescriptionService;
 
+    private WebTestClient webTestClient;
+
     @BeforeEach
-    void setup() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
+        webTestClient = WebTestClient.bindToController(prescriptionController).build();
     }
 
     @Test
-    void testCreatRx() throws Exception {
-        Prescription p = new Prescription();
-        p.setRx_number("12345");
-        p.setRx_provider("ProviderA");
-        p.setRx_name("MedicineA");
-        p.setRefills(2);
-        p.setQuantity(30);
+    void testGetPrescriptionByIdExists() {
+        Prescription mockPrescription = new Prescription();
+        mockPrescription.setPrescriptionId("testId");
+        when(prescriptionService.getPrescriptionById("testId")).thenReturn(Mono.just(mockPrescription));
 
-        when(prescriptionService.createPrescription(p)).thenReturn(Mono.just(p));
-
-        prescriptionController.createPrescription(p).block();
-
-        verify(prescriptionService, times(1)).createPrescription(p);
-
-    }
-
-
-    @Test
-    void testGetbyRxId(){
-        Prescription p = new Prescription();
-        p.setRx_number("12345");
-        p.setProfileId("pp");
-        p.setRx_provider("ProviderA");
-        p.setRx_name("MedicineA");
-        p.setRefills(2);
-        p.setQuantity(30);
-
-        when(prescriptionService.getPrescriptionById("12345")).thenReturn(Mono.just(p));
-        prescriptionController.getPrescriptionById("12345").block();
-        verify(prescriptionService, times(1)).getPrescriptionById("12345");
-
-    }
-
-
-    @Test
-    void testUpdatebyRxId(){
-        Prescription p = new Prescription();
-        p.setRx_number("12345");
-        p.setProfileId("pp");
-        p.setRx_provider("ProviderA");
-        p.setRx_name("MedicineA");
-        p.setRefills(2);
-        p.setQuantity(30);
-
-        when(prescriptionService.getPrescriptionById("12345")).thenReturn(Mono.just(p));
-        when(prescriptionService.updatePrescription(p)).thenReturn(Mono.just(p));
-
-        prescriptionController.updatePrescription("12345",p).block();
-        verify(prescriptionService, times(1)).getPrescriptionById("12345");
-
+        webTestClient.get()
+                .uri("/prescriptions/testId")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Prescription.class)
+                .consumeWith(response -> {
+                    assertEquals(mockPrescription.getPrescriptionId(), Objects.requireNonNull(response.getResponseBody()).getPrescriptionId());
+                });
     }
 
     @Test
-    void testDeleteRx() {
-        Prescription p = new Prescription();
-        p.setRx_number("12345");
-        p.setProfileId("pp");
-        p.setRx_provider("ProviderA");
-        p.setRx_name("MedicineA");
-        p.setRefills(2);
-        p.setQuantity(10);
+    void testGetPrescriptionByIdDoesNotExist() {
+        when(prescriptionService.getPrescriptionById("testId")).thenReturn(Mono.empty());
 
-        when(prescriptionService.getPrescriptionById("12345")).thenReturn(Mono.just(p));
-        when(prescriptionService.deletePrescription("12345")).thenReturn(Mono.empty());
+        webTestClient.get()
+                .uri("/prescriptions/testId")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
 
-        prescriptionController.deletePrescription("12345").block();
+    @Test
+    void testUpdatePrescriptionExists() {
+        Prescription mockPrescription = new Prescription();
+        mockPrescription.setPrescriptionId("testId");
+        when(prescriptionService.getPrescriptionById("testId")).thenReturn(Mono.just(mockPrescription));
+        when(prescriptionService.updatePrescription(any(Prescription.class))).thenReturn(Mono.just(mockPrescription));
 
+        webTestClient.put()
+                .uri("/prescriptions/testId")
+                .bodyValue(mockPrescription)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Prescription.class)
+                .consumeWith(response -> {
+                    assertEquals(mockPrescription.getPrescriptionId(), Objects.requireNonNull(response.getResponseBody()).getPrescriptionId());
+                });
+    }
 
-        verify(prescriptionService, times(1)).deletePrescription("12345");
+    @Test
+    void testUpdatePrescriptionDoesNotExist() {
+        when(prescriptionService.getPrescriptionById("testId")).thenReturn(Mono.empty());
+
+        webTestClient.put()
+                .uri("/prescriptions/testId")
+                .bodyValue(new Prescription())
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    void testDeletePrescriptionExists() {
+        Prescription mockPrescription = new Prescription();
+        mockPrescription.setPrescriptionId("testId");
+        when(prescriptionService.getPrescriptionById("testId")).thenReturn(Mono.just(mockPrescription));
+        when(prescriptionService.deletePrescription("testId")).thenReturn(Mono.empty());
+
+        webTestClient.delete()
+                .uri("/prescriptions/testId")
+                .exchange()
+                .expectStatus().isNoContent();
+    }
+
+    @Test
+    void testDeletePrescriptionDoesNotExist() {
+        when(prescriptionService.getPrescriptionById("testId")).thenReturn(Mono.empty());
+
+        webTestClient.delete()
+                .uri("/prescriptions/testId")
+                .exchange()
+                .expectStatus().isNotFound();
     }
 }
