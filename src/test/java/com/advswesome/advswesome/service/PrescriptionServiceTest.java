@@ -30,10 +30,10 @@ public class PrescriptionServiceTest {
     @Test
     void testCreateRx() {
         Prescription p = new Prescription();
-        p.setRx_number("12345");
+        p.setRxNumber("12345");
         p.setProfileId("pp");
-        p.setRx_provider("ProviderA");
-        p.setRx_name("MedicineA");
+        p.setRxProvider("ProviderA");
+        p.setRxName("MedicineA");
         p.setRefills(2);
         p.setQuantity(30);
 
@@ -42,7 +42,7 @@ public class PrescriptionServiceTest {
         Prescription savedPrescription = prescriptionService.createPrescription(p).block();
         // testing if the new prescription object exists and the value match
         assertNotNull(savedPrescription);
-        assertEquals(p.getRx_number(), savedPrescription.getRx_number());
+        assertEquals(p.getRxNumber(), savedPrescription.getRxNumber());
 
         verify(prescriptionRepository, times(1)).save(p);
     }
@@ -50,10 +50,10 @@ public class PrescriptionServiceTest {
     @Test
     void testGetRxByID(){
         Prescription p = new Prescription();
-        p.setRx_number("12345");
+        p.setRxNumber("12345");
         p.setProfileId("pp");
-        p.setRx_provider("ProviderA");
-        p.setRx_name("MedicineA");
+        p.setRxProvider("ProviderA");
+        p.setRxName("MedicineA");
         p.setRefills(2);
         p.setQuantity(30);
 
@@ -63,7 +63,7 @@ public class PrescriptionServiceTest {
 
         // test if getting the correct prescription with given id
         assertNotNull(fetchedP);
-        assertEquals(fetchedP.getRx_number(), p.getRx_number());
+        assertEquals(fetchedP.getRxNumber(), p.getRxNumber());
 
     }
 
@@ -71,10 +71,10 @@ public class PrescriptionServiceTest {
     @Test
     void testUpdate(){
         Prescription p = new Prescription();
-        p.setRx_number("12345");
+        p.setRxNumber("12345");
         p.setProfileId("pp");
-        p.setRx_provider("ProviderA");
-        p.setRx_name("MedicineA");
+        p.setRxProvider("ProviderA");
+        p.setRxName("MedicineA");
         p.setRefills(2);
         p.setQuantity(30);
 
@@ -93,10 +93,10 @@ public class PrescriptionServiceTest {
     @Test
     void testDeleteRx() {
         Prescription p = new Prescription();
-        p.setRx_number("12345");
+        p.setRxNumber("12345");
         p.setProfileId("pp");
-        p.setRx_provider("ProviderA");
-        p.setRx_name("MedicineA");
+        p.setRxProvider("ProviderA");
+        p.setRxName("MedicineA");
         p.setRefills(2);
         p.setQuantity(10);
 
