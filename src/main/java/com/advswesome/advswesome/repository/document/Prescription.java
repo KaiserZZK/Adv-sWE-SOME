@@ -23,27 +23,27 @@ public class Prescription {
         this.prescriptionId = prescriptionId;
     }
 
-    public String getRx_number() {
+    public String getRxNumber() {
         return rx_number;
     }
 
-    public void setRx_number(String rx_number) {
+    public void setRxNumber(String rx_number) {
         this.rx_number = rx_number;
     }
 
-    public String getRx_provider() {
+    public String getRxProvider() {
         return rx_provider;
     }
 
-    public void setRx_provider(String rx_provider) {
+    public void setRxProvider(String rx_provider) {
         this.rx_provider = rx_provider;
     }
 
-    public String getRx_name() {
+    public String getRxName() {
         return rx_name;
     }
 
-    public void setRx_name(String rx_name) {
+    public void setRxName(String rx_name) {
         this.rx_name = rx_name;
     }
 
