@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
@@ -31,6 +32,42 @@ public class PrescriptionControllerTest {
         MockitoAnnotations.openMocks(this);
         webTestClient = WebTestClient.bindToController(prescriptionController).build();
     }
+
+
+    @Test
+    void testCreatePrescriptionSuccess() {
+        Prescription mockPrescription = new Prescription();
+        mockPrescription.setPrescriptionId("testId");
+
+        when(prescriptionService.getPrescriptionById("testId")).thenReturn(Mono.empty());
+        when(prescriptionService.createPrescription(any(Prescription.class))).thenReturn(Mono.just(mockPrescription));
+
+        webTestClient.post()
+                .uri("/prescriptions")
+                .bodyValue(mockPrescription)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(String.class)
+                .isEqualTo("Prescription created successfully");
+    }
+
+    @Test
+    void testCreatePrescriptionConflict() {
+        Prescription mockPrescription = new Prescription();
+        mockPrescription.setPrescriptionId("testId");
+
+        when(prescriptionService.getPrescriptionById("testId")).thenReturn(Mono.just(mockPrescription));
+        when(prescriptionService.createPrescription(any(Prescription.class))).thenReturn(Mono.just(mockPrescription));
+
+        webTestClient.post()
+                .uri("/prescriptions")
+                .bodyValue(mockPrescription)
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.CONFLICT)
+                .expectBody(String.class)
+                .isEqualTo("Prescription with ID testId already exists.");
+    }
+
 
     @Test
     void testGetPrescriptionByIdExists() {
