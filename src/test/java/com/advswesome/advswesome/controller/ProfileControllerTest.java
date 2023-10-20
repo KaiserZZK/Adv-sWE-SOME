@@ -10,7 +10,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import static org.mockito.Mockito.*;
 
 public class ProfileControllerTest {
