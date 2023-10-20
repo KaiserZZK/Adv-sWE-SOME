@@ -51,6 +51,23 @@ public class PrescriptionControllerTest {
                 .isEqualTo("Prescription created successfully");
     }
 
+    @Test
+    void testCreatePrescriptionConflict() {
+        Prescription mockPrescription = new Prescription();
+        mockPrescription.setPrescriptionId("testId");
+
+        when(prescriptionService.getPrescriptionById("testId")).thenReturn(Mono.just(mockPrescription));
+        when(prescriptionService.createPrescription(any(Prescription.class))).thenReturn(Mono.just(mockPrescription));
+
+        webTestClient.post()
+                .uri("/prescriptions")
+                .bodyValue(mockPrescription)
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.CONFLICT)
+                .expectBody(String.class)
+                .isEqualTo("Prescription with ID testId already exists.");
+    }
+
 
     @Test
     void testGetPrescriptionByIdExists() {
