@@ -15,6 +15,7 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+// controller test that mock the behavior of api call
 public class PrescriptionControllerTest {
 
     @InjectMocks
