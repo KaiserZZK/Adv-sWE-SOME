@@ -8,7 +8,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import reactor.core.publisher.Mono;
+import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class ProfileServiceTest {
@@ -27,59 +29,87 @@ class ProfileServiceTest {
     @Test
     void createProfile() {
         Profile profile = new Profile();
+        profile.setProfileId("3959");
+        profile.setAge(25);
+        profile.setSex("Male");
+        profile.setLocation("US");
+        profile.setPhysicalFitness("Good");
+        profile.setMedicalHistory(Arrays.asList(new Profile.MedicalHistory("Flu", "2020-02-20", "Rest")));
 
-        // When the 'save' method of the mocked ProfileRepository is called with profile,
-        // instruct Mockito to return a Mono with our profile.
         when(profileRepository.save(profile)).thenReturn(Mono.just(profile));
 
-        profileService.createProfile(profile).block();
+        Profile savedProfile = profileService.createProfile(profile).block();
 
-        // Verifying that the 'save' method of ProfileRepository is called exactly once
+        assertNotNull(savedProfile);
+        assertEquals(profile.getProfileId(), savedProfile.getProfileId());
+
         verify(profileRepository, times(1)).save(profile);
     }
 
     @Test
     void getProfileById() {
         Profile profile = new Profile();
-        // set the profile fields
         profile.setProfileId("3959");
+        profile.setAge(25);
 
-        // When the 'findById' method of the mocked ProfileRepository is called with "3959",
-        // instruct Mockito to return a Mono with profile.
         when(profileRepository.findById("3959")).thenReturn(Mono.just(profile));
 
-        profileService.getProfileById("3959").block();
+        Profile fetchedProfile = profileService.getProfileById("3959").block();
 
-        // Verifying that the 'save' method of ProfileRepository is called exactly once
+        assertNotNull(fetchedProfile);
+        assertEquals(fetchedProfile.getProfileId(), profile.getProfileId());
+
         verify(profileRepository, times(1)).findById("3959");
     }
 
     @Test
     void updateProfile() {
         Profile profile = new Profile();
-        // set the profile fields
         profile.setProfileId("3959");
+        profile.setAge(25);
 
-        // Since the 'updateProfile' method in the service internally uses the 'save' method
-        // of the repository for both creating and updating, mock the save method here.
-        when(profileRepository.save(profile)).thenReturn(Mono.just(profile));
+        when(profileRepository.findById("3959")).thenReturn(Mono.just(profile));
+        when(profileRepository.save(any(Profile.class))).thenReturn(Mono.just(profile));
 
-        profileService.updateProfile(profile).block();
+        profile.setAge(26);
+        Profile updatedProfile = profileService.updateProfile(profile).block();
 
-        // Verifying that the 'save' method of ProfileRepository is called exactly once
+        assertNotNull(updatedProfile);
+        assertEquals(updatedProfile.getAge(), 26);
+
         verify(profileRepository, times(1)).save(profile);
     }
 
     @Test
     void deleteProfile() {
+        Profile profile = new Profile();
+        profile.setProfileId("3959");
 
-        // instruct Mockito to return an empty Mono to simulate a successful deletion.
+        when(profileRepository.findById("3959")).thenReturn(Mono.just(profile));
         when(profileRepository.deleteById("3959")).thenReturn(Mono.empty());
 
         profileService.deleteProfile("3959").block();
 
-        // Verifying that the 'deleteById' method of ProfileRepository is called exactly once
         verify(profileRepository, times(1)).deleteById("3959");
     }
+
+    // TODO: Test Saving Invalid Profile:
+//    @Test
+//    void createInvalidProfile() {
+
+//    }
+
+    // TODO: Test Retrieving Non-Existent Profile:
+//    @Test
+//    void getNonExistentProfile() {
+//    }
+
+    // TODO: Test Handling of DB Exceptions:
+//    @Test
+//    void handleDatabaseExceptionDuringCreation() {
+//
+//    }
+
+
 
 }

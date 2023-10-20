@@ -3,6 +3,7 @@ package com.advswesome.advswesome.controller;
 import com.advswesome.advswesome.repository.document.Profile;
 import com.advswesome.advswesome.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -24,25 +25,27 @@ public class ProfileController {
     @GetMapping("/{profileId}")
     public Mono<Profile> getProfileById(@PathVariable String profileId) {
         return profileService.getProfileById(profileId);
-    } 
+    }
 
     @PutMapping("/{profileId}")
-    public Mono<Profile> updateProfile(@PathVariable String profileId, @RequestBody Profile profile) {
-
-        // Check if the profile with the given ID exists
-        Mono<Profile> existingProfile = profileService.getProfileById(profileId);
-
-        return existingProfile.flatMap(existing -> {
-            // Assuming profileId in the path is used to ensure you update the correct profile
-            profile.setProfileId(profileId);
-            return profileService.updateProfile(profile);
-        }); 
-   
+    public Mono<ResponseEntity<Profile>> updateProfile(@PathVariable String profileId, @RequestBody Profile profile) {
+        return profileService.getProfileById(profileId)
+                .flatMap(existing -> {
+                    profile.setProfileId(profileId);
+                    return profileService.updateProfile(profile);
+                })
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
+
 
     @DeleteMapping("/{profileId}")
-    public Mono<Void> deleteProfile(@PathVariable String profileId) {
-        return profileService.deleteProfile(profileId);
+    public Mono<ResponseEntity<Void>> deleteProfile(@PathVariable String profileId) {
+        return profileService.getProfileById(profileId)
+                .flatMap(existing -> profileService.deleteProfile(profileId).thenReturn(existing))
+                .map(profile -> ResponseEntity.noContent().<Void>build())
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
+
 
 }
