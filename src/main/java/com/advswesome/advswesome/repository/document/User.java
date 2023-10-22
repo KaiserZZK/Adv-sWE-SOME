@@ -2,9 +2,7 @@ package com.advswesome.advswesome.repository.document;
 
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import java.security.SecureRandom;
 
 @Document(collectionName = "users")
 public class User {
@@ -19,9 +17,6 @@ public class User {
 
     private String createdAt; // Provided by services/apps, but the human end-users
     private String updatedAt; // Provided by services/apps, but the human end-users
-
-
-    // public User() {}
 
     public String getUserId() {
         return userId;
@@ -47,17 +42,19 @@ public class User {
         this.username = username;
     }
 
+    public String getStoredHash() {
+        return password;
+    }
+
     public String getPassword() {
         return password;
     }
 
     // Method to hash a password and set the hashed value
     public void setPassword(String password) {
-        // Generate a salt and hash the password
-        int strength = 10;
-        BCryptPasswordEncoder bCryptPasswordEncoder =
-            new BCryptPasswordEncoder(strength, new SecureRandom());
-        this.password =  bCryptPasswordEncoder.encode(password);
+        // Hash the password (without a salt)
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        this.password =  bCryptPasswordEncoder.encode(password); 
     }
 
     public String getEmail() {
