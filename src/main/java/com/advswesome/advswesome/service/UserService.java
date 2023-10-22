@@ -25,4 +25,19 @@ public class UserService {
     public Mono<User> getUserById(String id) {
         return userRepository.findById(id);
     }
+
+    public Boolean isEmailOrUsernameTaken(String email, String username) {
+        Iterable<User> users =  userRepository.findAll().toIterable();
+        for (User user : users) {
+            if (user.getEmail().equals(email) || user.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    } 
+
+    public Mono<Void> removeAllUsers() {
+        return userRepository.deleteAll();
+    }
+
 }

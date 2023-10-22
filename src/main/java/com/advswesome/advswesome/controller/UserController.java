@@ -20,7 +20,15 @@ public class UserController {
 
     @PostMapping("/auth/register")
     public Mono<User> createUser(@RequestBody User user) {
-        return userService.createUser(user);
+        Boolean isEmailOrUsernameTaken = userService.isEmailOrUsernameTaken(user.getEmail(), user.getUsername());
+
+        if (!isEmailOrUsernameTaken) {
+            return userService.createUser(user);
+        } else {
+            // TODO error-handling: "email or username in use"
+            return Mono.empty();
+        }
+
     }
 
     // @PostMapping("/auth/login")
@@ -29,6 +37,11 @@ public class UserController {
     @GetMapping("/{id}")
     public Mono<User> getUserById(@PathVariable String id) {
         return userService.getUserById(id);
+    }
+
+    @GetMapping("/admin/test/clear")
+    public Mono<Void> removeAllUsers() {
+        return  userService.removeAllUsers();
     }
 
 }

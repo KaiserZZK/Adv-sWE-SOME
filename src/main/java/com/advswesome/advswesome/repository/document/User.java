@@ -11,7 +11,7 @@ public class User {
     @DocumentId
     private String userId;
 
-    private String clientApiKey; // Provided by services/apps, but the human end-users
+    private String clientId; // Provided by services/apps, but the human end-users
 
     private String username;
     private String password;
@@ -31,12 +31,12 @@ public class User {
         this.userId = userId;
     }
 
-    public String getClientApiKey() {
-        return clientApiKey;
+    public String getClientId() {
+        return clientId;
     }
 
-    public void setClientApiKey(String clientApiKey) {
-        this.clientApiKey = clientApiKey;
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
     public String getUsername() {
