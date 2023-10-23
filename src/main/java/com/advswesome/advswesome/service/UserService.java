@@ -5,6 +5,7 @@ import com.advswesome.advswesome.repository.document.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Service
 public class UserService {
@@ -16,8 +17,9 @@ public class UserService {
     }
 
     public Mono<User> createUser(User user) {
-        // TODO 
-        // check for existing email/username
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encodedPassword = encoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
         return userRepository.save(user);
     }
 
@@ -26,6 +28,7 @@ public class UserService {
     }
 
     public Boolean isEmailOrUsernameTaken(String email, String username) {
+        // TODO use hashmap instead of list iteration
         Iterable<User> users =  userRepository.findAll().toIterable();
         for (User user : users) {
             if (user.getEmail().equals(email) || user.getUsername().equals(username)) {
@@ -35,16 +38,29 @@ public class UserService {
         return false;
     } 
 
-    public Mono<User> getUserByEmail(String email) {
+    public String authenticateUser(User user) { // TODO throws UserNotFoundException
+        User foundUser = this.getUserByEmail(user.getEmail());
+        String foundPassword = foundUser.getPassword();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        Boolean match = encoder.matches(user.getPassword(), foundPassword);
+
+        if (match) {
+            return "your JWT token: ";
+        } else {
+            return "plz check your email or password"
+        }
+    }
+
+    public User getUserByEmail(String email) {
+        // TODO use hashmap instead of list iteration
         Iterable<User> users =  userRepository.findAll().toIterable();
         for (User user : users) {
             if (user.getEmail().equals(email)) {
-                return Mono.just(user);
+                return user;
             }
         }
-        return Mono.empty();
+        return null;
     }
-
 
     public Mono<Void> removeAllUsers() {
         return userRepository.deleteAll();
