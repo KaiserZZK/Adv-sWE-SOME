@@ -47,7 +47,7 @@ public class UserService {
         if (match) {
             return "your JWT token: ";
         } else {
-            return "plz check your email or password"
+            return "plz check your email or password";
         }
     }
 
