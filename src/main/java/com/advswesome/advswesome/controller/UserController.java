@@ -5,6 +5,8 @@ import com.advswesome.advswesome.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+import org.springframework.http.ResponseEntity;
+import com.advswesome.advswesome.security.AuthenticationResponse;
 
 @RestController
 @RequestMapping("/users")
@@ -31,8 +33,8 @@ public class UserController {
     }
 
     @PostMapping("/auth/login")
-    public String authenticateUser(@RequestBody User user) {
-        return userService.authenticateUser(user);
+    public ResponseEntity<AuthenticationResponse> authenticateUser(@RequestBody User user) {
+        return ResponseEntity.ok(userService.authenticateUser(user));
     } 
 
     @GetMapping("/{id}")

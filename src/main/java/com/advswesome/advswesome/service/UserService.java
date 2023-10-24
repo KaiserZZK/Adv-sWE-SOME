@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.advswesome.advswesome.security.AuthenticationResponse;
 
 @Service
 public class UserService {
@@ -38,17 +39,19 @@ public class UserService {
         return false;
     } 
 
-    public String authenticateUser(User user) { // TODO throws UserNotFoundException
+    public AuthenticationResponse authenticateUser(User user) { // TODO throws UserNotFoundException
         User foundUser = this.getUserByEmail(user.getEmail());
         String foundPassword = foundUser.getPassword();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         Boolean match = encoder.matches(user.getPassword(), foundPassword);
 
         if (match) {
-            return "your JWT token: ";
+            // return "your JWT token: ";
         } else {
-            return "plz check your email or password";
+            // return "plz check your email or password";
         }
+
+        return new AuthenticationResponse("foo", "bar");
     }
 
     public User getUserByEmail(String email) {
