@@ -19,7 +19,7 @@ public class UserController {
 
     @PostMapping("/auth/register")
     public Mono<User> createUser(@RequestBody User user) {
-        Boolean isEmailOrUsernameTaken = userService.isEmailOrUsernameTaken(user.getEmail(), user.getUsername());
+        Boolean isEmailOrUsernameTaken = userService.isEmailOrUsernameTaken(user.getEmail(), user.getAccountname());
 
         if (!isEmailOrUsernameTaken) {
             return userService.createUser(user);

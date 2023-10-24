@@ -35,8 +35,15 @@ public class User implements UserDetails {
         this.clientId = clientId;
     }
 
-    public String getUsername() {
+    // refactored to getAccountname to differentiate from the method that overrides 
+    public String getAccountname() {
         return username;
+    }
+
+    // overriding UserDetails
+    @Override
+    public String getUsername() {
+        return email;
     }
 
     public void setUsername(String username) {

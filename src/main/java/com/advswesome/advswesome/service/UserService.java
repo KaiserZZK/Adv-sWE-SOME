@@ -31,7 +31,7 @@ public class UserService {
         // TODO use hashmap instead of list iteration
         Iterable<User> users =  userRepository.findAll().toIterable();
         for (User user : users) {
-            if (user.getEmail().equals(email) || user.getUsername().equals(username)) {
+            if (user.getEmail().equals(email) || user.getAccountname().equals(username)) {
                 return true;
             }
         }
