@@ -269,7 +269,7 @@ mvn checkstyle:check
       - Message: `Prescription created successfully`
     - On Duplicated `prescriptionId`:
       - Status Code: `409`
-      - Message: `Prescription with ID {prescriptionId} already exist`
+      - Message: `Prescription with ID {prescriptionId} already exists`
 
 - #### /prescription/{prescriptionId}
   - `GET`
@@ -344,12 +344,11 @@ mvn checkstyle:check
       - `updatedAt` (Timestamp String)
   - Output:
     - On Success
-      - Status Code: `200`
-      - JSON with Fields:
-        - `consentId`
-        - `profileId`
-        - `permission`
-        - `updatedAt` 
+      - Status Code: `201`
+      - Message: `Consent created successfully with ID {consentID}`
+    - On Duplicated `consentId`:
+      - Status Code: `409`
+      - Message: `Consent with ID {consentId} already exists`
 
 - #### /consent/{consentId}
   - `GET`
@@ -363,6 +362,8 @@ mvn checkstyle:check
           - `profileId`
           - `permission`
           - `updatedAt` 
+    - On Error - Not Found
+      - Status Code: `404`
 
 - #### /consent/{consentId}
   - `PUT`
@@ -378,12 +379,14 @@ mvn checkstyle:check
         - `updatedAt` (Timestamp String)
   - Output:
     - On Success
-    - Status Code: `200`
-    - JSON with Fields:
-        - `consentId`
-        - `profileId`
-        - `permission`
-        - `updatedAt` 
+      - Status Code: `200`
+      - JSON with Fields:
+          - `consentId`
+          - `profileId`
+          - `permission`
+          - `updatedAt` 
+    - On Error - Not Found
+      - Status Code: `404`
 
 - #### /consent/{consentId}
   - `DELETE` 
@@ -392,7 +395,8 @@ mvn checkstyle:check
   - Output:
     - On Success
       - Status Code: `200`
-
+    - On Error - Not Found
+      - Status Code: `404`
 
 ### Analytics
 
@@ -423,7 +427,14 @@ mvn checkstyle:check
     - On Error - Not Found
         - Status Code: `404`
 
-
+- #### /consent/profile/{profileId}
+  - `GET`
+  - Description: Get the consent info under the given ProfileId
+  - Authentication: Required
+  - Output:
+    - On Success
+      - Status Code: `200`
+      - JSON - Consent info
 
 
 
