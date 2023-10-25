@@ -13,6 +13,7 @@ public class User implements UserDetails {
     @DocumentId
     private String userId;
     private String clientId; // Provided by services/apps, but the human end-users
+    private Role role;
     private String username;
     private String password;
     private String email;
@@ -33,6 +34,14 @@ public class User implements UserDetails {
 
     public void setClientId(String clientId) {
         this.clientId = clientId;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     // refactored to getAccountname to differentiate from the method that overrides 
@@ -83,10 +92,6 @@ public class User implements UserDetails {
     }
 
     // for authentication and authorization
-
-    private Role role;
-    // private List<Token> tokens;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

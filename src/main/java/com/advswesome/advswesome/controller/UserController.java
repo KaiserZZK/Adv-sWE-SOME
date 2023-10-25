@@ -18,18 +18,15 @@ public class UserController {
         this.userService = userService;
     }
 
-
     @PostMapping("/auth/register")
     public Mono<User> createUser(@RequestBody User user) {
         Boolean isEmailOrUsernameTaken = userService.isEmailOrUsernameTaken(user.getEmail(), user.getAccountname());
-
         if (!isEmailOrUsernameTaken) {
             return userService.createUser(user);
         } else {
             // TODO error-handling: "email or username in use"
             return Mono.empty();
         }
-
     }
 
     @PostMapping("/auth/login")

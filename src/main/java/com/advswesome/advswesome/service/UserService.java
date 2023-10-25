@@ -1,7 +1,10 @@
 package com.advswesome.advswesome.service;
 
 import com.advswesome.advswesome.repository.UserRepository;
+import com.advswesome.advswesome.service.ClientService;
+import com.advswesome.advswesome.repository.document.Client;
 import com.advswesome.advswesome.repository.document.User;
+import com.advswesome.advswesome.repository.document.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -11,17 +14,39 @@ import com.advswesome.advswesome.security.AuthenticationResponse;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final ClientService clientService;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, ClientService clientService) {
         this.userRepository = userRepository;
+        this.clientService = clientService;
     }
 
     public Mono<User> createUser(User user) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodedPassword = encoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
+        this.setRoleBasedOnClient(user);
         return userRepository.save(user);
+    }
+
+    public void setRoleBasedOnClient(User user) {
+        Mono<Client> monoClient = clientService.getClientById(user.getClientId());
+        Mono<String> monoClientType = monoClient.map(client -> {
+            return client.getClientType();
+        });
+
+        String clientType = monoClientType.block();
+        Role role = null;
+        switch (clientType) {
+            case "ORGANIZATION":
+                role = Role.ORGANIZATION;
+                break;
+            case "INDIVIDUAL":
+                role = Role.INDIVIDUAL;
+                break;
+        }
+        user.setRole(role);
     }
 
     public Mono<User> getUserById(String id) {

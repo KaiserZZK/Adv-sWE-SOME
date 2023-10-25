@@ -36,9 +36,10 @@ public class SecurityConfiguration {
     }
 
     // endpoints that are accessible to all 
-    private static final String[] WHITE_LIST_URL = {"/clients/register",
-        "/auth/register",
-        "/auth/login"};
+    private static final String[] WHITE_LIST_URL = {
+        "/clients/register",
+        "/users/auth/register",
+        "/users/auth/login"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
