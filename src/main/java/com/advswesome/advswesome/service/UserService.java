@@ -26,11 +26,14 @@ public class UserService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodedPassword = encoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        this.setRoleBasedOnClient(user);
+        Role role = this.getRoleFromClient(user);
+        user.setRole(role);
+        // this.setRoleBasedOnClient(user);
+        // var Jwtwehifhwelkfwnkjfweahjkfwehkuewhkjwhjklahjksadvjhksadvhjkasvddv
         return userRepository.save(user);
     }
 
-    public void setRoleBasedOnClient(User user) {
+    public Role getRoleFromClient(User user) {
         Mono<Client> monoClient = clientService.getClientById(user.getClientId());
         Mono<String> monoClientType = monoClient.map(client -> {
             return client.getClientType();
@@ -46,7 +49,7 @@ public class UserService {
                 role = Role.INDIVIDUAL;
                 break;
         }
-        user.setRole(role);
+        return role; 
     }
 
     public Mono<User> getUserById(String id) {
