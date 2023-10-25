@@ -84,8 +84,9 @@ public class UserService {
 
         if (match) {
             // return JWT token
-            var jwtToken = jwtService.generateToken(foundUser);
             System.out.println("***************************" + foundUser.getRole());
+            System.out.println("***************************" + foundUser.getAccountname());
+            var jwtToken = jwtService.generateToken(foundUser);
             return new AuthenticationResponse(jwtToken); 
         } else {
             return new AuthenticationResponse("Invalid email or incorrect password; please check.");
