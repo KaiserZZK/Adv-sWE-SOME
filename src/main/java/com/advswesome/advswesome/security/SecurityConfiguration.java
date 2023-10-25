@@ -8,13 +8,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-// import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-// import org.springframework.security.web.authentication.logout.LogoutHandler;
-
-import static com.advswesome.advswesome.repository.document.Role.INDIVIDUAL;
-import static com.advswesome.advswesome.repository.document.Role.ORGANIZATION;
+// import static com.advswesome.advswesome.repository.document.Role.INDIVIDUAL;
+// import static com.advswesome.advswesome.repository.document.Role.ORGANIZATION;
+import static org.springframework.http.HttpMethod.DELETE;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -49,13 +50,15 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(req ->
                 req.requestMatchers(WHITE_LIST_URL)
                     .permitAll()
-                    .requestMatchers("/profiles").hasAnyRole(INDIVIDUAL.name()) 
-                    .requestMatchers("/profiles/**").hasAnyRole(INDIVIDUAL.name()) 
-                    .requestMatchers("/prescription").hasAnyRole(INDIVIDUAL.name())
-                    .requestMatchers("/prescription/**").hasAnyRole(INDIVIDUAL.name())
-                    .requestMatchers("/consent").hasAnyRole(INDIVIDUAL.name())
-                    .requestMatchers("/consent/**").hasAnyRole(INDIVIDUAL.name())
-                    .requestMatchers("/analytics/**").hasAnyRole(ORGANIZATION.name())
+                    .requestMatchers(POST, "/profiles").permitAll() // hasAnyAuthority("INDIVIDUAL") 
+                    .requestMatchers(GET, "/profiles/**").permitAll() // .hasAnyRole(INDIVIDUAL.name()) 
+                    .requestMatchers(PUT, "/profiles/**").permitAll() //.hasAnyRole(INDIVIDUAL.name()) 
+                    .requestMatchers(DELETE, "/profiles/**").permitAll() //.hasAnyRole(INDIVIDUAL.name()) 
+                    .requestMatchers("/prescription").permitAll() //.hasAnyRole(INDIVIDUAL.name())
+                    .requestMatchers("/prescription/**").permitAll() //.hasAnyRole(INDIVIDUAL.name())
+                    .requestMatchers("/consent").permitAll() //.hasAnyRole(INDIVIDUAL.name())
+                    .requestMatchers("/consent/**").permitAll() //.hasAnyRole(INDIVIDUAL.name())
+                    .requestMatchers("/analytics/**").permitAll() //.hasAnyRole(ORGANIZATION.name())
                     .anyRequest()
                     .authenticated()
             )

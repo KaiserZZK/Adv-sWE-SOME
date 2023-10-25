@@ -69,8 +69,6 @@ public class UserService {
         // TODO use hashmap instead of list iteration
         Iterable<User> users =  userRepository.findAll().toIterable();
         for (User user : users) {
-            System.out.println("existing" + username);
-            System.out.println("current" + user.getAccountname());
             if (user.getEmail().equals(email) || user.getAccountname().equals(username)) {
                 return true;
             }
@@ -86,7 +84,8 @@ public class UserService {
 
         if (match) {
             // return JWT token
-            var jwtToken = jwtService.generateToken(user);
+            var jwtToken = jwtService.generateToken(foundUser);
+            System.out.println("***************************" + foundUser.getRole());
             return new AuthenticationResponse(jwtToken); 
         } else {
             return new AuthenticationResponse("Invalid email or incorrect password; please check.");
