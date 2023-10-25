@@ -10,8 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-// import static com.advswesome.advswesome.repository.document.Role.INDIVIDUAL;
-// import static com.advswesome.advswesome.repository.document.Role.ORGANIZATION;
+// import com.advswesome.advswesome.repository.document.Role;
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -28,9 +27,10 @@ public class SecurityConfiguration {
     // private final LogoutHandler logoutHandler; 
 
     @Autowired
-    public SecurityConfiguration(   JwtAuthenticationFilter jwtAuthFilter, 
-                                    AuthenticationProvider authenticationProvider
-                                    ) {
+    public SecurityConfiguration(   
+        JwtAuthenticationFilter jwtAuthFilter, 
+        AuthenticationProvider authenticationProvider
+    ) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.authenticationProvider = authenticationProvider;
         // this.logoutHandler = logoutHandler;
@@ -54,10 +54,10 @@ public class SecurityConfiguration {
                     .requestMatchers(GET, "/profiles/**").permitAll() // .hasAnyRole(INDIVIDUAL.name()) 
                     .requestMatchers(PUT, "/profiles/**").permitAll() //.hasAnyRole(INDIVIDUAL.name()) 
                     .requestMatchers(DELETE, "/profiles/**").permitAll() //.hasAnyRole(INDIVIDUAL.name()) 
-                    .requestMatchers("/prescription").permitAll() //.hasAnyRole(INDIVIDUAL.name())
-                    .requestMatchers("/prescription/**").permitAll() //.hasAnyRole(INDIVIDUAL.name())
-                    .requestMatchers("/consent").permitAll() //.hasAnyRole(INDIVIDUAL.name())
-                    .requestMatchers("/consent/**").permitAll() //.hasAnyRole(INDIVIDUAL.name())
+                    .requestMatchers("/prescriptions").permitAll() //.hasAnyRole(INDIVIDUAL.name())
+                    .requestMatchers("/prescriptions/**").permitAll() //.hasAnyRole(INDIVIDUAL.name())
+                    .requestMatchers("/consents").permitAll() //.hasAnyRole(INDIVIDUAL.name())
+                    .requestMatchers("/consents/**").permitAll() //.hasAnyRole(INDIVIDUAL.name())
                     .requestMatchers("/analytics/**").permitAll() //.hasAnyRole(ORGANIZATION.name())
                     .anyRequest()
                     .authenticated()
