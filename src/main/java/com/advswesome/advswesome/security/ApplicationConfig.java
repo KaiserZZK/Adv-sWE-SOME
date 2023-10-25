@@ -2,6 +2,7 @@ package com.advswesome.advswesome.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import com.advswesome.advswesome.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,8 +23,9 @@ public class ApplicationConfig {
 
     private final UserService userService;
 
+    // use @Lazy to resolve dependency cycle issue between applicationConfig, jwtAuthenticationFilter, & userService
     @Autowired
-    public ApplicationConfig(UserService userService) {
+    public ApplicationConfig(@Lazy UserService userService) {
         this.userService = userService;
     }
 

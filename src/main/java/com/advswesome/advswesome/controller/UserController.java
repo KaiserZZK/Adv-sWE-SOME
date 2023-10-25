@@ -20,12 +20,12 @@ public class UserController {
 
     @PostMapping("/auth/register")
     public Mono<User> createUser(@RequestBody User user) {
-        Boolean isEmailOrUsernameTaken = userService.isEmailOrUsernameTaken(user.getEmail(), user.getAccountname());
+        Boolean isEmailOrUsernameTaken = userService.isEmailOrUsernameTaken(user.getEmail(), user.getUsername());
         if (!isEmailOrUsernameTaken) {
             return userService.createUser(user);
         } else {
-            // TODO error-handling: "email or username in use"
             return Mono.empty();
+            // return ResponseEntity.status(400).body(new AuthenticationResponse("User already exists"));
         }
     }
 

@@ -41,7 +41,7 @@ public class User implements UserDetails {
     }
 
     public void setRole(Role role) {
-        this.role = role;
+        this.role = role; 
     }
 
     // refactored to getAccountname to differentiate from the method that overrides 

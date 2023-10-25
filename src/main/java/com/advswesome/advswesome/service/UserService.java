@@ -5,21 +5,32 @@ import com.advswesome.advswesome.service.ClientService;
 import com.advswesome.advswesome.repository.document.Client;
 import com.advswesome.advswesome.repository.document.User;
 import com.advswesome.advswesome.repository.document.Role;
+import com.advswesome.advswesome.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.advswesome.advswesome.security.AuthenticationResponse;
+import org.springframework.security.authentication.AuthenticationManager;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final ClientService clientService;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public UserService(UserRepository userRepository, ClientService clientService) {
+    public UserService( 
+        UserRepository userRepository, 
+        ClientService clientService,
+        JwtService jwtService,
+        AuthenticationManager authenticationManager
+    ) {
         this.userRepository = userRepository;
         this.clientService = clientService;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
     }
 
     public Mono<User> createUser(User user) {
@@ -28,8 +39,6 @@ public class UserService {
         user.setPassword(encodedPassword);
         Role role = this.getRoleFromClient(user);
         user.setRole(role);
-        // this.setRoleBasedOnClient(user);
-        // var Jwtwehifhwelkfwnkjfweahjkfwehkuewhkjwhjklahjksadvjhksadvhjkasvddv
         return userRepository.save(user);
     }
 
@@ -60,6 +69,8 @@ public class UserService {
         // TODO use hashmap instead of list iteration
         Iterable<User> users =  userRepository.findAll().toIterable();
         for (User user : users) {
+            System.out.println("existing" + username);
+            System.out.println("current" + user.getAccountname());
             if (user.getEmail().equals(email) || user.getAccountname().equals(username)) {
                 return true;
             }
@@ -67,19 +78,19 @@ public class UserService {
         return false;
     } 
 
-    public AuthenticationResponse authenticateUser(User user) { // TODO throws UserNotFoundException
+    public AuthenticationResponse authenticateUser(User user) { 
         User foundUser = this.getUserByEmail(user.getEmail());
         String foundPassword = foundUser.getPassword();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         Boolean match = encoder.matches(user.getPassword(), foundPassword);
 
         if (match) {
-            // return "your JWT token: ";
+            // return JWT token
+            var jwtToken = jwtService.generateToken(user);
+            return new AuthenticationResponse(jwtToken); 
         } else {
-            // return "plz check your email or password";
+            return new AuthenticationResponse("Invalid email or incorrect password; please check.");
         }
-
-        return new AuthenticationResponse("foo", "bar");
     }
 
     public User getUserByEmail(String email) {
