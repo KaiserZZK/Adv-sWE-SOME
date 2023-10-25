@@ -2,26 +2,23 @@ package com.advswesome.advswesome.repository.document;
 
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
-
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import java.security.SecureRandom;
+import java.util.Collection;
+import java.util.List;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Document(collectionName = "users")
-public class User {
+public class User implements UserDetails {
     @DocumentId
     private String userId;
-
-    private String clientApiKey; // Provided by services/apps, but the human end-users
-
+    private String clientId; // Provided by services/apps, but the human end-users
+    private Role role;
     private String username;
     private String password;
     private String email;
-
     private String createdAt; // Provided by services/apps, but the human end-users
     private String updatedAt; // Provided by services/apps, but the human end-users
-
-
-    // public User() {}
 
     public String getUserId() {
         return userId;
@@ -31,16 +28,31 @@ public class User {
         this.userId = userId;
     }
 
-    public String getClientApiKey() {
-        return clientApiKey;
+    public String getClientId() {
+        return clientId;
     }
 
-    public void setClientApiKey(String clientApiKey) {
-        this.clientApiKey = clientApiKey;
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
-    public String getUsername() {
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role; 
+    }
+
+    // refactored to getAccountname to differentiate from the method that overrides 
+    public String getAccountname() {
         return username;
+    }
+
+    // overriding UserDetails
+    @Override
+    public String getUsername() {
+        return email;
     }
 
     public void setUsername(String username) {
@@ -51,13 +63,8 @@ public class User {
         return password;
     }
 
-    // Method to hash a password and set the hashed value
     public void setPassword(String password) {
-        // Generate a salt and hash the password
-        int strength = 10;
-        BCryptPasswordEncoder bCryptPasswordEncoder =
-            new BCryptPasswordEncoder(strength, new SecureRandom());
-        this.password =  bCryptPasswordEncoder.encode(password);
+        this.password =  password; 
     }
 
     public String getEmail() {
@@ -82,6 +89,32 @@ public class User {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    // for authentication and authorization
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
 }

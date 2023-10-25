@@ -38,7 +38,6 @@ public class ProfileController {
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
-
     @DeleteMapping("/{profileId}")
     public Mono<ResponseEntity<Void>> deleteProfile(@PathVariable String profileId) {
         return profileService.getProfileById(profileId)
@@ -46,6 +45,5 @@ public class ProfileController {
                 .map(profile -> ResponseEntity.noContent().<Void>build())
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
-
 
 }
