@@ -113,7 +113,7 @@ mvn checkstyle:check
 
 ### Authentication
 
-- #### users//auth/register
+- #### users/auth/register
   - `POST`
   - Description: Register a new user
   - Input:
