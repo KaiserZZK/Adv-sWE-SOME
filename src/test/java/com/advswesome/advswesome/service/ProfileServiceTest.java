@@ -7,7 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
+
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,6 +33,7 @@ class ProfileServiceTest {
     void createProfile() {
         Profile profile = new Profile();
         profile.setProfileId("3959");
+        profile.setUserId("user1");
         profile.setAge(25);
         profile.setSex("Male");
         profile.setLocation("US");
@@ -91,6 +95,30 @@ class ProfileServiceTest {
         profileService.deleteProfile("3959").block();
 
         verify(profileRepository, times(1)).deleteById("3959");
+    }
+
+    @Test
+    void getAllProfilesForUser() {
+        Profile profile1 = new Profile();
+        profile1.setProfileId("3959");
+        profile1.setUserId("user1");
+        Profile profile2 = new Profile();
+        profile2.setProfileId("4000");
+        profile2.setUserId("user1");
+
+        when(profileRepository.findByUserId("user1")).thenReturn(Flux.just(profile1,profile2));
+
+        Flux<Profile> profiles = profileService.getProfilesByUserId("user1");
+
+        // verify each item in the returning prescriptions
+        StepVerifier.create(profiles)
+                .expectNext(profile1)
+                .expectNext(profile2)
+                .verifyComplete();
+
+        verify(profileRepository, times(1)).findByUserId("user1");
+
+
     }
 
     // TODO: Test Saving Invalid Profile:
