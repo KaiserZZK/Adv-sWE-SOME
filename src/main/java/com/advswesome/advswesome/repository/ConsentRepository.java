@@ -8,4 +8,5 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface ConsentRepository extends FirestoreReactiveRepository<Consent> {
     Mono<Consent> findByProfileId(String profileId);
+    Mono<Consent> findByUserId(String userId);
 }

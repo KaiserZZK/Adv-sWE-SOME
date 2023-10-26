@@ -11,7 +11,7 @@ public class Consent {
     @DocumentId
     private String consentId;
 
-    // TODO: add profile id later
+    private String userId;
     private String profileId;
     private boolean permission;
     private Date updatedAt;
@@ -19,8 +19,9 @@ public class Consent {
     public Consent() {
     }
 
-    public Consent(String consentId, String profileId, boolean permission, Date updatedAt) {
+    public Consent(String consentId, String userId, String profileId, boolean permission, Date updatedAt) {
         this.consentId = consentId;
+        this.userId = userId;
         this.profileId = profileId;
         this.permission = permission;
         this.updatedAt = updatedAt;
@@ -48,6 +49,14 @@ public class Consent {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getProfileId() {
