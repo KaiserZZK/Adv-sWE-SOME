@@ -339,6 +339,7 @@ mvn checkstyle:check
         - `Content-Type`: `application/json`
     - Body
       - `consentId` (String)
+      - `userId` (String)
       - `profileId` (String)
       - `permission` (Boolean)
       - `updatedAt` (Timestamp String)
@@ -359,6 +360,7 @@ mvn checkstyle:check
       - Status Code: `200`
       - JSON with Fields:
           - `consentId`
+          - `userId`
           - `profileId`
           - `permission`
           - `updatedAt` 
@@ -374,6 +376,7 @@ mvn checkstyle:check
         - `Content-Type`: `application/json`
     - Body
         - `consentId` (String)
+        - `userId` (String)
         - `profileId` (String)
         - `permission` (Boolean)
         - `updatedAt` (Timestamp String)
@@ -382,6 +385,7 @@ mvn checkstyle:check
       - Status Code: `200`
       - JSON with Fields:
           - `consentId`
+          - `userId`
           - `profileId`
           - `permission`
           - `updatedAt` 
@@ -436,6 +440,14 @@ mvn checkstyle:check
       - Status Code: `200`
       - JSON - Consent info
 
+- #### /consent/user/{userId}
+  - `GET`
+  - Description: Get the consent info under the given UserId
+  - Authentication: Required
+  - Output:
+    - On Success
+      - Status Code: `200`
+      - JSON - Consent info
 
 
     

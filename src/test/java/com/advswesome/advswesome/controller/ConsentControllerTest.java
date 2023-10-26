@@ -37,7 +37,7 @@ public class ConsentControllerTest {
     void testCreateConsentSuccess() {
         // create a new consent
         Date date = new Date();
-        Consent mockConsent = new Consent("123", "A2", true, date);
+        Consent mockConsent = new Consent("123", "User1", "A2", true, date);
         when(consentService.getConsentById("123")).thenReturn(Mono.empty());
         when(consentService.createConsent(any(Consent.class))).thenReturn(Mono.just(mockConsent));
 
@@ -54,7 +54,7 @@ public class ConsentControllerTest {
     void testCreateConflict() {
         // create a new consent
         Date date = new Date();
-        Consent mockConsent = new Consent("123", "A2", true, date);
+        Consent mockConsent = new Consent("123", "User1", "A2", true, date);
         when(consentService.getConsentById("123")).thenReturn(Mono.just(mockConsent));
         when(consentService.createConsent(any(Consent.class))).thenReturn(Mono.just(mockConsent));
 
@@ -71,7 +71,7 @@ public class ConsentControllerTest {
     void testGetByConsentIdExists(){
         // create a new consent
         Date date = new Date();
-        Consent mockConsent = new Consent("123", "A2", true, date);
+        Consent mockConsent = new Consent("123", "User1", "A2", true, date);
         when(consentService.getConsentById("123")).thenReturn(Mono.just(mockConsent));
 
         webTestClient.get()
@@ -98,7 +98,7 @@ public class ConsentControllerTest {
     void testUpdateConsentExists(){
         // create a new consent
         Date date = new Date();
-        Consent mockConsent = new Consent("123", "A2", true, date);
+        Consent mockConsent = new Consent("123", "User1", "A2", true, date);
         when(consentService.getConsentById("123")).thenReturn(Mono.just(mockConsent));
         when(consentService.updateConsent(any(Consent.class))).thenReturn(Mono.just(mockConsent));
 
@@ -128,7 +128,7 @@ public class ConsentControllerTest {
     void testDeleteConsentExists() {
         // create a new consent
         Date date = new Date();
-        Consent consent = new Consent("123", "A2", true, date);
+        Consent consent = new Consent("123", "User1", "A2", true, date);
 
         // when getConsentById & deleteConsent called, return the same consent
         when(consentService.getConsentById("123")).thenReturn(Mono.just(consent));
