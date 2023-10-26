@@ -5,6 +5,7 @@ import com.advswesome.advswesome.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -46,4 +47,8 @@ public class ProfileController {
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/user/{userId}")
+    public Flux<Profile> getProfilesByUserId(@PathVariable String userId) {
+        return profileService.getProfilesByUserId(userId);
+    }
 }
