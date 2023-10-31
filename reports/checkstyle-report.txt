@@ -1,0 +1,17 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< com.advswesome:Adv-sWE-SOME >---------------------
+[INFO] Building Adv-sWE-SOME 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.3.0:check (default-cli) @ Adv-sWE-SOME ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.709 s
+[INFO] Finished at: 2023-10-31T13:28:34-04:00
+[INFO] ------------------------------------------------------------------------
