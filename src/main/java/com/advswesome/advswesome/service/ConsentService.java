@@ -23,6 +23,10 @@ public class ConsentService {
         return consentRepository.findById(consentId);
     }
 
+    public Mono<Consent> getConsentByUserId(String userId) {
+        return consentRepository.findByUserId(userId);
+    }
+
     public Mono<Consent> getConsentByProfileId(String profileId) {
         return consentRepository.findByProfileId(profileId);
     }

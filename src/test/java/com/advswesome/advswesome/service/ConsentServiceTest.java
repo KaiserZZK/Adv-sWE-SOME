@@ -30,7 +30,7 @@ public class ConsentServiceTest {
     void testCreateConsent() {
         // create a new consent
         Date date = new Date();
-        Consent consent = new Consent("123", "A2", true, date);
+        Consent consent = new Consent("123", "User1", "A2", true, date);
 
         // when save method is called, use Mockito to return a Mono of consent
         when(consentRepository.save(consent)).thenReturn(Mono.just(consent));
@@ -39,6 +39,7 @@ public class ConsentServiceTest {
         // check consent content
         assertNotNull(savedConsent);
         assertEquals(consent.getConsentId(), savedConsent.getConsentId());
+        assertEquals(consent.getUserId(), savedConsent.getUserId());
         assertEquals(consent.getProfileId(), savedConsent.getProfileId());
         assertEquals(consent.isPermission(), savedConsent.isPermission());
         assertEquals(consent.getUpdatedAt(), savedConsent.getUpdatedAt());
@@ -51,7 +52,7 @@ public class ConsentServiceTest {
     void testGetConsentByID(){
         // create a new consent
         Date date = new Date();
-        Consent consent = new Consent("123", "A2", true, date);
+        Consent consent = new Consent("123", "User1", "A2", true, date);
 
         // when findById method is called, use Mockito to return a Mono of consent
         when(consentRepository.findById("123")).thenReturn(Mono.just(consent));
@@ -60,6 +61,7 @@ public class ConsentServiceTest {
         // check consent content
         assertNotNull(fetchedConsent);
         assertEquals(consent.getConsentId(), fetchedConsent.getConsentId());
+        assertEquals(consent.getUserId(), fetchedConsent.getUserId());
         assertEquals(consent.getProfileId(), fetchedConsent.getProfileId());
         assertEquals(consent.isPermission(), fetchedConsent.isPermission());
         assertEquals(consent.getUpdatedAt(), fetchedConsent.getUpdatedAt());
@@ -73,7 +75,7 @@ public class ConsentServiceTest {
     void testUpdate(){
         // create a new consent
         Date date = new Date();
-        Consent consent = new Consent("123", "A2", true, date);
+        Consent consent = new Consent("123", "User1", "A2", true, date);
 
         // save and then update consent
         when(consentRepository.save(consent)).thenReturn(Mono.just(consent));
@@ -91,7 +93,7 @@ public class ConsentServiceTest {
     void testDeleteConsent() {
         // create a new consent
         Date date = new Date();
-        Consent consent = new Consent("123", "A2", true, date);
+        Consent consent = new Consent("123", "User1", "A2", true, date);
 
         // when deleteById method is called, use Mockito to return a Mono of consent
         when(consentRepository.deleteById("123")).thenReturn(Mono.empty());
@@ -105,7 +107,7 @@ public class ConsentServiceTest {
     void testGetConsentByProfileId() {
         // create a new consent
         Date date = new Date();
-        Consent consent = new Consent("123", "A2", true, date);
+        Consent consent = new Consent("123", "User1", "A2", true, date);
 
         // when findByProfileId method is called, use Mockito to return a Mono of consent
         when(consentRepository.findByProfileId("A2")).thenReturn(Mono.just(consent));
@@ -114,6 +116,7 @@ public class ConsentServiceTest {
         // check consent content
         assertNotNull(fetchedConsent);
         assertEquals(consent.getConsentId(), fetchedConsent.getConsentId());
+        assertEquals(consent.getUserId(), fetchedConsent.getUserId());
         assertEquals(consent.getProfileId(), fetchedConsent.getProfileId());
         assertEquals(consent.isPermission(), fetchedConsent.isPermission());
         assertEquals(consent.getUpdatedAt(), fetchedConsent.getUpdatedAt());
@@ -122,6 +125,27 @@ public class ConsentServiceTest {
         verify(consentRepository, times(1)).findByProfileId("A2");
     }
 
+    @Test
+    void testGetConsentByUserId() {
+        // create a new consent
+        Date date = new Date();
+        Consent consent = new Consent("123", "User1", "A2", true, date);
+
+        // when findByProfileId method is called, use Mockito to return a Mono of consent
+        when(consentRepository.findByUserId("User1")).thenReturn(Mono.just(consent));
+        Consent fetchedConsent = consentService.getConsentByUserId("User1").block();
+
+        // check consent content
+        assertNotNull(fetchedConsent);
+        assertEquals(consent.getConsentId(), fetchedConsent.getConsentId());
+        assertEquals(consent.getUserId(), fetchedConsent.getUserId());
+        assertEquals(consent.getProfileId(), fetchedConsent.getProfileId());
+        assertEquals(consent.isPermission(), fetchedConsent.isPermission());
+        assertEquals(consent.getUpdatedAt(), fetchedConsent.getUpdatedAt());
+
+        // verify the findByProfileId method is called exactly once
+        verify(consentRepository, times(1)).findByUserId("User1");
+    }
 }
 
 

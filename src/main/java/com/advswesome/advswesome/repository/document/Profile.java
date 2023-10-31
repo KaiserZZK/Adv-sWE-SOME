@@ -11,7 +11,7 @@ public class Profile {
 
     @DocumentId
     private String profileId;
-
+    private String userId;
     private int age;
     private String sex;
     private String location;
@@ -26,6 +26,14 @@ public class Profile {
 
     public void setProfileId(String profileId) {
         this.profileId = profileId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public int getAge() {
@@ -49,7 +57,7 @@ public class Profile {
     }
 
     public void setLocation(String location) {
-        this.location = location; 
+        this.location = location;
     }
 
     public String getPhysicalFitness() {
@@ -57,7 +65,7 @@ public class Profile {
     }
 
     public void setPhysicalFitness(String physicalFitness) {
-        this.physicalFitness = physicalFitness; 
+        this.physicalFitness = physicalFitness;
     }
 
     public String getLanguagePreference() {
@@ -65,7 +73,7 @@ public class Profile {
     }
 
     public void setLanguagePreference() {
-        this.languagePreference = languagePreference; 
+        this.languagePreference = languagePreference;
     }
 
     public List<MedicalHistory> getMedicalHistory() {

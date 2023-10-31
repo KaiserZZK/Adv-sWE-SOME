@@ -46,9 +46,11 @@ public class ConsentController {
 
         return existingConsent.flatMap(existing -> {
             // Assuming consentId in the path is used to ensure you update the correct consent
-            // Every time we update the consent, we need to update the time here
-            Date date = new Date();
-            consent.setUpdatedAt(date);
+            // If no specific time given, the time updated is when we update the consent
+            if (consent.getUpdatedAt() == null){
+                Date date = new Date();
+                consent.setUpdatedAt(date);
+            }
             consent.setConsentId(consentId);
             return consentService.updateConsent(consent);
         })
@@ -67,5 +69,10 @@ public class ConsentController {
     @GetMapping("/profile/{profileId}")
     public Mono<Consent> getConsentByProfileId(@PathVariable String profileId) {
         return consentService.getConsentByProfileId(profileId);
+    }
+
+    @GetMapping("/user/{userId}")
+    public Mono<Consent> getConsentByUserId(@PathVariable String userId) {
+        return consentService.getConsentByUserId(userId);
     }
 }

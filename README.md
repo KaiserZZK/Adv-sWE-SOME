@@ -113,7 +113,7 @@ mvn checkstyle:check
 
 ### Authentication
 
-- #### /auth/register
+- #### users/auth/register
   - `POST`
   - Description: Register a new user
   - Input:
@@ -130,6 +130,7 @@ mvn checkstyle:check
     - On Success:
       - Status Code: `200`
       - JSON with field
+        - `userId`
         - `clientId`
         - `username` 
         - `password`
@@ -137,7 +138,7 @@ mvn checkstyle:check
         - `createdAt`
         - `updatedAt`
 
-- #### /auth/login
+- #### users/auth/login
   - `POST`
   - Description: Login a user
   - Input:
@@ -161,6 +162,7 @@ mvn checkstyle:check
     - Header
       - `Content-Type`: `application/json`
     - Body(JSON) Fields:
+      - `userId` (String)
       - `age` (String)
       - `sex` (String)
       - `location` (String)
@@ -179,7 +181,8 @@ mvn checkstyle:check
     - On Success:
       - Status Code: `200`
       - JSON with Fields:
-        - `profileID`
+        - `profileId`
+        - `userId`
         - `age` 
         - `sex` 
         - `location`
@@ -196,7 +199,8 @@ mvn checkstyle:check
     - On Success:
       - Status Code: `200`
       - JSON with Fields:
-          - `profileID`
+          - `profileId`
+          - `userId`
           - `age`
           - `sex`
           - `location`
@@ -212,6 +216,7 @@ mvn checkstyle:check
     - Header
         - `Content-Type`: `application/json`
     - Body(JSON) Fields:
+        - `userId` (String)
         - `age` (String)
         - `sex` (String)
         - `location` (String)
@@ -230,13 +235,23 @@ mvn checkstyle:check
     - On Success:
       - Status Code: `200`
       - JSON with Fields:
-          - `profileID`
+          - `profileId`
+          - `userId`
           - `age`
           - `sex`
           - `location`
           - `physical_fitness`
           - `language_preference`
           - `medical_history` 
+
+- #### /profiles/user/{userId}
+  - `GET`
+  - Description: Get all profile of this user
+  - Authentication: Required, owner only
+  - Output:
+    - On Success:
+      - Status Code: `200`
+      - JSON with list of profiles
 
 - #### /profiles/{profileId}
   - `DELETE`
@@ -339,6 +354,7 @@ mvn checkstyle:check
         - `Content-Type`: `application/json`
     - Body
       - `consentId` (String)
+      - `userId` (String)
       - `profileId` (String)
       - `permission` (Boolean)
       - `updatedAt` (Timestamp String)
@@ -359,6 +375,7 @@ mvn checkstyle:check
       - Status Code: `200`
       - JSON with Fields:
           - `consentId`
+          - `userId`
           - `profileId`
           - `permission`
           - `updatedAt` 
@@ -374,6 +391,7 @@ mvn checkstyle:check
         - `Content-Type`: `application/json`
     - Body
         - `consentId` (String)
+        - `userId` (String)
         - `profileId` (String)
         - `permission` (Boolean)
         - `updatedAt` (Timestamp String)
@@ -382,6 +400,7 @@ mvn checkstyle:check
       - Status Code: `200`
       - JSON with Fields:
           - `consentId`
+          - `userId`
           - `profileId`
           - `permission`
           - `updatedAt` 
@@ -436,6 +455,14 @@ mvn checkstyle:check
       - Status Code: `200`
       - JSON - Consent info
 
+- #### /consent/user/{userId}
+  - `GET`
+  - Description: Get the consent info under the given UserId
+  - Authentication: Required
+  - Output:
+    - On Success
+      - Status Code: `200`
+      - JSON - Consent info
 
 
     
