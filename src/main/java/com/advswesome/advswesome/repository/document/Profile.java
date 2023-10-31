@@ -10,7 +10,7 @@ import java.util.List;
 public class Profile {
 
     @DocumentId
-    private String profileId;
+    // private String profileId;
     private String userId;
     private int age;
     private String sex;
