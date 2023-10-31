@@ -6,11 +6,11 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: ASE Bank App CI using Java Maven
+name: Adv-sWE-SOME Health Service CI using Java Maven
 
 on:
   push:
-    # branches: [ "main" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -29,6 +29,6 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Run tests with Maven
-      run: mvn test
+      run: ./mvnw test
     - name: Run Style Checker with Maven
-      run: mvn checkstyle:check
+      run: ./mvnw checkstyle:check
