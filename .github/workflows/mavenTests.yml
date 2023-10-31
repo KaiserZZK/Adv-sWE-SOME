@@ -38,6 +38,3 @@ jobs:
     
     - name: Run Style Checker with Maven
       run: ./mvnw checkstyle:check
-
-    - name: Generate CI reports 
-      run: bash generateCIReports.sh
