@@ -22,20 +22,9 @@ public class ProfileController {
 
     @PostMapping
     public String createProfile(@AuthenticationPrincipal UserPrincipal principal, @RequestBody Profile profile) {
-        System.out.println("This can only be seen by a logged in user. Your Email is: " + principal.getEmail() + " your ID: " + principal.getUserId());
-        System.out.println("This can only be seen by a logged in user. Your Email is: " + principal.getEmail() + " your ID: " + principal.getAuthorities());
-        System.out.println("Kumbaya!!");
         profileService.createProfile(profile);
-        return "sugondeez";
+        return "Profile successfully created";
     }
-
-    // @PostMapping
-    // public Mono<Profile> createProfile(@AuthenticationPrincipal UserPrincipal principal, @RequestBody Profile profile) {
-    //     System.out.println("This can only be seen by a logged in user. Your Email is: " + principal.getEmail() + " your ID: " + principal.getUserId());
-    //     System.out.println("This can only be seen by a logged in user. Your Email is: " + principal.getEmail() + " your ID: " + principal.getAuthorities());
-    //     System.out.println("Kumbaya!!");
-    //     return profileService.createProfile(profile);
-    // }
 
     @GetMapping("/{profileId}")
     public Mono<Profile> getProfileById(@PathVariable String profileId) {
