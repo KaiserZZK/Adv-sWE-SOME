@@ -1,26 +1,30 @@
 package com.advswesome.advswesome.controller;
 
+import com.advswesome.advswesome.repository.document.LoginRequest;
+import com.advswesome.advswesome.repository.document.LoginResponse;
 import com.advswesome.advswesome.repository.document.User;
 import com.advswesome.advswesome.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.auth0.jwt.exceptions.JWTCreationException;
+
+import lombok.RequiredArgsConstructor;
+import com.advswesome.advswesome.service.AuthService;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-import org.springframework.http.ResponseEntity;
-import com.advswesome.advswesome.security.AuthenticationResponse;
+
+import java.io.UnsupportedEncodingException;
+
+import org.springframework.validation.annotation.Validated;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    private final AuthService authService;
 
     @PostMapping("/auth/register")
     public Mono<User> createUser(@RequestBody User user) {
-        Boolean isEmailOrUsernameTaken = userService.isEmailOrUsernameTaken(user.getEmail(), user.getAccountname());
+        Boolean isEmailOrUsernameTaken = userService.isEmailOrUsernameTaken(user.getEmail(), user.getUsername());
         if (!isEmailOrUsernameTaken) {
             return userService.createUser(user);
         } else {
@@ -29,9 +33,9 @@ public class UserController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<AuthenticationResponse> authenticateUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.authenticateUser(user));
-    } 
+    public LoginResponse login(@RequestBody @Validated LoginRequest request) throws IllegalArgumentException, JWTCreationException, UnsupportedEncodingException {
+        return authService.attemptLogin(request.getEmail(), request.getPassword());
+    }
 
     @GetMapping("/{id}")
     public Mono<User> getUserById(@PathVariable String id) {

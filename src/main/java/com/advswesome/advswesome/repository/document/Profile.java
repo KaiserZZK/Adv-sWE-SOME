@@ -72,7 +72,7 @@ public class Profile {
         return languagePreference;
     }
 
-    public void setLanguagePreference() {
+    public void setLanguagePreference(String languagePreference) {
         this.languagePreference = languagePreference;
     }
 
