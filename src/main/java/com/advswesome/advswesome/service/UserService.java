@@ -41,10 +41,10 @@ public class UserService {
         String role = null;
         switch (clientType) {
             case "ORGANIZATION":
-                role = "ROLE_USER";
+                role = "ROLE_STAFF";
                 break;
             case "INDIVIDUAL":
-                role = "ROLE_DEVELOPER";
+                role = "ROLE_USER";
                 break;
         }
         return role; 
@@ -55,7 +55,6 @@ public class UserService {
     }
 
     public Boolean isEmailOrUsernameTaken(String email, String username) {
-        // TODO use hashmap instead of list iteration
         Iterable<User> users =  userRepository.findAll().toIterable();
         for (User user : users) {
             if (user.getEmail().equals(email) || user.getUsername().equals(username)) {
@@ -65,25 +64,7 @@ public class UserService {
         return false;
     } 
 
-    // public AuthenticationResponse authenticateUser(User user) { 
-    //     User foundUser = this.getUserByEmail(user.getEmail());
-    //     String foundPassword = foundUser.getPassword();
-    //     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    //     Boolean match = encoder.matches(user.getPassword(), foundPassword);
-
-    //     if (match) {
-    //         // return JWT token
-    //         System.out.println("***************************" + foundUser.getRole());
-    //         System.out.println("***************************" + foundUser.getAccountname());
-    //         var jwtToken = jwtService.generateToken(foundUser);
-    //         return new AuthenticationResponse(jwtToken); 
-    //     } else {
-    //         return new AuthenticationResponse("Invalid email or incorrect password; please check.");
-    //     }
-    // }
-
     public User getUserByEmail(String email) {
-        // TODO use hashmap instead of list iteration
         Iterable<User> users =  userRepository.findAll().toIterable();
         for (User user : users) {
             if (user.getEmail().equals(email)) {

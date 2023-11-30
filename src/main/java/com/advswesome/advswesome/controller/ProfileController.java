@@ -1,5 +1,7 @@
 package com.advswesome.advswesome.controller;
 
+import com.advswesome.advswesome.security.UserPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.advswesome.advswesome.repository.document.Profile;
 import com.advswesome.advswesome.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +21,21 @@ public class ProfileController {
     }
 
     @PostMapping
-    public Mono<Profile> createProfile(@RequestBody Profile profile) {
-        return profileService.createProfile(profile);
+    public String createProfile(@AuthenticationPrincipal UserPrincipal principal, @RequestBody Profile profile) {
+        System.out.println("This can only be seen by a logged in user. Your Email is: " + principal.getEmail() + " your ID: " + principal.getUserId());
+        System.out.println("This can only be seen by a logged in user. Your Email is: " + principal.getEmail() + " your ID: " + principal.getAuthorities());
+        System.out.println("Kumbaya!!");
+        profileService.createProfile(profile);
+        return "sugondeez";
     }
+
+    // @PostMapping
+    // public Mono<Profile> createProfile(@AuthenticationPrincipal UserPrincipal principal, @RequestBody Profile profile) {
+    //     System.out.println("This can only be seen by a logged in user. Your Email is: " + principal.getEmail() + " your ID: " + principal.getUserId());
+    //     System.out.println("This can only be seen by a logged in user. Your Email is: " + principal.getEmail() + " your ID: " + principal.getAuthorities());
+    //     System.out.println("Kumbaya!!");
+    //     return profileService.createProfile(profile);
+    // }
 
     @GetMapping("/{profileId}")
     public Mono<Profile> getProfileById(@PathVariable String profileId) {

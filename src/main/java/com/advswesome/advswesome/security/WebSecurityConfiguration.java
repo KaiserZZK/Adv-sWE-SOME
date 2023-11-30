@@ -15,7 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 // import static org.springframework.http.HttpMethod.DELETE;
 // import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+// import static org.springframework.http.HttpMethod.POST;
 // import static org.springframework.http.HttpMethod.PUT;
 
 @Configuration
@@ -25,6 +25,11 @@ public class WebSecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomUserDetailService customUserDetailService;
     private final UnauthorizedHandler unauthorizedHandler;
+    private static final String[] WHITE_LIST_URL = {
+        "/clients/register",
+        "/users/auth/register",
+        "/users/auth/login"
+    };
 
     @Bean
     public SecurityFilterChain applicationSecurity(HttpSecurity http) throws Exception {
@@ -38,10 +43,8 @@ public class WebSecurityConfiguration {
             .exceptionHandling(h -> h.authenticationEntryPoint(unauthorizedHandler))
             .securityMatcher("/**")
             .authorizeHttpRequests(registry -> registry
-                    .requestMatchers("/").permitAll()
-                    .requestMatchers("/public/**").permitAll()
-                    .requestMatchers(POST, "/users/auth/login").permitAll()
-                    .requestMatchers("/admin").hasRole("ADMIN")
+                    .requestMatchers(WHITE_LIST_URL).permitAll()
+                    .requestMatchers("/profiles**").hasRole("USER")
                     .anyRequest().authenticated()
             );
         return http.build();
