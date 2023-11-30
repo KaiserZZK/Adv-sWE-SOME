@@ -40,7 +40,7 @@ export class SignupComponent {
 
   signup() {
     alert(this.signupForm.value)
-    console.log(this.signupForm.value);
+    // console.log(this.signupForm.value);
     this.service.signup(this.signupForm.value).subscribe((response) => {
       alert(response);
       console.log(response);

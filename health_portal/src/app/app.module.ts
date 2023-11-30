@@ -11,6 +11,7 @@ import { PrescriptionComponent } from './prescription/prescription.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { LoginComponent } from './components/login/login.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { LoginComponent } from './components/login/login.component';
     AnalyticsComponent,
     SignupComponent,
     LoginComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,
