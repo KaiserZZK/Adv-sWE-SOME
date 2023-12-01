@@ -21,9 +21,8 @@ public class ProfileController {
     }
 
     @PostMapping
-    public String createProfile(@AuthenticationPrincipal UserPrincipal principal, @RequestBody Profile profile) {
-        profileService.createProfile(profile);
-        return "Profile successfully created";
+    public Mono<Profile> createProfile(@AuthenticationPrincipal UserPrincipal principal, @RequestBody Profile profile) {
+        return profileService.createProfile(profile);
     }
 
     @GetMapping("/{profileId}")
