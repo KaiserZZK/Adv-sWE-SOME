@@ -23,7 +23,7 @@ export class AuthService {
   }
 
   hello(): Observable<any> {
-    return this.http.post(BASE_URL + 'profiles', {}, {
+    return this.http.post(BASE_URL + 'profiles', {"age": 7654321}, {
       headers: this.createAuthorizationHeader()
     });
   }
