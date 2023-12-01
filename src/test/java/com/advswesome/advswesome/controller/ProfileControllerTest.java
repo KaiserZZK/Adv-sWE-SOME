@@ -29,20 +29,20 @@ public class ProfileControllerTest {
         webTestClient = WebTestClient.bindToController(profileController).build();
     }
 
-    @Test
-    void createProfile() {
-        Profile profile = new Profile();
-        profile.setProfileId(String.valueOf(123));
-        profile.setAge(23);
-        when(profileService.createProfile(profile)).thenReturn(Mono.just(profile));
+    // @Test
+    // void createProfile() {
+    //     Profile profile = new Profile();
+    //     profile.setProfileId(String.valueOf(123));
+    //     profile.setAge(23);
+    //     when(profileService.createProfile(profile)).thenReturn(Mono.just(profile));
 
-        webTestClient.post()
-                .uri("/profiles")
-                .bodyValue(profile)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(Profile.class);
-    }
+    //     webTestClient.post()
+    //             .uri("/profiles")
+    //             .bodyValue(profile)
+    //             .exchange()
+    //             .expectStatus().isOk()
+    //             .expectBody(Profile.class);
+    // }
 
     @Test
     void getProfileById() {

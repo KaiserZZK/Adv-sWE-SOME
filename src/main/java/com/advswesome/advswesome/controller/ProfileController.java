@@ -1,5 +1,7 @@
 package com.advswesome.advswesome.controller;
 
+import com.advswesome.advswesome.security.UserPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.advswesome.advswesome.repository.document.Profile;
 import com.advswesome.advswesome.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,7 @@ public class ProfileController {
     }
 
     @PostMapping
-    public Mono<Profile> createProfile(@RequestBody Profile profile) {
+    public Mono<Profile> createProfile(@AuthenticationPrincipal UserPrincipal principal, @RequestBody Profile profile) {
         return profileService.createProfile(profile);
     }
 
