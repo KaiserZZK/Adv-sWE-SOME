@@ -6,6 +6,32 @@
 <p>[placeholder] A list of profiles, each with Delete/Update/View actions buttons</p>
 <p>[placeholder] add/update/view buttons should lead to another component</p>
 
+<div class="panel panel-primary">
+    <div class="panel-heading">
+      <h2>Employee List</h2>
+    </div>
+    <div class="panel-body">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>profileId</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let profile of profiles | async">
+            <td>{{profile.profileId}</td>
+            <!-- <td><button (click)="deleteEmployee(employee.id)" class="btn btn-danger">Delete</button>
+                <button (click)="updateEmployee(employee.id)" class="btn btn-info" style="margin-left: 10px">Update</button>
+                <button (click)="employeeDetails(employee.id)" class="btn btn-info" style="margin-left: 10px">Details</button>
+            </td> -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+
 <div>
   <form>
     <p> Age: <input type="text"> </p>
