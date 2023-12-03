@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/consents")
@@ -22,20 +23,18 @@ public class ConsentController {
     }
 
     @PostMapping
-    public ResponseEntity<Consent> createConsent(
+    public ResponseEntity<String> createConsent(
         @AuthenticationPrincipal UserPrincipal principal, 
         @RequestBody Consent consent) 
     {
-        Mono<Consent> consentMono = consentService.createConsent(consent);
-        Consent newConsent  = consentMono.block();
-        return ResponseEntity.status(HttpStatus.OK).body(newConsent);
-        // return consentService.getConsentById(consent.getConsentId())
-        //         .flatMap(existingConsent ->
-        //                 Mono.just(new ResponseEntity<String>("Consent with ID " + consent.getConsentId() + " already exists.", HttpStatus.CONFLICT)))
-        //         .switchIfEmpty (
-        //                 consentService.createConsent(consent)
-        //                         .then(Mono.just(new ResponseEntity<String>("Consent created successfully with ID " + consent.getConsentId(), HttpStatus.CREATED)))
-        //         );
+        return consentService.getConsentById(consent.getConsentId())
+                .flatMap(existingConsent ->
+                        Mono.just(new ResponseEntity<String>("Consent with ID " + consent.getConsentId() + " already exists.", HttpStatus.CONFLICT)))
+                .switchIfEmpty (
+                        consentService.createConsent(consent)
+                                .then(Mono.just(new ResponseEntity<String>("Consent created successfully with ID " + consent.getConsentId(), HttpStatus.CREATED)))
+                )
+                .block();
     }
 
     @GetMapping("/{consentId}")
@@ -43,12 +42,10 @@ public class ConsentController {
         @AuthenticationPrincipal UserPrincipal principal,
         @PathVariable String consentId) 
     {
-        Mono<Consent> consentMono = consentService.getConsentById(consentId);
-        Consent foundConsent  = consentMono.block();
-        return ResponseEntity.status(HttpStatus.OK).body(foundConsent);
-        // return consentService.getConsentById(consentId)
-        //         .map(ResponseEntity::ok)
-        //         .defaultIfEmpty(ResponseEntity.notFound().build());
+        return consentService.getConsentById(consentId)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build())
+                .block();
     }
 
     @PutMapping("/{consentId}")
@@ -57,25 +54,21 @@ public class ConsentController {
         @PathVariable String consentId, 
         @RequestBody Consent consent) 
     {
-
-        Mono<Consent> consentMono = consentService.updateConsent(consent);
-        Consent updatedConsent  = consentMono.block();
-        return ResponseEntity.status(HttpStatus.OK).body(updatedConsent);
-
-        // Mono<Consent> existingConsent = consentService.getConsentById(consentId);
-
-        // return existingConsent.flatMap(existing -> {
-        //     // Assuming consentId in the path is used to ensure you update the correct consent
-        //     // If no specific time given, the time updated is when we update the consent
-        //     if (consent.getUpdatedAt() == null){
-        //         Date date = new Date();
-        //         consent.setUpdatedAt(date);
-        //     }
-        //     consent.setConsentId(consentId);
-        //     return consentService.updateConsent(consent);
-        // })
-        //         .map(ResponseEntity::ok)
-        //         .defaultIfEmpty(ResponseEntity.notFound().build());
+        Mono<Consent> existingConsent = consentService.getConsentById(consentId);
+        
+        return existingConsent.flatMap(existing -> {
+            // Assuming consentId in the path is used to ensure you update the correct consent
+            // If no specific time given, the time updated is when we update the consent
+            if (consent.getUpdatedAt() == null){
+                Date date = new Date();
+                consent.setUpdatedAt(date);
+            }
+            consent.setConsentId(consentId);
+            return consentService.updateConsent(consent);
+        })
+        .map(ResponseEntity::ok)
+        .defaultIfEmpty(ResponseEntity.notFound().build())
+        .block();
     }
 
     @DeleteMapping("/{consentId}")
@@ -83,13 +76,11 @@ public class ConsentController {
         @AuthenticationPrincipal UserPrincipal principal,
         @PathVariable String consentId
     ) {
-        Mono<Void> consentMono = consentService.deleteConsent(consentId);
-        var deletedConsent = consentMono.block();
-        return ResponseEntity.status(HttpStatus.OK).body(deletedConsent);
-        // return consentService.getConsentById(consentId)
-        //         .flatMap(existing -> consentService.deleteConsent(consentId).thenReturn(existing))
-        //         .map(prescription -> ResponseEntity.noContent().<Void>build())
-        //         .defaultIfEmpty(ResponseEntity.notFound().build());
+        return consentService.getConsentById(consentId)
+                .flatMap(existing -> consentService.deleteConsent(consentId).thenReturn(existing))
+                .map(prescription -> ResponseEntity.noContent().<Void>build())
+                .defaultIfEmpty(ResponseEntity.notFound().build())
+                .block();
     }
 
     @GetMapping("/profile/{profileId}")
