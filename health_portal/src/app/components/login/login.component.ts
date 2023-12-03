@@ -31,7 +31,7 @@ export class LoginComponent {
     this.service.login(this.loginForm.value).subscribe((response) => {
       console.log(response);
       if (response.token) {
-        alert(response.token);
+        alert("Welcome! You've been logged in :)");
         const token = response.token;
         localStorage.setItem('JWT', token);
         this.router.navigateByUrl('/dashboard');
