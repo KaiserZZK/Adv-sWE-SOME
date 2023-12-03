@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ProfileService } from 'src/app/service/profile.service';
+// import { AuthService } from 'src/app/service/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,5 +9,22 @@ import { ProfileService } from 'src/app/service/profile.service';
 })
 
 export class DashboardComponent {
+
+  // message: String;
+
+  // constructor(
+  //   private service: AuthService
+  // ) { }
+
+  // ngOnInit() {
+  //   this.hello();
+  // }
+
+  // hello() {
+  //   this.service.hello().subscribe((response) => {
+  //     console.log(response);
+  //     this.message = response.message;
+  //   })
+  // }
 
 }

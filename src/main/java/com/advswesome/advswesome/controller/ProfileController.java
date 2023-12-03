@@ -5,10 +5,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.advswesome.advswesome.repository.document.Profile;
 import com.advswesome.advswesome.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import java.util.List;
 
 @RestController
 @RequestMapping("/profiles")
@@ -50,7 +52,10 @@ public class ProfileController {
     }
 
     @GetMapping("/user/{userId}")
-    public Flux<Profile> getProfilesByUserId(@PathVariable String userId) {
-        return profileService.getProfilesByUserId(userId);
+    public ResponseEntity<List<Profile>> getProfilesByUserId(@AuthenticationPrincipal UserPrincipal principal, @PathVariable String userId) {
+        Flux<Profile> profilesFlux = profileService.getProfilesByUserId(userId);
+        List<Profile> profilesList = profilesFlux.collectList().block();
+        return ResponseEntity.status(HttpStatus.OK).body(profilesList);
     }
+
 }

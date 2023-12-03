@@ -22,4 +22,22 @@ export class AuthService {
     return this.http.post(BASE_URL + "users/auth/login", loginRequest)
   }
 
+  // hello(): Observable<any> {
+  //   return this.http.get(BASE_URL + 'profiles/user/GeNXYdjyczbvtTtQhe34', {
+  //     headers: this.createAuthorizationHeader()
+  //   });
+  // }
+
+  // private createAuthorizationHeader() {
+  //   const jwtToken = localStorage.getItem('JWT');
+  //   if (jwtToken) {
+  //     return new HttpHeaders().set(
+  //       'Authorization', 'Bearer ' + jwtToken
+  //     )
+  //   } else {
+  //     console.log("JWT token not found in the Local Storage");
+  //   }
+  //   return null;
+  // }
+
 }
