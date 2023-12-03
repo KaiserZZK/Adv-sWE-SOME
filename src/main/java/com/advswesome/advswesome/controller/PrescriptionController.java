@@ -2,10 +2,15 @@ package com.advswesome.advswesome.controller;
 
 
 import com.advswesome.advswesome.repository.document.Prescription;
+import com.advswesome.advswesome.security.UserPrincipal;
 import com.advswesome.advswesome.service.PrescriptionService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -22,45 +27,68 @@ public class PrescriptionController {
     }
 
     @PostMapping
-    public Mono<ResponseEntity<String>> createPrescription(@RequestBody Prescription prescription) {
+    public ResponseEntity<String> createPrescription(
+        @AuthenticationPrincipal UserPrincipal principal, 
+        @RequestBody Prescription prescription
+    ) {
         return prescriptionService.getPrescriptionById(prescription.getPrescriptionId())
                 .flatMap(existingPrescription ->
                         Mono.just(new ResponseEntity<String>("Prescription with ID " + prescription.getPrescriptionId() + " already exists.", HttpStatus.CONFLICT)))
                 .switchIfEmpty(
                         prescriptionService.createPrescription(prescription)
                                 .then(Mono.just(new ResponseEntity<String>("Prescription created successfully", HttpStatus.CREATED)))
-                );
+                )
+                .block();
     }
 
     @GetMapping("/{prescriptionId}")
-    public Mono<ResponseEntity<Prescription>> getPrescriptionById(@PathVariable String prescriptionId) {
+    public ResponseEntity<Prescription> getPrescriptionById(
+        @AuthenticationPrincipal UserPrincipal principal, 
+        @PathVariable String prescriptionId
+    ) {
         return prescriptionService.getPrescriptionById(prescriptionId)
                 .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+                .defaultIfEmpty(ResponseEntity.notFound().build())
+                .block();
     }
 
     @PutMapping("/{prescriptionId}")
-    public Mono<ResponseEntity<Prescription>> updatePrescription(@PathVariable String prescriptionId, @RequestBody Prescription prescription) {
+    public ResponseEntity<Prescription> updatePrescription(
+        @AuthenticationPrincipal UserPrincipal principal,
+        @PathVariable String prescriptionId, 
+        @RequestBody Prescription prescription
+    ) {
         return prescriptionService.getPrescriptionById(prescriptionId)
                 .flatMap(existing -> {
                     prescription.setPrescriptionId(prescriptionId);
                     return prescriptionService.updatePrescription(prescription);
                 })
                 .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+                .defaultIfEmpty(ResponseEntity.notFound().build())
+                .block();
     }
 
     @DeleteMapping("/{prescriptionId}")
-    public Mono<ResponseEntity<Void>> deletePrescription(@PathVariable String prescriptionId) {
+    public ResponseEntity<Void> deletePrescription(
+        @AuthenticationPrincipal UserPrincipal principal,
+        @PathVariable String prescriptionId
+    ) {
         return prescriptionService.getPrescriptionById(prescriptionId)
                 .flatMap(existing -> prescriptionService.deletePrescription(prescriptionId).thenReturn(existing))
                 .map(prescription -> ResponseEntity.noContent().<Void>build())
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+                .defaultIfEmpty(ResponseEntity.notFound().build())
+                .block();
     }
 
 
     @GetMapping("/profile/{profileId}")
-    public Flux<Prescription> getPrescriptionsByProfileId(@PathVariable String profileId) {
-        return prescriptionService.getPrescriptionsByProfileId(profileId);
+    // public Flux<Prescription> getPrescriptionsByProfileId(@PathVariable String profileId) {
+    //     return prescriptionService.getPrescriptionsByProfileId(profileId);
+    // }
+    public ResponseEntity<List<Prescription>> getPrescriptionsByProfileId(@PathVariable String profileId) {
+        Flux<Prescription> prescriptionsFlux = prescriptionService.getPrescriptionsByProfileId(profileId);
+        List<Prescription> prescriptionsList = prescriptionsFlux.collectList().block();
+        return ResponseEntity.status(HttpStatus.OK).body(prescriptionsList);
     }
+    
 }

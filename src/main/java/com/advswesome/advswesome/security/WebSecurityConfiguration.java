@@ -41,6 +41,9 @@ public class WebSecurityConfiguration {
             .authorizeHttpRequests(registry -> registry
                     .requestMatchers(WHITE_LIST_URL).permitAll()
                     .requestMatchers("/profiles**").hasRole("USER")
+                    .requestMatchers("/prescriptions").hasRole("USER")
+                    .requestMatchers("/consents").hasRole("USER")
+                    .requestMatchers("/analytics").hasRole("USER")
                     .anyRequest().authenticated()
             );
         return http.build();
