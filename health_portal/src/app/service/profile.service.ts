@@ -16,8 +16,13 @@ export class ProfileService {
   ) { }
 
   getProfiles(userId): Observable<any> {
-    console.log(BASE_URL + 'profiles/user/' + userId)
     return this.http.get(BASE_URL + 'profiles/user/' + userId, {
+      headers: this.createAuthorizationHeader()
+    });
+  }
+
+  deleteProfile(profileId): Observable<any> {
+    return this.http.delete(BASE_URL + 'profiles/' + profileId, {
       headers: this.createAuthorizationHeader()
     });
   }

@@ -2,10 +2,6 @@
 
 <button type="button" routerLink="/dashboard">Back to Main Dashboard</button>
 
-<p>[placeholder] add profile button </p>
-<p>[placeholder] A list of profiles, each with Delete/Update/View actions buttons</p>
-<p>[placeholder] add/update/view buttons should lead to another component</p>
-
 <div class="panel panel-primary">
     <div class="panel-heading">
       <h2>Profile List</h2>
@@ -14,17 +10,24 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>profileId</th>
+            <th>Profile ID</th>
+            <th>Age</th>
+            <th>Sex</th>
+            <th>Location</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let profile of profiles | async">
             <td>{{profile.profileId}}</td>
-            <!-- <td><button (click)="deleteProfile(profile.id)" class="btn btn-danger">Delete</button>
-                <button (click)="updateProfile(profile.id)" class="btn btn-info" style="margin-left: 10px">Update</button>
-                <button (click)="getProfileById(profile.id)" class="btn btn-info" style="margin-left: 10px">Details</button>
-            </td> -->
+            <td>{{profile.age}}</td>
+            <td>{{profile.sex}}</td>
+            <td>{{profile.location}}</td>
+            <td>
+              <button (click)="viewProfile(profile.profileId)" class="btn btn-info">Details</button>
+              <button (click)="updateProfile(profile.profileId)" class="btn btn-info" style="margin-left: 10px">Update</button>
+              <button (click)="deleteProfile(profile.profileId)" class="btn btn-danger" style="margin-left: 10px">Delete</button>
+            </td>
           </tr>
         </tbody>
       </table>

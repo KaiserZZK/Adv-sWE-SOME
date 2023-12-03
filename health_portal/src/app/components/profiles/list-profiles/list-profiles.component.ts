@@ -29,23 +29,23 @@ export class ListProfilesComponent {
     this.profiles = this.profileService.getProfiles(this.userId);
   }
 
-  // deleteEmployee(id: number) {
-  //   this.employeeService.deleteEmployee(id)
-  //     .subscribe(
-  //       data => {
-  //         console.log(data);
-  //         this.reloadData();
-  //       },
-  //       error => console.log(error));
-  // }
+  deleteProfile(id: String) {
+    this.profileService.deleteProfile(id)
+      .subscribe(
+        data => {
+          console.log(data);
+          this.reloadData();
+        },
+        error => console.log(error));
+  }
 
-  // employeeDetails(id: number){
-  //   this.router.navigate(['details', id]);
-  // }
+  viewProfile(id: String){
+    this.router.navigate(['details', id]);
+  }
 
-  // updateEmployee(id: number){
-  //   this.router.navigate(['update', id]);
-  // }
+  updateProfile(id: String){
+    this.router.navigate(['update', id]);
+  }
 
 
 }
