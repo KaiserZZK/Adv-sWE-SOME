@@ -34,7 +34,6 @@ public class AnalyticService {
 
         RestTemplate restTemplate = new RestTemplate();
 
-//        String openAIKey = "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";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(openaiApiKey);
