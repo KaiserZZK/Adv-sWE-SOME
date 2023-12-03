@@ -30,7 +30,7 @@ public class AnalyticService {
 
 
 
-    public String getHealthAdvice(String healthInfo) {
+    public String getHealthAdvice(String prompt) {
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -38,12 +38,6 @@ public class AnalyticService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(openaiApiKey);
-
-        String prompt = "I am a 46 yo male, 140 pounds, currently taking omeprazole. Give me three health advices. Make the response in a json list where each item is an advice like {\n" +
-                "  \"advice_1\": \"xxxxx.\",\n" +
-                "  \"advice_2\": \"xxxx.\",\n" +
-                "  \"advice_3\": \"xxx.\"\n" +
-                "}";
 
         HttpEntity<String> request = new HttpEntity<>(createRequestBody(prompt), headers);
 
