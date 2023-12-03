@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 
 // to be changed to deployed instance 
 const BASE_URL = ['http://localhost:8080/']
@@ -14,10 +15,20 @@ export class ProfileService {
     private http: HttpClient
   ) { }
 
-  getProfiles(): Observable<any> {
-    return this.http.post(BASE_URL + 'profiles', {"age": 7654321}, {
+  getProfiles(userId): Observable<any> {
+    console.log(BASE_URL + 'profiles/user/' + userId)
+    return this.http.get(BASE_URL + 'profiles/user/' + userId, {
       headers: this.createAuthorizationHeader()
     });
+  }
+
+  getIdFromJwt(): any {
+    const jwtToken = localStorage.getItem('JWT');
+    try {
+      return jwtDecode(jwtToken)['sub'];
+    } catch(Error) {
+      return null;
+    }
   }
 
   private createAuthorizationHeader() {

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Observable } from "rxjs";
 import { Profile } from "./../../../documents/profile";
+import { ProfileService } from "./../../../service/profile.service";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-profiles',
@@ -11,14 +13,39 @@ import { Profile } from "./../../../documents/profile";
 export class ListProfilesComponent {
 
   profiles: Observable<Profile[]>;
+  userId: String;
 
   constructor (
-
+    private profileService: ProfileService,
+    private router: Router,
   ) {}
 
   ngOnInit() {
-    this.profiles = null;
-
+    this.userId = this.profileService.getIdFromJwt();
+    this.reloadData();
   }
+
+  reloadData() {
+    this.profiles = this.profileService.getProfiles(this.userId);
+  }
+
+  // deleteEmployee(id: number) {
+  //   this.employeeService.deleteEmployee(id)
+  //     .subscribe(
+  //       data => {
+  //         console.log(data);
+  //         this.reloadData();
+  //       },
+  //       error => console.log(error));
+  // }
+
+  // employeeDetails(id: number){
+  //   this.router.navigate(['details', id]);
+  // }
+
+  // updateEmployee(id: number){
+  //   this.router.navigate(['update', id]);
+  // }
+
 
 }

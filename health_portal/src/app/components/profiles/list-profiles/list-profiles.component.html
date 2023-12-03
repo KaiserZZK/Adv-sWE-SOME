@@ -8,7 +8,7 @@
 
 <div class="panel panel-primary">
     <div class="panel-heading">
-      <h2>Employee List</h2>
+      <h2>Profile List</h2>
     </div>
     <div class="panel-body">
       <table class="table table-striped">
@@ -20,10 +20,10 @@
         </thead>
         <tbody>
           <tr *ngFor="let profile of profiles | async">
-            <td>{{profile.profileId}</td>
-            <!-- <td><button (click)="deleteEmployee(employee.id)" class="btn btn-danger">Delete</button>
-                <button (click)="updateEmployee(employee.id)" class="btn btn-info" style="margin-left: 10px">Update</button>
-                <button (click)="employeeDetails(employee.id)" class="btn btn-info" style="margin-left: 10px">Details</button>
+            <td>{{profile.profileId}}</td>
+            <!-- <td><button (click)="deleteProfile(profile.id)" class="btn btn-danger">Delete</button>
+                <button (click)="updateProfile(profile.id)" class="btn btn-info" style="margin-left: 10px">Update</button>
+                <button (click)="getProfileById(profile.id)" class="btn btn-info" style="margin-left: 10px">Details</button>
             </td> -->
           </tr>
         </tbody>
