@@ -27,7 +27,6 @@ export class LoginComponent {
   }
 
   login() {
-    // console.log(this.loginForm.value);
     this.service.login(this.loginForm.value).subscribe((response) => {
       console.log(response);
       if (response.token) {

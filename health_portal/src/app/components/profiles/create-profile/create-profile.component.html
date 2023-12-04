@@ -1,5 +1,11 @@
 <h3>Create Profile</h3>
 <div [hidden]="submitted" style="width: 400px;">
+    <div class="row">
+        <div class="col-6"></div>
+        <div class="col-6 text-end">
+          <button class="btn btn-sm btn-success" (click)="addRow()">Add Medical History</button>
+        </div>
+      </div>
     <form (ngSubmit)="onSubmit()">
         <div>
         <label for="age">Age</label>
@@ -28,9 +34,7 @@
 
         <!-- TODO medical history?? -->
 
-        <button type="submit" class="btn btn-success">Submit</button>
-    </form>
-</div>
+
 
 <div [hidden]="!submitted">
     <h4>You submitted successfully!</h4>
