@@ -9,8 +9,11 @@ import { ViewProfileComponent } from './components/profiles/view-profile/view-pr
 import { UpdateProfileComponent } from './components/profiles/update-profile/update-profile.component';
 import { ListProfilesComponent } from './components/profiles/list-profiles/list-profiles.component';
 
-import { PrescriptionComponent } from './prescription/prescription.component';
-import { ConsentComponent } from './consent/consent.component';
+import { CreatePrescriptionComponent } from './prescription/create-prescription/create-prescription.component';
+import { ListPrescriptionComponent } from './prescription/list-prescription/list-prescription.component';
+import { UpdateConsentComponent } from './consent/update-consent/update-consent.component';
+import { ShowConsentComponent } from "./consent/show-consent/show-consent.component";
+import { CreateConsentComponent } from "./consent/create-consent/create-consent.component";
 
 
 const routes: Routes = [
@@ -21,8 +24,11 @@ const routes: Routes = [
   { path: 'create-profile', component: CreateProfileComponent },
   { path: 'view-profile',   component: ViewProfileComponent   },
   { path: 'update-profile', component: UpdateProfileComponent },
-  { path: 'prescription',   component: PrescriptionComponent  },
-  { path: 'consent',        component: ConsentComponent       }
+  { path: 'create-prescription', component: CreatePrescriptionComponent },
+  { path: 'list-prescription',   component: ListPrescriptionComponent   },
+  { path: 'update-consent',      component: UpdateConsentComponent      },
+  { path: 'show-consent',        component: ShowConsentComponent        },
+  { path: 'create-consent',      component: CreateConsentComponent      }
 ];
 
 @NgModule({
