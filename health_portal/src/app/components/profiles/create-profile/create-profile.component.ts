@@ -59,6 +59,8 @@ export class CreateProfileComponent {
 
   save() {
     this.profile.userId = this.userId; 
+    this.profile.medicalHistory = this.medicalHistoryForm.value.tableRows;
+    console.log(this.medicalHistoryForm.value)
     this.profileService.createProfile(this.profile)
       .subscribe(data => console.log(data), error => console.log(error));
     this.profile = new Profile();
@@ -69,6 +71,10 @@ export class CreateProfileComponent {
   removeMedicalHistory(index:number) {
     const control =  this.medicalHistoryForm.get('tableRows') as FormArray;
     control.removeAt(index);
+  }
+
+  onSaveForm() {
+    const formValue = this.medicalHistoryForm.value;
   }
 
   onSubmit() {

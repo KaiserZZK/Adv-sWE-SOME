@@ -20,7 +20,7 @@ const routes: Routes = [
   { path: 'list-profiles',  component: ListProfilesComponent  },
   { path: 'create-profile', component: CreateProfileComponent },
   { path: 'view-profile/:profileId',   component: ViewProfileComponent   },
-  { path: 'update-profile', component: UpdateProfileComponent },
+  { path: 'update-profile/:profileId', component: UpdateProfileComponent },
   { path: 'prescription',   component: PrescriptionComponent  },
   { path: 'consent',        component: ConsentComponent       }
 ];
