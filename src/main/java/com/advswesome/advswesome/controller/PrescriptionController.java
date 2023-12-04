@@ -27,18 +27,21 @@ public class PrescriptionController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createPrescription(
+    public ResponseEntity<Prescription> createPrescription(
         @AuthenticationPrincipal UserPrincipal principal, 
         @RequestBody Prescription prescription
     ) {
-        return prescriptionService.getPrescriptionById(prescription.getPrescriptionId())
-                .flatMap(existingPrescription ->
-                        Mono.just(new ResponseEntity<String>("Prescription with ID " + prescription.getPrescriptionId() + " already exists.", HttpStatus.CONFLICT)))
-                .switchIfEmpty(
-                        prescriptionService.createPrescription(prescription)
-                                .then(Mono.just(new ResponseEntity<String>("Prescription created successfully", HttpStatus.CREATED)))
-                )
-                .block();
+        // return prescriptionService.getPrescriptionById(prescription.getPrescriptionId())
+        //         .flatMap(existingPrescription ->
+        //                 Mono.just(new ResponseEntity<String>("Prescription with ID " + prescription.getPrescriptionId() + " already exists.", HttpStatus.CONFLICT)))
+        //         .switchIfEmpty(
+        //                 prescriptionService.createPrescription(prescription)
+        //                         .then(Mono.just(new ResponseEntity<String>("Prescription created successfully", HttpStatus.CREATED)))
+        //         )
+        //         .block();
+        Mono<Prescription> prescriptionMono = prescriptionService.createPrescription(prescription);
+        Prescription newPrescription  = prescriptionMono.block();
+        return ResponseEntity.status(HttpStatus.OK).body(newPrescription);
     }
 
     @GetMapping("/{prescriptionId}")
@@ -82,10 +85,10 @@ public class PrescriptionController {
 
 
     @GetMapping("/profile/{profileId}")
-    // public Flux<Prescription> getPrescriptionsByProfileId(@PathVariable String profileId) {
-    //     return prescriptionService.getPrescriptionsByProfileId(profileId);
-    // }
-    public ResponseEntity<List<Prescription>> getPrescriptionsByProfileId(@PathVariable String profileId) {
+    public ResponseEntity<List<Prescription>> getPrescriptionsByProfileId(
+        @AuthenticationPrincipal UserPrincipal principal,
+        @PathVariable String profileId
+    ) {
         Flux<Prescription> prescriptionsFlux = prescriptionService.getPrescriptionsByProfileId(profileId);
         List<Prescription> prescriptionsList = prescriptionsFlux.collectList().block();
         return ResponseEntity.status(HttpStatus.OK).body(prescriptionsList);

@@ -9,6 +9,11 @@ import { ViewProfileComponent } from './components/profiles/view-profile/view-pr
 import { UpdateProfileComponent } from './components/profiles/update-profile/update-profile.component';
 import { ListProfilesComponent } from './components/profiles/list-profiles/list-profiles.component';
 
+import { CreatePrescriptionComponent } from './components/prescription/create-prescription/create-prescription.component';
+import { ViewPrescriptionComponent } from './components/prescription/view-prescription/view-prescription.component';
+import { UpdatePrescriptionComponent } from './components/prescription/update-prescription/update-prescription.component';
+import { ListPrescriptionComponent } from './components/prescription/list-prescription/list-prescription.component';
+
 import { HealthAdviceComponent } from './components/analytics/health-advice/health-advice.component';
 
 import { PrescriptionComponent } from './prescription/prescription.component';
@@ -23,8 +28,11 @@ const routes: Routes = [
   { path: 'create-profile', component: CreateProfileComponent },
   { path: 'view-profile/:profileId',    component: ViewProfileComponent   },
   { path: 'update-profile/:profileId',  component: UpdateProfileComponent },
+  { path: 'list-prescription/:profileId',   component: ListPrescriptionComponent    },
+  { path: 'create-prescription',            component: CreatePrescriptionComponent  },
+  { path: 'view-prescription/:prescriptionId',    component: ViewPrescriptionComponent   },
+  { path: 'update-prescription/:prescriptionId',  component: UpdatePrescriptionComponent },
   { path: 'health-advice/:profileId',   component: HealthAdviceComponent  },
-  { path: 'prescription',   component: PrescriptionComponent  },
   { path: 'consent',        component: ConsentComponent       }
 ];
 
