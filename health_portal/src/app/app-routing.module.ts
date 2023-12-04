@@ -29,7 +29,7 @@ const routes: Routes = [
   { path: 'view-profile/:profileId',    component: ViewProfileComponent   },
   { path: 'update-profile/:profileId',  component: UpdateProfileComponent },
   { path: 'list-prescription/:profileId',   component: ListPrescriptionComponent    },
-  { path: 'create-prescription',            component: CreatePrescriptionComponent  },
+  { path: 'create-prescription/:profileId', component: CreatePrescriptionComponent  },
   { path: 'view-prescription/:profileId/:prescriptionId',    component: ViewPrescriptionComponent   },
   { path: 'update-prescription/:profileId/:prescriptionId',  component: UpdatePrescriptionComponent },
   { path: 'health-advice/:profileId',   component: HealthAdviceComponent  },

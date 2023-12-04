@@ -36,24 +36,6 @@ export class UpdatePrescriptionComponent {
         )
     }  
 
-  // createFormGroup(medicalHistory?: MedicalHistory): FormGroup {
-  //   return this.fb.group({
-  //     diseaseName: [medicalHistory ? medicalHistory.diseaseName : '',[Validators.required]],
-  //     diagnosedAt: [medicalHistory ? medicalHistory.diagnosedAt : '',[Validators.required]],
-  //     treatment:[medicalHistory ? medicalHistory.treatment : ''],
-  //   });
-  // }
-
-  // get getFormControls() {
-  //   const control = this.medicalHistoryForm.get('tableRows') as FormArray;
-  //   return control;
-  // }
-
-  // addRow(medicalHistory?: MedicalHistory) {
-  //   const control =  this.medicalHistoryForm.get('tableRows') as FormArray;
-  //   control.push(this.createFormGroup(medicalHistory));
-  // }
-
   newPrescription(): void {
     this.submitted = false;
     this.prescription = new Prescription();

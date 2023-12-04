@@ -45,6 +45,10 @@ export class ListPrescriptionComponent {
   //   this.router.navigate(['view-prescription', prescriptionId]);
   // }
 
+  createPrescription() {
+    this.router.navigate(['create-prescription', this.profileId]);
+  }
+
   updatePrescription(profileId: String, prescriptionId: String) {
     this.router.navigate(['update-prescription', profileId, prescriptionId]);
   }
