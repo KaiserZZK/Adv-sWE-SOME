@@ -10,9 +10,9 @@
 
         <thead>
             <tr class="text-uppercase table-dark">
-              <th scope="col">First Name</th>
-              <th scope="col">Last Name</th>
-              <th scope="col">Action</th>
+              <th scope="col">Medical Condition</th>
+              <th scope="col">Diagnosed At</th>
+              <th scope="col">Treatment</th>
             </tr>
         </thead>
         <tbody [formGroup]="medicalHistoryForm">
@@ -33,29 +33,16 @@
                   </div>
                 </td>
                 <td>
-                <td>
                     <input type="text" class="form-control" formControlName="treatment" placeholder="Enter Last">
                     <div class="text-danger" *ngIf="getFormControls.controls[i].get('treatment')?.touched">
                         <span *ngIf="getFormControls.controls[i].get('treatment')?.errors?.['required']">Required</span>
                     </div>
-                    </td>
-                <td>
+                </td>
                 <td>
                   <button class="btn btn-danger" (click)="removeMedicalHistory(i)">Remove</button>
                 </td>
               </tr>
             </ng-container>
-            <!-- <ng-container>
-              <tr>
-                <td colspan="7">
-                  <div class="row">
-                    <div class="col-12 text-center">
-                      <button class="btn btn-success" (click)="onSaveForm()">Save Bulk Employee</button>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            </ng-container> -->
           </tbody>
         
         <div>
@@ -82,32 +69,6 @@
             <label for="languagePreference">Primary Language Preference</label>
             <input type="text" class="form-control" id="languagePreference" required [(ngModel)]="profile.languagePreference" name="languagePreference">
         </div>
-
-        <!-- TODO medical history?? -->
-        
-
-        <!-- <script>
-            angular.module('submitExample', [])
-            .controller('ExampleController', ['$scope', function($scope) {
-                $scope.ll = [];
-                $scope.text = 'hello';
-                $scope.submit = function() {
-                if ($scope.text) {
-                    $scope.ll.push(this.text);
-                    $scope.text = '';
-                }
-                };
-            }]);
-        </script>
-        <form ng-submit="submit()" ng-controller="ExampleController">
-            Enter text and hit enter:
-            <input type="text" ng-model="text" name="text" />
-            <input type="submit" id="submit" value="Submit" />
-            <pre>list={{list}}</pre>
-        </form> -->
-  
-  
-
         <button type="submit" class="btn btn-success">Submit</button>
     </form>
 </div>

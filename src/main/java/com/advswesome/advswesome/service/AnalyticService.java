@@ -1,18 +1,18 @@
 package com.advswesome.advswesome.service;
 
-import com.advswesome.advswesome.repository.ProfileRepository;
-import com.advswesome.advswesome.repository.document.Profile;
-import jakarta.annotation.PostConstruct;
-import org.apache.http.Header;
-import org.springframework.beans.factory.annotation.Autowired;
+// import com.advswesome.advswesome.repository.ProfileRepository;
+// import com.advswesome.advswesome.repository.document.Profile;
+// import jakarta.annotation.PostConstruct;
+// import org.apache.http.Header;
+// import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
+// import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.*;
+// import org.springframework.web.client.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+// import reactor.core.publisher.Flux;
+// import reactor.core.publisher.Mono;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

@@ -1,1 +1,80 @@
-<p>update-profile works!</p>
+<h3>Update Profile</h3>
+<div [hidden]="submitted" style="width: 400px;">
+    <div class="row">
+        <div class="col-6"></div>
+        <div class="col-6 text-end">
+          <button class="btn btn-sm btn-success" (click)="addRow()">Add Medical History</button>
+        </div>
+    </div>
+    <form (ngSubmit)="onSubmit(); onSaveForm()">
+
+        <thead>
+            <tr class="text-uppercase table-dark">
+              <th scope="col">Medical Condition</th>
+              <th scope="col">Diagnosed At</th>
+              <th scope="col">Treatment</th>
+            </tr>
+        </thead>
+        <tbody [formGroup]="medicalHistoryForm">
+            <ng-container formArrayName="tableRows" *ngFor="let group of getFormControls.controls; let i=index">
+              <tr [formGroupName]="i">
+                <td>
+                  <input type="text" class="form-control" formControlName="diseaseName" placeholder="Enter First" [value]="getFormControls.controls[i].get('diseaseName').value">
+                  <div class="text-danger" *ngIf="getFormControls.controls[i].get('diseaseName')?.touched">
+                    <span *ngIf="getFormControls.controls[i].get('diseaseName')?.errors?.['required']">Required</span>
+                    <span *ngIf="getFormControls.controls[i].get('diseaseName')?.errors?.['minlength']">3 Chars
+                      Required</span>
+                  </div>
+                </td>
+                <td>
+                  <input type="text" class="form-control" formControlName="diagnosedAt" placeholder="Enter Last">
+                  <div class="text-danger" *ngIf="getFormControls.controls[i].get('diagnosedAt')?.touched">
+                    <span *ngIf="getFormControls.controls[i].get('diagnosedAt')?.errors?.['required']">Required</span>
+                  </div>
+                </td>
+                <td>
+                    <input type="text" class="form-control" formControlName="treatment" placeholder="Enter Last">
+                    <div class="text-danger" *ngIf="getFormControls.controls[i].get('treatment')?.touched">
+                        <span *ngIf="getFormControls.controls[i].get('treatment')?.errors?.['required']">Required</span>
+                    </div>
+                </td>
+                <td>
+                  <button class="btn btn-danger" (click)="removeMedicalHistory(i)">Remove</button>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        
+        <div>
+        <label for="age">Age</label>
+        <input type="number" class="form-control" id="age" required [(ngModel)]="profile.age" name="age">
+        </div>
+
+        <div>
+        <label for="sex">Sex</label>
+        <input type="text" class="form-control" id="sex" required [(ngModel)]="profile.sex" name="sex">
+        </div>
+
+        <div>
+        <label for="location">Location</label>
+        <input type="text" class="form-control" id="location" required [(ngModel)]="profile.location" name="location">
+        </div>
+
+        <div>
+            <label for="physicalFitness">Physical Fitness Level</label>
+            <input type="text" class="form-control" id="physicalFitness" required [(ngModel)]="profile.physicalFitness" name="physicalFitness">
+        </div>
+
+        <div>
+            <label for="languagePreference">Primary Language Preference</label>
+            <input type="text" class="form-control" id="languagePreference" required [(ngModel)]="profile.languagePreference" name="languagePreference">
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+</div>
+
+<button type="button" routerLink="/list-profiles">Cancel</button>
+
+<div [hidden]="!submitted">
+    <h4>You submitted successfully!</h4>
+</div>

@@ -33,6 +33,12 @@ export class ProfileService {
     });
   }
 
+  updateProfile(profileId, profile): Observable<any> {
+    return this.http.post(BASE_URL + 'profiles/' + profileId, profile, {
+      headers: this.createAuthorizationHeader()
+    });
+  }
+
   deleteProfile(profileId): Observable<any> {
     return this.http.delete(BASE_URL + 'profiles/' + profileId, {
       headers: this.createAuthorizationHeader()
