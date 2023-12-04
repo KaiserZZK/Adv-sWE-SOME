@@ -39,13 +39,17 @@ export class ListProfilesComponent {
         error => console.log(error));
   }
 
-  viewProfile(profileId: String){
+  viewProfile(profileId: String) {
     console.log(profileId)
     this.router.navigate(['view-profile', profileId]);
   }
 
-  updateProfile(profileId: String){
+  updateProfile(profileId: String) {
     this.router.navigate(['update-profile', profileId]);
+  }
+
+  getHealthAdvice(profileId: String) {
+    this.router.navigate(['health-advice', profileId]);
   }
 
 

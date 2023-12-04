@@ -15,6 +15,7 @@ import { CreateProfileComponent } from './components/profiles/create-profile/cre
 import { ViewProfileComponent } from './components/profiles/view-profile/view-profile.component';
 import { UpdateProfileComponent } from './components/profiles/update-profile/update-profile.component';
 import { ListProfilesComponent } from './components/profiles/list-profiles/list-profiles.component';
+import { HealthAdviceComponent } from './components/analytics/health-advice/health-advice.component';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { ListProfilesComponent } from './components/profiles/list-profiles/list-
     ViewProfileComponent,
     UpdateProfileComponent,
     ListProfilesComponent,
+    HealthAdviceComponent,
   ],
   imports: [
     BrowserModule,

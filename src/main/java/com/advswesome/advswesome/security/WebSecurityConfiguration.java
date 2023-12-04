@@ -43,7 +43,7 @@ public class WebSecurityConfiguration {
                     .requestMatchers("/profiles**").hasRole("USER")
                     .requestMatchers("/prescriptions").hasRole("USER")
                     .requestMatchers("/consents").hasRole("USER")
-                    .requestMatchers("/analytics").hasRole("USER")
+                    .requestMatchers("/analytics**").hasRole("USER")
                     .anyRequest().authenticated()
             );
         return http.build();

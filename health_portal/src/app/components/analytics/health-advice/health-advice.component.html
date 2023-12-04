@@ -1,0 +1,30 @@
+<h1>Howdy!</h1>
+
+
+<!-- health-advice.component.html -->
+
+<div *ngIf="advice">
+  <h2>Health Advice</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Advice Number</th>
+        <th>Advice</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let key of advice | keyvalue">
+        <td>{{key.key}}</td>
+        <td>{{key.value}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="!advice">
+  <p>Loading advice...</p>
+</div>
+
+
+
+<button type="button" routerLink="/list-profiles">Back to Profiles</button>

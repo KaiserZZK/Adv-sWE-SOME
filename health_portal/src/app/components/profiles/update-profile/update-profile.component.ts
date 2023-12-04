@@ -28,13 +28,11 @@ export class UpdateProfileComponent {
     this.medicalHistoryForm = this.fb.group({
       tableRows: this.fb.array([],[Validators.required])
     });
-    this.addRow();
   }
 
   ngOnInit() {
     this.userId = this.profileService.getIdFromJwt();
     const profileId = this.route.snapshot.paramMap.get('profileId');
-    // const profile = this.profileService.getProfile(profileId);
 
     this.profileService.getProfile(profileId)
         .subscribe(
