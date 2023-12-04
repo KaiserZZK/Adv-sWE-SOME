@@ -49,9 +49,14 @@ public class ProfileController {
         @RequestBody Profile profile) 
     {
         // TODO: updated the dates??
-        Mono<Profile> profileMono = profileService.updateProfile(profile);
-        Profile updatedProfile  = profileMono.block();
-        return ResponseEntity.status(HttpStatus.OK).body(updatedProfile);
+        return profileService.getProfileById(profileId)
+                .flatMap(existing -> {
+                    profile.setProfileId(profileId);
+                    return profileService.updateProfile(profile);
+                })
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build())
+                .block();
     }
 
     @DeleteMapping("/{profileId}")

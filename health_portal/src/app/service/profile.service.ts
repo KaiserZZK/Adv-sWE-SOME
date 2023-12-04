@@ -21,6 +21,12 @@ export class ProfileService {
     });
   }
 
+  getProfile(profileId): Observable<any> {
+    return this.http.get(BASE_URL + 'profiles/' + profileId, {
+      headers: this.createAuthorizationHeader()
+    });
+  }
+
   createProfile(profile): Observable<any> {
     return this.http.post(BASE_URL + 'profiles', profile, {
       headers: this.createAuthorizationHeader()

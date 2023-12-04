@@ -19,7 +19,7 @@ const routes: Routes = [
   { path: 'dashboard',      component: DashboardComponent     },
   { path: 'list-profiles',  component: ListProfilesComponent  },
   { path: 'create-profile', component: CreateProfileComponent },
-  { path: 'view-profile',   component: ViewProfileComponent   },
+  { path: 'view-profile/:profileId',   component: ViewProfileComponent   },
   { path: 'update-profile', component: UpdateProfileComponent },
   { path: 'prescription',   component: PrescriptionComponent  },
   { path: 'consent',        component: ConsentComponent       }

@@ -1,1 +1,46 @@
-<p>view-profile works!</p>
+<h2>Profile Details</h2> 
+
+<hr/>
+<div *ngIf="profile">
+  <div>
+    <label><b>Age: </b></label> {{profile.age}}
+  </div>
+  <div>
+    <label><b>Last Name: </b></label> {{profile.sex}}
+  </div>
+  <div>
+    <label><b>Location: </b></label> {{profile.location}}
+  </div>
+  <div>
+    <label><b>Physical Fitness: </b></label> {{profile.physicalFitness}}
+  </div>
+  <div>
+    <label><b>Language Preference: </b></label> {{profile.languagePreference}}
+  </div>  
+</div>
+
+
+<!-- Add a table for medical histories -->
+<table *ngIf="profile.medicalHistory && profile.medicalHistory.length > 0" border="1">
+    <caption><b>Medical Histories</b></caption>
+    <thead>
+      <tr>
+        <th>Disease Name</th>
+        <th>Diagnosed At</th>
+        <th>Treatment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let history of profile.medicalHistory">
+        <td>{{ history.diseaseName }}</td>
+        <td>{{ history.diagnosedAt }}</td>
+        <td>{{ history.treatment }}</td>
+      </tr>
+    </tbody>
+  </table>
+<br>
+<br>
+
+
+
+<button type="button" routerLink="/list-profiles">Back to Profiles</button>
