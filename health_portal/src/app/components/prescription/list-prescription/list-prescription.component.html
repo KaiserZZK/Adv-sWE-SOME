@@ -24,14 +24,13 @@
         <tbody>
           <tr *ngFor="let prescription of prescriptionList | async">
             <td>{{prescription.prescriptionId}}</td>
-            <td>{{prescription.rx_number}}</td>
-            <td>{{prescription.rx_provider}}</td>
-            <td>{{prescription.rx_name}}</td>
+            <td>{{prescription.rxNumber}}</td>
+            <td>{{prescription.rxProvider}}</td>
+            <td>{{prescription.rxName}}</td>
             <td>{{prescription.refills}}</td>
             <td>{{prescription.quantity}}</td>
             <td>
-              <!-- <button (click)="viewPrescription(prescription.prescriptionId)" class="btn btn-info">Details</button> -->
-              <!-- <button (click)="updateProfile(profile.profileId)" class="btn btn-info" style="margin-left: 10px">Update</button>-->
+              <button (click)="updatePrescription(prescription.profileId, prescription.prescriptionId)" class="btn btn-info" style="margin-left: 10px">Update</button>
               <button (click)="deletePrescription(prescription.prescriptionId)" class="btn btn-danger" style="margin-left: 10px">Delete</button>
             </td>
           </tr>

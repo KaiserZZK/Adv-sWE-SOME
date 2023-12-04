@@ -26,17 +26,17 @@ export class PrescriptionService {
     });
   }
 
-  // createPrescription(profile): Observable<any> {
-  //   return this.http.post(BASE_URL + 'profiles', profile, {
-  //     headers: this.createAuthorizationHeader()
-  //   });
-  // }
+  createPrescription(prescription): Observable<any> {
+    return this.http.post(BASE_URL + 'prescriptions', prescription, {
+      headers: this.createAuthorizationHeader()
+    });
+  }
 
-  // updatePrescription(profileId, profile): Observable<any> {
-  //   return this.http.post(BASE_URL + 'profiles/' + profileId, profile, {
-  //     headers: this.createAuthorizationHeader()
-  //   });
-  // }
+  updatePrescription(prescriptionId, prescription): Observable<any> {
+    return this.http.put(BASE_URL + 'prescriptions/' + prescriptionId, prescription, {
+      headers: this.createAuthorizationHeader()
+    });
+  }
 
   deletePrescription(prescriptionId): Observable<any> {
     return this.http.delete(BASE_URL + 'prescriptions/' + prescriptionId, {

@@ -30,8 +30,8 @@ const routes: Routes = [
   { path: 'update-profile/:profileId',  component: UpdateProfileComponent },
   { path: 'list-prescription/:profileId',   component: ListPrescriptionComponent    },
   { path: 'create-prescription',            component: CreatePrescriptionComponent  },
-  { path: 'view-prescription/:prescriptionId',    component: ViewPrescriptionComponent   },
-  { path: 'update-prescription/:prescriptionId',  component: UpdatePrescriptionComponent },
+  { path: 'view-prescription/:profileId/:prescriptionId',    component: ViewPrescriptionComponent   },
+  { path: 'update-prescription/:profileId/:prescriptionId',  component: UpdatePrescriptionComponent },
   { path: 'health-advice/:profileId',   component: HealthAdviceComponent  },
   { path: 'consent',        component: ConsentComponent       }
 ];
