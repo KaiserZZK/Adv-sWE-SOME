@@ -30,20 +30,20 @@ export class ListPrescriptionComponent {
     this.prescriptionList = this.prescriptionService.getPrescriptionList(this.profileId);
   }
 
-  deleteProfile(id: String) {
-    // this.profileService.deleteProfile(id)
-    //   .subscribe(
-    //     data => {
-    //       console.log(data);
-    //       this.reloadData();
-    //     },
-    //     error => console.log(error));
+  deletePrescription(prescriptionId: String) {
+    this.prescriptionService.deletePrescription(prescriptionId)
+      .subscribe(
+        data => {
+          console.log(data);
+          this.reloadData();
+        },
+        error => console.log(error));
   }
 
-  viewProfile(profileId: String) {
-    console.log(profileId)
-    this.router.navigate(['view-profile', profileId]);
-  }
+  // not really necessary here
+  // viewPrescription(prescriptionId: String) {
+  //   this.router.navigate(['view-prescription', prescriptionId]);
+  // }
 
   updateProfile(profileId: String) {
     this.router.navigate(['update-profile', profileId]);

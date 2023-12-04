@@ -20,11 +20,11 @@ export class PrescriptionService {
     });
   }
 
-  // getPrescription(profileId): Observable<any> {
-  //   return this.http.get(BASE_URL + 'profiles/' + profileId, {
-  //     headers: this.createAuthorizationHeader()
-  //   });
-  // }
+  getPrescription(prescriptionId): Observable<any> {
+    return this.http.get(BASE_URL + 'prescriptions/' + prescriptionId, {
+      headers: this.createAuthorizationHeader()
+    });
+  }
 
   // createPrescription(profile): Observable<any> {
   //   return this.http.post(BASE_URL + 'profiles', profile, {
@@ -38,11 +38,11 @@ export class PrescriptionService {
   //   });
   // }
 
-  // deletePrescription(profileId): Observable<any> {
-  //   return this.http.delete(BASE_URL + 'profiles/' + profileId, {
-  //     headers: this.createAuthorizationHeader()
-  //   });
-  // }
+  deletePrescription(prescriptionId): Observable<any> {
+    return this.http.delete(BASE_URL + 'prescriptions/' + prescriptionId, {
+      headers: this.createAuthorizationHeader()
+    });
+  }
 
   private createAuthorizationHeader() {
     const jwtToken = localStorage.getItem('JWT');
