@@ -16,6 +16,10 @@ import { ViewProfileComponent } from './components/profiles/view-profile/view-pr
 import { UpdateProfileComponent } from './components/profiles/update-profile/update-profile.component';
 import { ListProfilesComponent } from './components/profiles/list-profiles/list-profiles.component';
 import { HealthAdviceComponent } from './components/analytics/health-advice/health-advice.component';
+import { CreatePrescriptionComponent } from './components/prescription/create-prescription/create-prescription.component';
+import { ListPrescriptionComponent } from './components/prescription/list-prescription/list-prescription.component';
+import { UpdatePrescriptionComponent } from './components/prescription/update-prescription/update-prescription.component';
+import { ViewPrescriptionComponent } from './components/prescription/view-prescription/view-prescription.component';
 
 
 @NgModule({
@@ -32,6 +36,10 @@ import { HealthAdviceComponent } from './components/analytics/health-advice/heal
     UpdateProfileComponent,
     ListProfilesComponent,
     HealthAdviceComponent,
+    CreatePrescriptionComponent,
+    ListPrescriptionComponent,
+    UpdatePrescriptionComponent,
+    ViewPrescriptionComponent,
   ],
   imports: [
     BrowserModule,
