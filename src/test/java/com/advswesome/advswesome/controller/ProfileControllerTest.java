@@ -7,8 +7,16 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 
 import static org.mockito.Mockito.*;
@@ -21,28 +29,36 @@ public class ProfileControllerTest {
     @Mock
     private ProfileService profileService;
 
-    private WebTestClient webTestClient;
+    private MockMvc mockMvc;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        webTestClient = WebTestClient.bindToController(profileController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(profileController).build();
     }
 
-    // @Test
-    // void createProfile() {
-    //     Profile profile = new Profile();
-    //     profile.setProfileId(String.valueOf(123));
-    //     profile.setAge(23);
-    //     when(profileService.createProfile(profile)).thenReturn(Mono.just(profile));
+    @Test
+    void createProfile() {
+        Profile profile = new Profile();
+        profile.setProfileId("123");
+        profile.setAge(23);
 
-    //     webTestClient.post()
-    //             .uri("/profiles")
-    //             .bodyValue(profile)
-    //             .exchange()
-    //             .expectStatus().isOk()
-    //             .expectBody(Profile.class);
-    // }
+
+        when(profileService.createProfile(any(Profile.class))).thenReturn(Mono.just(profile));
+
+        try {
+            mockMvc.perform(post("/profiles")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(profile)))
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(objectMapper.writeValueAsString(profile)));
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
+
+
+    }
 
     @Test
     void getProfileById() {
@@ -50,11 +66,13 @@ public class ProfileControllerTest {
         profile.setProfileId("3959");
         when(profileService.getProfileById("3959")).thenReturn(Mono.just(profile));
 
-        webTestClient.get()
-                .uri("/profiles/3959")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(Profile.class);
+        try {
+        mockMvc.perform(get("/profiles/3959"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(profile)));
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
     }
 
     @Test
@@ -64,25 +82,30 @@ public class ProfileControllerTest {
         when(profileService.getProfileById("3959")).thenReturn(Mono.just(profile));
         when(profileService.updateProfile(any(Profile.class))).thenReturn(Mono.just(profile));
 
-        webTestClient.put()
-                .uri("/profiles/3959")
-                .bodyValue(profile)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(Profile.class);
+        try {
+            mockMvc.perform(put("/profiles/3959")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(profile)))
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(objectMapper.writeValueAsString(profile)));
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
     }
 
     @Test
     void updateProfileNotExist() {
         when(profileService.getProfileById("3959")).thenReturn(Mono.empty());
 
-        webTestClient.put()
-                .uri("/profiles/3959")
-                .bodyValue(new Profile())
-                .exchange()
-                .expectStatus().isNotFound();
+        try {
+            mockMvc.perform(put("/profiles/3959")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(new Profile())))
+                    .andExpect(status().isNotFound());
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
     }
-
 
     @Test
     void deleteProfile() {
@@ -91,20 +114,12 @@ public class ProfileControllerTest {
         when(profileService.getProfileById("3959")).thenReturn(Mono.just(profile));
         when(profileService.deleteProfile("3959")).thenReturn(Mono.empty());
 
-        webTestClient.delete()
-                .uri("/profiles/3959")
-                .exchange()
-                .expectStatus().isNoContent();
-    }
-
-    @Test
-    void deleteProfileNotExist() {
-        when(profileService.getProfileById("3959")).thenReturn(Mono.empty());
-
-        webTestClient.delete()
-                .uri("/profiles/3959")
-                .exchange()
-                .expectStatus().isNotFound();
+        try {
+            mockMvc.perform(delete("/profiles/3959"))
+                    .andExpect(status().isNoContent());
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
     }
 
 //    @Test

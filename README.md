@@ -263,7 +263,7 @@ mvn checkstyle:check
 
 ### Prescriptions
 
-- #### /prescription
+- #### /prescriptions
   - `POST`
   - Description: Create a new prescription
   - Authentication: Required
@@ -281,10 +281,14 @@ mvn checkstyle:check
   - Output 
     - On Success
       - Status Code: `201`
-      - Message: `Prescription created successfully`
-    - On Duplicated `prescriptionId`:
-      - Status Code: `409`
-      - Message: `Prescription with ID {prescriptionId} already exists`
+      - JSON with field:
+        - `prescriptionId` (String)
+        - `profileId` (String)
+        - `rx_number` (Integer)
+        - `rx_provider` (String)
+        - `rx_name` (String)
+        - `refills` (Integer)
+        - `quantity` (Integer)
 
 - #### /prescription/{prescriptionId}
   - `GET`
