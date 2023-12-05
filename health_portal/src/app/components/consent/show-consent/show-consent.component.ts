@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConsentService } from "../../../service/consent.service";
 
 @Component({
@@ -13,6 +13,7 @@ export class ShowConsentComponent {
 
   constructor (
     private ConsentService: ConsentService,
+    private route: ActivatedRoute,
     private router: Router,
   ) {}
 
@@ -26,6 +27,7 @@ export class ShowConsentComponent {
       .subscribe(
       data => {
         this.consent = data;
+        console.log(this.consent);
         },
       error => {
         console.log(error)

@@ -15,37 +15,37 @@ export class ConsentService {
   ) { }
 
   getConsentByUid(userId): Observable<any> {
-    return this.http.get(BASE_URL + 'consent/user/' + userId, {
+    return this.http.get(BASE_URL + 'consents/user/' + userId, {
       headers: this.createAuthorizationHeader()
     });
   }
 
   getConsentByPid(profileId): Observable<any> {
-    return this.http.get(BASE_URL + 'consent/profile/' + profileId, {
+    return this.http.get(BASE_URL + 'consents/profile/' + profileId, {
       headers: this.createAuthorizationHeader()
     });
   }
 
   getConsentByCid(consentId): Observable<any> {
-    return this.http.get(BASE_URL + 'consent/' + consentId, {
-      headers: this.createAuthorizationHeader()
-    });
-  }
-
-  deleteConsent(consentId): Observable<any> {
-    return this.http.delete(BASE_URL + 'consent/' + consentId, {
+    return this.http.get(BASE_URL + 'consents/' + consentId, {
       headers: this.createAuthorizationHeader()
     });
   }
 
   createConsent(consentData): Observable<any> {
-    return this.http.post(BASE_URL + 'consent/', consentData, {
+    return this.http.post(BASE_URL + 'consents', consentData, {
+      headers: this.createAuthorizationHeader()
+    });
+  }
+
+  deleteConsent(consentId): Observable<any> {
+    return this.http.delete(BASE_URL + 'consents/' + consentId, {
       headers: this.createAuthorizationHeader()
     });
   }
 
   updateConsent(consentId, consentData): Observable<any> {
-    return this.http.put(BASE_URL + 'consent/' + consentId, consentData, {
+    return this.http.put(BASE_URL + 'consents/' + consentId, consentData, {
       headers: this.createAuthorizationHeader()
     });
   }
