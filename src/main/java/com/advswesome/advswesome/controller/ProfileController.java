@@ -5,10 +5,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.advswesome.advswesome.repository.document.Profile;
 import com.advswesome.advswesome.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import java.util.List;
 
 @RestController
 @RequestMapping("/profiles")
@@ -21,36 +23,60 @@ public class ProfileController {
     }
 
     @PostMapping
-    public Mono<Profile> createProfile(@AuthenticationPrincipal UserPrincipal principal, @RequestBody Profile profile) {
-        return profileService.createProfile(profile);
+    public ResponseEntity<Profile> createProfile(
+        @AuthenticationPrincipal UserPrincipal principal, 
+        @RequestBody Profile profile) 
+    {
+        Mono<Profile> profileMono = profileService.createProfile(profile);
+        Profile newProfile  = profileMono.block();
+        return ResponseEntity.status(HttpStatus.OK).body(newProfile);
     }
 
     @GetMapping("/{profileId}")
-    public Mono<Profile> getProfileById(@PathVariable String profileId) {
-        return profileService.getProfileById(profileId);
+    public ResponseEntity<Profile> getProfileById(
+        @AuthenticationPrincipal UserPrincipal principal, 
+        @PathVariable String profileId) 
+    {
+        Mono<Profile> profileMono = profileService.getProfileById(profileId);
+        Profile foundProfile  = profileMono.block();
+        return ResponseEntity.status(HttpStatus.OK).body(foundProfile);
     }
 
     @PutMapping("/{profileId}")
-    public Mono<ResponseEntity<Profile>> updateProfile(@PathVariable String profileId, @RequestBody Profile profile) {
+    public ResponseEntity<Profile> updateProfile(
+        @AuthenticationPrincipal UserPrincipal principal, 
+        @PathVariable String profileId, 
+        @RequestBody Profile profile) 
+    {
+        // TODO: updated the dates??
         return profileService.getProfileById(profileId)
                 .flatMap(existing -> {
                     profile.setProfileId(profileId);
                     return profileService.updateProfile(profile);
                 })
                 .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+                .defaultIfEmpty(ResponseEntity.notFound().build())
+                .block();
     }
 
     @DeleteMapping("/{profileId}")
-    public Mono<ResponseEntity<Void>> deleteProfile(@PathVariable String profileId) {
-        return profileService.getProfileById(profileId)
-                .flatMap(existing -> profileService.deleteProfile(profileId).thenReturn(existing))
-                .map(profile -> ResponseEntity.noContent().<Void>build())
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+    public ResponseEntity<Void> deleteProfile(
+        @AuthenticationPrincipal UserPrincipal principal, 
+        @PathVariable String profileId
+    ) {
+        Mono<Void> profileMono = profileService.deleteProfile(profileId);
+        var deletedProfile = profileMono.block();
+        return ResponseEntity.status(HttpStatus.OK).body(deletedProfile);
     }
 
     @GetMapping("/user/{userId}")
-    public Flux<Profile> getProfilesByUserId(@PathVariable String userId) {
-        return profileService.getProfilesByUserId(userId);
+    public ResponseEntity<List<Profile>> getProfilesByUserId(
+        @AuthenticationPrincipal UserPrincipal principal, 
+        @PathVariable String userId) 
+    {
+        Flux<Profile> profilesFlux = profileService.getProfilesByUserId(userId);
+        List<Profile> profilesList = profilesFlux.collectList().block();
+        return ResponseEntity.status(HttpStatus.OK).body(profilesList);
     }
+
 }

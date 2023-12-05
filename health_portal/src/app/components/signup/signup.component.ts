@@ -40,9 +40,8 @@ export class SignupComponent {
 
   signup() {
     alert(this.signupForm.value)
-    // console.log(this.signupForm.value);
     this.service.signup(this.signupForm.value).subscribe((response) => {
-      alert(response);
+      alert("Nice to meet you! You've successfully created a new account.");
       console.log(response);
     })
   }
