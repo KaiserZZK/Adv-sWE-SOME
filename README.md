@@ -349,7 +349,7 @@ mvn checkstyle:check
 
 ### Consents 
 
-- #### /consent
+- #### /consents
   - `POST`
   - Description: Create a new consent 
   - Authentication: Required
@@ -370,7 +370,7 @@ mvn checkstyle:check
       - Status Code: `409`
       - Message: `Consent with ID {consentId} already exists`
 
-- #### /consent/{consentId}
+- #### /consents/{consentId}
   - `GET`
   - Description: Get consent by consentId 
   - Authentication: Required
@@ -386,7 +386,7 @@ mvn checkstyle:check
     - On Error - Not Found
       - Status Code: `404`
 
-- #### /consent/{consentId}
+- #### /consents/{consentId}
   - `PUT`
   - Description: Update a consent
   - Authentication: Required
@@ -411,7 +411,7 @@ mvn checkstyle:check
     - On Error - Not Found
       - Status Code: `404`
 
-- #### /consent/{consentId}
+- #### /consents/{consentId}
   - `DELETE` 
   - Description: Delete a consent
   - Authentication: Required
@@ -450,7 +450,7 @@ mvn checkstyle:check
     - On Error - Not Found
         - Status Code: `404`
 
-- #### /consent/profile/{profileId}
+- #### /consents/profile/{profileId}
   - `GET`
   - Description: Get the consent info under the given ProfileId
   - Authentication: Required
@@ -459,7 +459,7 @@ mvn checkstyle:check
       - Status Code: `200`
       - JSON - Consent info
 
-- #### /consent/user/{userId}
+- #### /consents/user/{userId}
   - `GET`
   - Description: Get the consent info under the given UserId
   - Authentication: Required

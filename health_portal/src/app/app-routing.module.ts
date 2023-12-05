@@ -14,10 +14,11 @@ import { ViewPrescriptionComponent } from './components/prescription/view-prescr
 import { UpdatePrescriptionComponent } from './components/prescription/update-prescription/update-prescription.component';
 import { ListPrescriptionComponent } from './components/prescription/list-prescription/list-prescription.component';
 
-import { HealthAdviceComponent } from './components/analytics/health-advice/health-advice.component';
+import { CreateConsentComponent } from "./components/consent/create-consent/create-consent.component";
+import { UpdateConsentComponent } from "./components/consent/update-consent/update-consent.component";
+import { ShowConsentComponent } from "./components/consent/show-consent/show-consent.component";
 
-import { PrescriptionComponent } from './prescription/prescription.component';
-import { ConsentComponent } from './consent/consent.component';
+import { HealthAdviceComponent } from './components/analytics/health-advice/health-advice.component';
 
 
 const routes: Routes = [
@@ -33,7 +34,9 @@ const routes: Routes = [
   { path: 'view-prescription/:profileId/:prescriptionId',    component: ViewPrescriptionComponent   },
   { path: 'update-prescription/:profileId/:prescriptionId',  component: UpdatePrescriptionComponent },
   { path: 'health-advice/:profileId',   component: HealthAdviceComponent  },
-  { path: 'consent',        component: ConsentComponent       }
+  { path: 'create-consent',      component: CreateConsentComponent      },
+  { path: 'update-consent',      component: UpdateConsentComponent      },
+  { path: 'show-consent',        component: ShowConsentComponent        }
 ];
 
 @NgModule({
