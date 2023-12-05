@@ -24,8 +24,8 @@ public class ProfileController {
 
     @PostMapping
     public ResponseEntity<Profile> createProfile(
-        @AuthenticationPrincipal UserPrincipal principal, 
-        @RequestBody Profile profile) 
+        @AuthenticationPrincipal UserPrincipal principal,
+        @RequestBody Profile profile)
     {
         Mono<Profile> profileMono = profileService.createProfile(profile);
         Profile newProfile  = profileMono.block();
@@ -34,8 +34,8 @@ public class ProfileController {
 
     @GetMapping("/{profileId}")
     public ResponseEntity<Profile> getProfileById(
-        @AuthenticationPrincipal UserPrincipal principal, 
-        @PathVariable String profileId) 
+        @AuthenticationPrincipal UserPrincipal principal,
+        @PathVariable String profileId)
     {
         Mono<Profile> profileMono = profileService.getProfileById(profileId);
         Profile foundProfile  = profileMono.block();
@@ -44,9 +44,9 @@ public class ProfileController {
 
     @PutMapping("/{profileId}")
     public ResponseEntity<Profile> updateProfile(
-        @AuthenticationPrincipal UserPrincipal principal, 
-        @PathVariable String profileId, 
-        @RequestBody Profile profile) 
+        @AuthenticationPrincipal UserPrincipal principal,
+        @PathVariable String profileId,
+        @RequestBody Profile profile)
     {
         // TODO: updated the dates??
         return profileService.getProfileById(profileId)
@@ -61,18 +61,18 @@ public class ProfileController {
 
     @DeleteMapping("/{profileId}")
     public ResponseEntity<Void> deleteProfile(
-        @AuthenticationPrincipal UserPrincipal principal, 
+        @AuthenticationPrincipal UserPrincipal principal,
         @PathVariable String profileId
     ) {
         Mono<Void> profileMono = profileService.deleteProfile(profileId);
         var deletedProfile = profileMono.block();
-        return ResponseEntity.status(HttpStatus.OK).body(deletedProfile);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(deletedProfile);
     }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Profile>> getProfilesByUserId(
-        @AuthenticationPrincipal UserPrincipal principal, 
-        @PathVariable String userId) 
+        @AuthenticationPrincipal UserPrincipal principal,
+        @PathVariable String userId)
     {
         Flux<Profile> profilesFlux = profileService.getProfilesByUserId(userId);
         List<Profile> profilesList = profilesFlux.collectList().block();

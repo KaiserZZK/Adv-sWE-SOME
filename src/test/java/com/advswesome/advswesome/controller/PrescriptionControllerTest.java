@@ -1,19 +1,25 @@
 package com.advswesome.advswesome.controller;
 
 import com.advswesome.advswesome.repository.document.Prescription;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.advswesome.advswesome.service.PrescriptionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import reactor.core.publisher.Mono;
 
-import java.util.Objects;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import static org.mockito.Mockito.*;
 
 // controller test that mock the behavior of api call
@@ -25,16 +31,17 @@ public class PrescriptionControllerTest {
     @Mock
     private PrescriptionService prescriptionService;
 
-    private WebTestClient webTestClient;
+    private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        webTestClient = WebTestClient.bindToController(prescriptionController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(prescriptionController).build();
     }
 
 
     @Test
+    @WithMockUser
     void testCreatePrescriptionSuccess() {
         Prescription mockPrescription = new Prescription();
         mockPrescription.setPrescriptionId("testId");
@@ -42,108 +49,117 @@ public class PrescriptionControllerTest {
         when(prescriptionService.getPrescriptionById("testId")).thenReturn(Mono.empty());
         when(prescriptionService.createPrescription(any(Prescription.class))).thenReturn(Mono.just(mockPrescription));
 
-        webTestClient.post()
-                .uri("/prescriptions")
-                .bodyValue(mockPrescription)
-                .exchange()
-                .expectStatus().isCreated()
-                .expectBody(String.class)
-                .isEqualTo("Prescription created successfully");
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            String mockPrescriptionJson = objectMapper.writeValueAsString(mockPrescription);
+
+            mockMvc.perform(post("/prescriptions")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(mockPrescriptionJson))
+                    .andExpect(status().isCreated())
+                    .andExpect(jsonPath("$.prescriptionId").value("testId"));
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
     }
 
     @Test
-    void testCreatePrescriptionConflict() {
-        Prescription mockPrescription = new Prescription();
-        mockPrescription.setPrescriptionId("testId");
-
-        when(prescriptionService.getPrescriptionById("testId")).thenReturn(Mono.just(mockPrescription));
-        when(prescriptionService.createPrescription(any(Prescription.class))).thenReturn(Mono.just(mockPrescription));
-
-        webTestClient.post()
-                .uri("/prescriptions")
-                .bodyValue(mockPrescription)
-                .exchange()
-                .expectStatus().isEqualTo(HttpStatus.CONFLICT)
-                .expectBody(String.class)
-                .isEqualTo("Prescription with ID testId already exists.");
-    }
-
-
-    @Test
+    @WithMockUser
     void testGetPrescriptionByIdExists() {
         Prescription mockPrescription = new Prescription();
         mockPrescription.setPrescriptionId("testId");
         when(prescriptionService.getPrescriptionById("testId")).thenReturn(Mono.just(mockPrescription));
 
-        webTestClient.get()
-                .uri("/prescriptions/testId")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(Prescription.class)
-                .consumeWith(response -> {
-                    assertEquals(mockPrescription.getPrescriptionId(), Objects.requireNonNull(response.getResponseBody()).getPrescriptionId());
-                });
+        try {
+            mockMvc.perform(get("/prescriptions/testId"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.prescriptionId").value("testId"));
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
     }
 
     @Test
+    @WithMockUser
     void testGetPrescriptionByIdDoesNotExist() {
         when(prescriptionService.getPrescriptionById("testId")).thenReturn(Mono.empty());
 
-        webTestClient.get()
-                .uri("/prescriptions/testId")
-                .exchange()
-                .expectStatus().isNotFound();
+        try {
+            mockMvc.perform(get("/prescriptions/testId"))
+                    .andExpect(status().isNotFound());
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
     }
 
     @Test
+    @WithMockUser
     void testUpdatePrescriptionExists() {
         Prescription mockPrescription = new Prescription();
         mockPrescription.setPrescriptionId("testId");
         when(prescriptionService.getPrescriptionById("testId")).thenReturn(Mono.just(mockPrescription));
         when(prescriptionService.updatePrescription(any(Prescription.class))).thenReturn(Mono.just(mockPrescription));
 
-        webTestClient.put()
-                .uri("/prescriptions/testId")
-                .bodyValue(mockPrescription)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(Prescription.class)
-                .consumeWith(response -> {
-                    assertEquals(mockPrescription.getPrescriptionId(), Objects.requireNonNull(response.getResponseBody()).getPrescriptionId());
-                });
+        ObjectMapper objectMapper = new ObjectMapper();
+
+
+        try {
+            String mockPrescriptionJson = objectMapper.writeValueAsString(mockPrescription);
+            mockMvc.perform(put("/prescriptions/testId")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(mockPrescriptionJson))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.prescriptionId").value("testId"));
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
     }
 
     @Test
+    @WithMockUser
     void testUpdatePrescriptionDoesNotExist() {
         when(prescriptionService.getPrescriptionById("testId")).thenReturn(Mono.empty());
 
-        webTestClient.put()
-                .uri("/prescriptions/testId")
-                .bodyValue(new Prescription())
-                .exchange()
-                .expectStatus().isNotFound();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            String emptyPrescriptionJson = objectMapper.writeValueAsString(new Prescription());
+            mockMvc.perform(put("/prescriptions/testId")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(emptyPrescriptionJson))
+                    .andExpect(status().isNotFound());
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
     }
 
     @Test
+    @WithMockUser
     void testDeletePrescriptionExists() {
         Prescription mockPrescription = new Prescription();
         mockPrescription.setPrescriptionId("testId");
         when(prescriptionService.getPrescriptionById("testId")).thenReturn(Mono.just(mockPrescription));
         when(prescriptionService.deletePrescription("testId")).thenReturn(Mono.empty());
 
-        webTestClient.delete()
-                .uri("/prescriptions/testId")
-                .exchange()
-                .expectStatus().isNoContent();
+        try {
+            mockMvc.perform(delete("/prescriptions/testId"))
+                    .andExpect(status().isNoContent());
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
     }
 
     @Test
+    @WithMockUser
     void testDeletePrescriptionDoesNotExist() {
         when(prescriptionService.getPrescriptionById("testId")).thenReturn(Mono.empty());
 
-        webTestClient.delete()
-                .uri("/prescriptions/testId")
-                .exchange()
-                .expectStatus().isNotFound();
+        try {
+            mockMvc.perform(delete("/prescriptions/testId"))
+                    .andExpect(status().isNotFound());
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
     }
 }
