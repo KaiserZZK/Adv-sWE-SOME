@@ -8,6 +8,8 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 
 import lombok.RequiredArgsConstructor;
 import com.advswesome.advswesome.service.AuthService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -33,8 +35,14 @@ public class UserController {
     }
 
     @PostMapping("/auth/login")
-    public LoginResponse login(@RequestBody @Validated LoginRequest request) throws IllegalArgumentException, JWTCreationException, UnsupportedEncodingException {
-        return authService.attemptLogin(request.getEmail(), request.getPassword());
+    public ResponseEntity<LoginResponse> login(@RequestBody @Validated LoginRequest request) throws IllegalArgumentException, JWTCreationException, UnsupportedEncodingException {
+        User user = userService.getUserByEmail(request.getEmail());
+        if (user.getClientId().equals(request.getClientId())) {
+            LoginResponse loginResponse=  authService.attemptLogin(request.getEmail(), request.getPassword());
+            return ResponseEntity.ok(loginResponse);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     @GetMapping("/{id}")
