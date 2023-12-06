@@ -22,13 +22,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-
-    
-    - name: Hello world action
-      with: # Set the secret as an input
-        super_secret: ${{ secrets.hello }}
-      env: # Or as an environment variable
-        super_secret: ${{ secrets.hello }}
     
     - shell: bash
       env:
