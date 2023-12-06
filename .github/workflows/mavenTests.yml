@@ -13,10 +13,6 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-  workflow_run:
-    workflows: ["Check out code"]
-    types:
-      - checkout
 
 jobs:
   build:
@@ -26,6 +22,19 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    
+    - name: Hello world action
+      with: # Set the secret as an input
+        super_secret: ${{ secrets.hello }}
+      env: # Or as an environment variable
+        super_secret: ${{ secrets.hello }}
+    
+    - shell: bash
+      env:
+        SUPER_SECRET: ${{ secrets.hello }}
+      run: |
+        echo "$SUPER_SECRET" >> src/main/resources/application.properties
 
     - name: Set up JDK 19
       uses: actions/setup-java@v2
