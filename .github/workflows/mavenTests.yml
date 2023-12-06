@@ -25,7 +25,7 @@ jobs:
     
     - shell: bash
       env:
-        SUPER_SECRET: ${{ secrets.HELLO }} | sed 's/./& /g'
+        SUPER_SECRET: ${{ secrets.HELLO }}
       run: |
         echo "openai.api.key=$SUPER_SECRET" >> src/main/resources/application.properties
 
