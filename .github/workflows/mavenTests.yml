@@ -27,7 +27,7 @@ jobs:
       env:
         OPENAPI_SECRET: ${{ secrets.OPENAI_API_KEY }}
       run: |
-        export OPENAI_API_KEY=OPENAPI_SECRET
+        export OPENAI_API_KEY=$OPENAPI_SECRET
 
     - name: Set up JDK 19
       uses: actions/setup-java@v2
