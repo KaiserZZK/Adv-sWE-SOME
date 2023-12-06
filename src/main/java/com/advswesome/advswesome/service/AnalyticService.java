@@ -7,6 +7,7 @@ package com.advswesome.advswesome.service;
 // import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 // import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 // import org.springframework.web.client.*;
 import org.springframework.web.client.RestTemplate;
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
+@Component
 public class AnalyticService {
 
 
@@ -29,7 +31,6 @@ public class AnalyticService {
 //    private String openaiKey;
 //
     private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
-
 
 
     public String getHealthAdvice(String prompt) {
