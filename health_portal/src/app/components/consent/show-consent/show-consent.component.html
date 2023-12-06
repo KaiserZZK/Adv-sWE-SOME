@@ -1,0 +1,13 @@
+<div *ngIf="consent; else consentNotFound">
+  <h2>Your current consent status is: {{consent.permission}} </h2>
+  <button type="button" routerLink="/update-consent">Update Your Consent</button>
+</div>
+<ng-template #consentNotFound>
+  <h2>Currently, you do not have consent in our record</h2>
+  <h2>Please create your consent first</h2>
+  <button type="button" routerLink="/create-consent">Create Your Consent</button>
+  <br>
+</ng-template>
+<br>
+
+<button type="button" routerLink="/dashboard">Back to Main Dashboard</button>

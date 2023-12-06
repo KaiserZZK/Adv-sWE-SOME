@@ -7,147 +7,132 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import reactor.core.publisher.Mono;
 
-import java.util.Objects;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.mockito.Mockito.*;
 
 public class ConsentControllerTest {
-
 
     @InjectMocks
     private ConsentController consentController;
 
     @Mock
     private ConsentService consentService;
-    private WebTestClient webTestClient;
+
+    private MockMvc mockMvc;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        webTestClient = WebTestClient.bindToController(consentController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(consentController).build();
     }
 
     @Test
-    void testCreateConsentSuccess() {
-        // create a new consent
+    @WithMockUser
+    void testCreateConsentSuccess() throws Exception {
         Date date = new Date();
         Consent mockConsent = new Consent("123", "User1", "A2", true, date);
         when(consentService.getConsentById("123")).thenReturn(Mono.empty());
         when(consentService.createConsent(any(Consent.class))).thenReturn(Mono.just(mockConsent));
 
-        webTestClient.post()
-                .uri("/consents")
-                .bodyValue(mockConsent)
-                .exchange()
-                .expectStatus().isCreated()
-                .expectBody(String.class)
-                .isEqualTo("Consent created successfully with ID 123");
+        mockMvc.perform(post("/consents")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(mockConsent)))
+                .andExpect(status().isCreated())
+                .andExpect(content().string("Consent created successfully with ID 123"));
     }
 
     @Test
-    void testCreateConflict() {
-        // create a new consent
+    @WithMockUser
+    void testCreateConflict() throws Exception {
         Date date = new Date();
         Consent mockConsent = new Consent("123", "User1", "A2", true, date);
         when(consentService.getConsentById("123")).thenReturn(Mono.just(mockConsent));
         when(consentService.createConsent(any(Consent.class))).thenReturn(Mono.just(mockConsent));
 
-        webTestClient.post()
-                .uri("/consents")
-                .bodyValue(mockConsent)
-                .exchange()
-                .expectStatus().isEqualTo(HttpStatus.CONFLICT)
-                .expectBody(String.class)
-                .isEqualTo("Consent with ID 123 already exists.");
+        try {
+            mockMvc.perform(post("/consents")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(mockConsent)))
+                    .andExpect(status().isConflict())
+                    .andExpect(content().string("Consent with ID 123 already exists."));
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
     }
 
     @Test
-    void testGetByConsentIdExists(){
-        // create a new consent
+    void testGetByConsentIdExists() throws Exception {
         Date date = new Date();
         Consent mockConsent = new Consent("123", "User1", "A2", true, date);
         when(consentService.getConsentById("123")).thenReturn(Mono.just(mockConsent));
 
-        webTestClient.get()
-                .uri("/consents/123")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(Consent.class)
-                .consumeWith(response -> {
-                    assertEquals(mockConsent.getConsentId(), Objects.requireNonNull(response.getResponseBody()).getConsentId());
-                });
+        mockMvc.perform(get("/consents/123"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(mockConsent)));
     }
 
     @Test
-    void testGetConsentByIdDoesNotExist() {
+    void testGetConsentByIdDoesNotExist() throws Exception {
         when(consentService.getConsentById("123")).thenReturn(Mono.empty());
 
-        webTestClient.get()
-                .uri("/consents/123")
-                .exchange()
-                .expectStatus().isNotFound();
+        mockMvc.perform(get("/consents/123"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
-    void testUpdateConsentExists(){
-        // create a new consent
+    void testUpdateConsentExists() throws Exception {
         Date date = new Date();
         Consent mockConsent = new Consent("123", "User1", "A2", true, date);
         when(consentService.getConsentById("123")).thenReturn(Mono.just(mockConsent));
         when(consentService.updateConsent(any(Consent.class))).thenReturn(Mono.just(mockConsent));
 
-        webTestClient.put()
-                .uri("/consents/123")
-                .bodyValue(mockConsent)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(Consent.class)
-                .consumeWith(response -> {
-                    assertEquals(mockConsent.getConsentId(), Objects.requireNonNull(response.getResponseBody()).getConsentId());
-                });
+        mockMvc.perform(put("/consents/123")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(mockConsent)))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(mockConsent)));
     }
 
     @Test
-    void testUpdateConsentDoesNotExist() {
+    void testUpdateConsentDoesNotExist() throws Exception {
         when(consentService.getConsentById("123")).thenReturn(Mono.empty());
 
-        webTestClient.put()
-                .uri("/consents/123")
-                .bodyValue(new Consent())
-                .exchange()
-                .expectStatus().isNotFound();
+        mockMvc.perform(put("/consents/123")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new Consent())))
+                .andExpect(status().isNotFound());
     }
 
     @Test
-    void testDeleteConsentExists() {
-        // create a new consent
+    void testDeleteConsentExists() throws Exception {
         Date date = new Date();
         Consent consent = new Consent("123", "User1", "A2", true, date);
-
-        // when getConsentById & deleteConsent called, return the same consent
         when(consentService.getConsentById("123")).thenReturn(Mono.just(consent));
         when(consentService.deleteConsent("123")).thenReturn(Mono.empty());
 
-        webTestClient.delete()
-                .uri("/consents/123")
-                .exchange()
-                .expectStatus().isNoContent();
+        mockMvc.perform(delete("/consents/123"))
+                .andExpect(status().isNoContent());
     }
 
     @Test
-    void testDeleteConsentDoesNotExist() {
+    void testDeleteConsentDoesNotExist() throws Exception {
         when(consentService.getConsentById("123")).thenReturn(Mono.empty());
 
-        webTestClient.delete()
-                .uri("/consents/123")
-                .exchange()
-                .expectStatus().isNotFound();
+        mockMvc.perform(delete("/consents/123"))
+                .andExpect(status().isNotFound());
     }
 
 }

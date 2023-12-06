@@ -13,6 +13,10 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_run:
+    workflows: ["Check out code"]
+    types:
+      - checkout
 
 jobs:
   build:
@@ -29,6 +33,12 @@ jobs:
         java-version: '19'
         distribution: 'adopt'
         cache: maven
+
+    - name: Include a test message
+      run: echo "hello world" >> src/main/resources/application.properties
+
+    - name: Verify the test message
+      run: cat src/main/resources/application.properties
     
     - name: Build project with Maven 
       run: ./mvnw clean install

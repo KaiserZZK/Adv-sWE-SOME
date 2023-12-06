@@ -1,110 +1,158 @@
 package com.advswesome.advswesome.controller;
 
 import com.advswesome.advswesome.repository.document.Profile;
+import com.advswesome.advswesome.security.JwtIssuer;
+import com.advswesome.advswesome.service.ConsentService;
 import com.advswesome.advswesome.service.ProfileService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SpringBootTest
 public class ProfileControllerTest {
-
-    @InjectMocks
-    private ProfileController profileController;
-
-    @Mock
+    @MockBean
     private ProfileService profileService;
 
-    private WebTestClient webTestClient;
+    @MockBean
+    private ConsentService consentService;
+
+    private MockMvc mockMvc;
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+    @Autowired
+    private JwtIssuer jwtIssuer;
+
+    @Autowired
+    private WebApplicationContext context;
+
+    private String token;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        webTestClient = WebTestClient.bindToController(profileController).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()) // Apply Spring Security configuration
+                .build();
+        try {
+             token = jwtIssuer.issue(JwtIssuer.Request.builder()
+                    .userId("12")
+                    .email("")
+                    .roles(Arrays.asList("ROLE_USER"))
+                    .build());
+        } catch (Exception e) {
+            fail();
+        }
+
     }
 
-    // @Test
-    // void createProfile() {
-    //     Profile profile = new Profile();
-    //     profile.setProfileId(String.valueOf(123));
-    //     profile.setAge(23);
-    //     when(profileService.createProfile(profile)).thenReturn(Mono.just(profile));
+    @Test
+    void createProfile() {
+        Profile profile = new Profile();
+        profile.setUserId("12");
+        profile.setProfileId("123");
+        profile.setAge(23);
 
-    //     webTestClient.post()
-    //             .uri("/profiles")
-    //             .bodyValue(profile)
-    //             .exchange()
-    //             .expectStatus().isOk()
-    //             .expectBody(Profile.class);
-    // }
+        when(profileService.createProfile(any(Profile.class))).thenReturn(Mono.just(profile));
+
+        try {
+            mockMvc.perform(post("/profiles")
+                            .header("Authorization", "Bearer " + token)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(profile)))
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(objectMapper.writeValueAsString(profile)));
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
+    }
 
     @Test
     void getProfileById() {
         Profile profile = new Profile();
         profile.setProfileId("3959");
+        profile.setUserId("12");
         when(profileService.getProfileById("3959")).thenReturn(Mono.just(profile));
+        when(consentService.getConsentByProfileId("3959")).thenReturn(Mono.empty());
 
-        webTestClient.get()
-                .uri("/profiles/3959")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(Profile.class);
+        try {
+            mockMvc.perform(get("/profiles/3959").header("Authorization", "Bearer " + token))
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(objectMapper.writeValueAsString(profile)));
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
     }
 
     @Test
     void updateProfile() {
         Profile profile = new Profile();
+        profile.setUserId("12");
         profile.setProfileId("3959");
         when(profileService.getProfileById("3959")).thenReturn(Mono.just(profile));
         when(profileService.updateProfile(any(Profile.class))).thenReturn(Mono.just(profile));
 
-        webTestClient.put()
-                .uri("/profiles/3959")
-                .bodyValue(profile)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(Profile.class);
+        try {
+            mockMvc.perform(put("/profiles/3959")
+                            .header("Authorization", "Bearer " + token)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(profile)))
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(objectMapper.writeValueAsString(profile)));
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
     }
 
     @Test
     void updateProfileNotExist() {
         when(profileService.getProfileById("3959")).thenReturn(Mono.empty());
 
-        webTestClient.put()
-                .uri("/profiles/3959")
-                .bodyValue(new Profile())
-                .exchange()
-                .expectStatus().isNotFound();
+        try {
+            mockMvc.perform(put("/profiles/3959")
+                            .header("Authorization", "Bearer " + token)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(new Profile())))
+                    .andExpect(status().isNotFound());
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
     }
-
 
     @Test
     void deleteProfile() {
         Profile profile = new Profile();
+        profile.setUserId("12");
         profile.setProfileId("3959");
         when(profileService.getProfileById("3959")).thenReturn(Mono.just(profile));
         when(profileService.deleteProfile("3959")).thenReturn(Mono.empty());
 
-        webTestClient.delete()
-                .uri("/profiles/3959")
-                .exchange()
-                .expectStatus().isNoContent();
-    }
-
-    @Test
-    void deleteProfileNotExist() {
-        when(profileService.getProfileById("3959")).thenReturn(Mono.empty());
-
-        webTestClient.delete()
-                .uri("/profiles/3959")
-                .exchange()
-                .expectStatus().isNotFound();
+        try {
+            mockMvc.perform(delete("/profiles/3959").header("Authorization", "Bearer " + token))
+                    .andExpect(status().isNoContent());
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
     }
 
 //    @Test

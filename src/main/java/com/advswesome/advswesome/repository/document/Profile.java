@@ -5,6 +5,7 @@ import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
 
 import java.util.List;
+import java.util.Objects;
 
 @Document(collectionName = "profiles")
 public class Profile {
@@ -127,4 +128,16 @@ public class Profile {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Profile profile = (Profile) o;
+        return age == profile.age && Objects.equals(profileId, profile.profileId) && Objects.equals(userId, profile.userId) && Objects.equals(sex, profile.sex) && Objects.equals(location, profile.location) && Objects.equals(physicalFitness, profile.physicalFitness) && Objects.equals(languagePreference, profile.languagePreference) && Objects.equals(medicalHistory, profile.medicalHistory);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(profileId, userId, age, sex, location, physicalFitness, languagePreference, medicalHistory);
+    }
 }

@@ -76,7 +76,7 @@ export class UpdateProfileComponent {
     this.profileService.createProfile(this.profile)
       .subscribe(data => console.log(data), error => console.log(error));
     this.profile = new Profile();
-    alert("Profile created successfully!");
+    alert("Profile updated successfully!");
     this.gotoList();
   }
 

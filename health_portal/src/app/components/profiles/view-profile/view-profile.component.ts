@@ -29,4 +29,8 @@ export class ViewProfileComponent {
       }, error => console.log(error));
   }
 
+  listPrescription(profileId: String) {
+    this.router.navigate(['list-prescription', profileId]);
+  }
+
 }

@@ -1,0 +1,7 @@
+<h2> Do you agree to give permission for our app to analyze your health data </h2>
+<select [(ngModel)]="permission">
+  <option value=True> Yes </option>
+  <option value=False> No </option>
+</select>
+<br><br>
+<button type="button" (click)="createConsent()"> Submit </button>

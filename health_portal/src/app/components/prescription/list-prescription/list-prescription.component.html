@@ -1,0 +1,40 @@
+<h1> You're now viewing your prescription list</h1>
+
+
+<button type="button" routerLink="/list-profiles">Back to Profiles</button>
+
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+      <h2>Prescription List</h2>
+    </div>
+    <button (click)="createPrescription()" class="btn btn-info" style="margin-left: 10px">Create New Prescription</button>
+    <div class="panel-body">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Prescription ID</th>
+            <th>Rx Number</th>
+            <th>Rx Provider</th>
+            <th>Rx Name</th>
+            <th>Refills</th>
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let prescription of prescriptionList | async">
+            <td>{{prescription.prescriptionId}}</td>
+            <td>{{prescription.rxNumber}}</td>
+            <td>{{prescription.rxProvider}}</td>
+            <td>{{prescription.rxName}}</td>
+            <td>{{prescription.refills}}</td>
+            <td>{{prescription.quantity}}</td>
+            <td>
+              <button (click)="updatePrescription(prescription.profileId, prescription.prescriptionId)" class="btn btn-info" style="margin-left: 10px">Update</button>
+              <button (click)="deletePrescription(prescription.prescriptionId)" class="btn btn-danger" style="margin-left: 10px">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

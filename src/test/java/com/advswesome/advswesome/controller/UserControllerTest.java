@@ -1,57 +1,58 @@
-// package com.advswesome.advswesome.controller;
+package com.advswesome.advswesome.controller;
 
-// import com.advswesome.advswesome.repository.document.User;
-// import com.advswesome.advswesome.service.UserService;
-// import org.junit.jupiter.api.BeforeEach;
-// import org.junit.jupiter.api.Test;
-// import org.mockito.InjectMocks;
-// import org.mockito.Mock;
-// import org.mockito.MockitoAnnotations;
-// import reactor.core.publisher.Flux;
-// import reactor.core.publisher.Mono;
+import com.advswesome.advswesome.repository.document.User;
+import com.advswesome.advswesome.service.AuthService;
+import com.advswesome.advswesome.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Mono;
 
-// import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+public class UserControllerTest {
 
-// class UserControllerTest {
+    @Mock
+    private UserService userService;
 
-//     @InjectMocks
-//     private UserController userController;
+    @Mock
+    private AuthService authService;
 
-//     @Mock
-//     private UserService userService;
+    @InjectMocks
+    private UserController userController;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
-//     @BeforeEach
-//     void setUp() {
-//         MockitoAnnotations.openMocks(this);
-//     }
+    private WebTestClient webTestClient;
 
-//     @Test
-//     void getAllUsers() {
-//         when(userService.getAllUsers()).thenReturn(Flux.just(new User("test@email.com")));
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        webTestClient = WebTestClient.bindToController(userController).build();
+    }
 
-//         userController.getAllUsers().collectList().block();
+    @Test
+    void createUserTest() throws Exception {
+        User mockUser = new User();
+        mockUser.setUserId("123");
+        mockUser.setEmail("123@122.com");
+        mockUser.setClientId("1");
 
-//         verify(userService, times(1)).getAllUsers();
-//     }
+        when(userService.createUser(any(User.class))).thenReturn(Mono.just(mockUser));
 
-//     @Test
-//     void createUser() {
-//         User user = new User("test@email.com");
-//         when(userService.saveUser(user)).thenReturn(Mono.just(user));
-
-//         userController.createUser(user).block();
-
-//         verify(userService, times(1)).saveUser(user);
-//     }
-
-//     @Test
-//     void getUserById() {
-//         User user = new User("test@email.com");
-//         user.setUserId("123");
-//         when(userService.getUserById("123")).thenReturn(Mono.just(user));
-
-//         userController.getUserById("123").block();
-
-//         verify(userService, times(1)).getUserById("123");
-//     }
-// }
+        webTestClient.post()
+                .uri("/users/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(mockUser)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.userId").isEqualTo("123")
+                .jsonPath("$.email").isEqualTo("123@122.com")
+                .jsonPath("$.clientId").isEqualTo("1");
+    }
+}

@@ -9,10 +9,16 @@ import { ViewProfileComponent } from './components/profiles/view-profile/view-pr
 import { UpdateProfileComponent } from './components/profiles/update-profile/update-profile.component';
 import { ListProfilesComponent } from './components/profiles/list-profiles/list-profiles.component';
 
-import { HealthAdviceComponent } from './components/analytics/health-advice/health-advice.component';
+import { CreatePrescriptionComponent } from './components/prescription/create-prescription/create-prescription.component';
+import { ViewPrescriptionComponent } from './components/prescription/view-prescription/view-prescription.component';
+import { UpdatePrescriptionComponent } from './components/prescription/update-prescription/update-prescription.component';
+import { ListPrescriptionComponent } from './components/prescription/list-prescription/list-prescription.component';
 
-import { PrescriptionComponent } from './prescription/prescription.component';
-import { ConsentComponent } from './consent/consent.component';
+import { CreateConsentComponent } from "./components/consent/create-consent/create-consent.component";
+import { UpdateConsentComponent } from "./components/consent/update-consent/update-consent.component";
+import { ShowConsentComponent } from "./components/consent/show-consent/show-consent.component";
+
+import { HealthAdviceComponent } from './components/analytics/health-advice/health-advice.component';
 
 
 const routes: Routes = [
@@ -23,9 +29,14 @@ const routes: Routes = [
   { path: 'create-profile', component: CreateProfileComponent },
   { path: 'view-profile/:profileId',    component: ViewProfileComponent   },
   { path: 'update-profile/:profileId',  component: UpdateProfileComponent },
+  { path: 'list-prescription/:profileId',   component: ListPrescriptionComponent    },
+  { path: 'create-prescription/:profileId', component: CreatePrescriptionComponent  },
+  { path: 'view-prescription/:profileId/:prescriptionId',    component: ViewPrescriptionComponent   },
+  { path: 'update-prescription/:profileId/:prescriptionId',  component: UpdatePrescriptionComponent },
   { path: 'health-advice/:profileId',   component: HealthAdviceComponent  },
-  { path: 'prescription',   component: PrescriptionComponent  },
-  { path: 'consent',        component: ConsentComponent       }
+  { path: 'create-consent',      component: CreateConsentComponent      },
+  { path: 'update-consent',      component: UpdateConsentComponent      },
+  { path: 'show-consent',        component: ShowConsentComponent        }
 ];
 
 @NgModule({
