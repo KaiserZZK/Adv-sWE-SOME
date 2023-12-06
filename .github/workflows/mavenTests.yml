@@ -25,9 +25,9 @@ jobs:
     
     - shell: bash
       env:
-        SUPER_SECRET: ${{ secrets.hello }}
+        SUPER_SECRET: ${{ secrets.OPENAI_API_KEY }}
       run: |
-        echo "$SUPER_SECRET" >> src/main/resources/application.properties
+        echo "openai.api.key=$SUPER_SECRET" >> src/main/resources/application.properties
 
     - name: Set up JDK 19
       uses: actions/setup-java@v2
