@@ -48,7 +48,7 @@ export class CreatePrescriptionComponent {
   }
 
   gotoList(profileId: String) {
-    this.router.navigate(['list-prescription', profileId]);
+    this.router.navigate(['list-prescription', this.profileId]);
   }
 
 }
