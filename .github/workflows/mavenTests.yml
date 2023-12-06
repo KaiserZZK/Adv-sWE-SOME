@@ -34,7 +34,7 @@ jobs:
       shell: bash
       env:
         OPENAPI_SECRET: ${{ secrets.OPENAI_API_KEY }}
-      run: >
+      run: |
         export OPENAI_API_KEY=$OPENAPI_SECRET
         echo $OPENAI_API_KEY
         ./mvnw clean install
