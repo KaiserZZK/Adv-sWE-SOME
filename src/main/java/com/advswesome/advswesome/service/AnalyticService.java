@@ -20,32 +20,27 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 @Component
 public class AnalyticService {
-
-
-
     @Value("${openai.api.key}")
     private String openaiApiKey;
 
-
-    //    @Value("${OPENAI_API_KEY}")
-//    private String openaiKey;
-//
     private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 
+    private static RestTemplate restTemplate = new RestTemplate();
+
+    public static void setRestTemplate(RestTemplate restTemplate) {
+        AnalyticService.restTemplate = restTemplate;
+    }
 
     public String getHealthAdvice(String prompt) {
-
-        RestTemplate restTemplate = new RestTemplate();
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(openaiApiKey);
 
         HttpEntity<String> request = new HttpEntity<>(createRequestBody(prompt), headers);
 
-        ResponseEntity<String> response = restTemplate.postForEntity(OPENAI_API_URL, request, String.class);
-
         try {
+            ResponseEntity<String> response = restTemplate.postForEntity(OPENAI_API_URL, request, String.class);
+
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(response.getBody());
             JsonNode choicesNode = rootNode.path("choices");
@@ -60,7 +55,7 @@ public class AnalyticService {
 
             return contentNode.asText();
         } catch (Exception e) {
-            e.printStackTrace();
+           // e.printStackTrace();
             return "Error parsing response";
         }
 

@@ -107,6 +107,19 @@ public class ConsentControllerTest {
     }
 
     @Test
+    void testUpdateConsentExistsNoDate() throws Exception {
+        Consent mockConsent = new Consent("123", "User1", "A2", true, null);
+        when(consentService.getConsentById("123")).thenReturn(Mono.just(mockConsent));
+        when(consentService.updateConsent(any(Consent.class))).thenReturn(Mono.just(mockConsent));
+
+        mockMvc.perform(put("/consents/123")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(mockConsent)))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(mockConsent)));
+    }
+
+    @Test
     void testUpdateConsentDoesNotExist() throws Exception {
         when(consentService.getConsentById("123")).thenReturn(Mono.empty());
 

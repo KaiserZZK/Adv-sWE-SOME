@@ -97,47 +97,115 @@ class ProfileServiceTest {
         verify(profileRepository, times(1)).deleteById("3959");
     }
 
-    // @Test
-    // void getAllProfilesForUser() {
-    //     Profile profile1 = new Profile();
-    //     profile1.setProfileId("3959");
-    //     profile1.setUserId("user1");
-    //     Profile profile2 = new Profile();
-    //     profile2.setProfileId("4000");
-    //     profile2.setUserId("user1");
+    @Test
+    void getNonExistentProfile() {
+        when(profileRepository.findById("nonexistent")).thenReturn(Mono.empty());
 
-    //     when(profileRepository.findByUserId("user1")).thenReturn(Flux.just(profile1,profile2));
+        Mono<Profile> result = profileService.getProfileById("nonexistent");
 
-    //     Flux<Profile> profiles = profileService.getProfilesByUserId("user1");
+        StepVerifier.create(result)
+                .expectNextCount(0)
+                .verifyComplete();
 
-    //     // verify each item in the returning prescriptions
-    //     StepVerifier.create(profiles)
-    //             .expectNext(profile1)
-    //             .expectNext(profile2)
-    //             .verifyComplete();
+        verify(profileRepository, times(1)).findById("nonexistent");
+    }
 
-    //     verify(profileRepository, times(1)).findByUserId("user1");
+    @Test
+    void handleDatabaseExceptionDuringCreation() {
+        Profile profile = new Profile();
+        profile.setProfileId("3959");
+
+        when(profileRepository.save(profile)).thenReturn(Mono.error(new RuntimeException("Database error")));
+
+        Mono<Profile> result = profileService.createProfile(profile);
+
+        StepVerifier.create(result)
+                .expectErrorMatches(throwable -> throwable instanceof RuntimeException && throwable.getMessage().equals("Database error"))
+                .verify();
+
+        verify(profileRepository).save(profile);
+    }
+
+    @Test
+    void getAllProfilesForUser() {
+        Profile profile1 = new Profile();
+        profile1.setProfileId("3959");
+        profile1.setUserId("user1");
+        Profile profile2 = new Profile();
+        profile2.setProfileId("4000");
+        profile2.setUserId("user1");
+
+        when(profileRepository.findByUserId("user1")).thenReturn(Flux.just(profile1, profile2));
+
+        Flux<Profile> profiles = profileService.getProfilesByUserId("user1");
+
+        StepVerifier.create(profiles)
+                .expectNext(profile1)
+                .expectNext(profile2)
+                .verifyComplete();
+
+        verify(profileRepository, times(1)).findByUserId("user1");
+    }
+
+    @Test
+    void createInvalidProfile() {
+        Profile invalidProfile = new Profile();
+
+        when(profileRepository.save(invalidProfile)).thenReturn(Mono.error(new IllegalArgumentException("Invalid profile")));
+
+        Mono<Profile> result = profileService.createProfile(invalidProfile);
+
+        StepVerifier.create(result)
+                .expectError(IllegalArgumentException.class)
+                .verify();
+
+        verify(profileRepository).save(invalidProfile);
+    }
+
+    @Test
+    void updateWithInvalidData() {
+        Profile invalidProfile = new Profile();
+
+        when(profileRepository.findById(invalidProfile.getProfileId())).thenReturn(Mono.just(invalidProfile));
+        when(profileRepository.save(invalidProfile)).thenReturn(Mono.error(new IllegalArgumentException("Invalid profile data")));
+
+        Mono<Profile> result = profileService.updateProfile(invalidProfile);
+
+        StepVerifier.create(result)
+                .expectError(IllegalArgumentException.class)
+                .verify();
+
+        verify(profileRepository).save(invalidProfile);
+    }
+
+    @Test
+    void handleDatabaseExceptionDuringUpdate() {
+        Profile profile = new Profile();
+        // Set profile details...
+        when(profileRepository.save(profile)).thenReturn(Mono.error(new RuntimeException("Database error")));
+
+        Mono<Profile> result = profileService.updateProfile(profile);
+
+        StepVerifier.create(result)
+                .expectError(RuntimeException.class)
+                .verify();
+
+        verify(profileRepository).save(profile);
+    }
 
 
-    // }
+    @Test
+    void handleExceptionDuringDelete() {
+        String profileId = "nonexistent";
+        when(profileRepository.deleteById(profileId)).thenReturn(Mono.error(new RuntimeException("Deletion error")));
 
-    // TODO: Test Saving Invalid Profile:
-//    @Test
-//    void createInvalidProfile() {
+        Mono<Void> result = profileService.deleteProfile(profileId);
 
-//    }
+        StepVerifier.create(result)
+                .expectError(RuntimeException.class)
+                .verify();
 
-    // TODO: Test Retrieving Non-Existent Profile:
-//    @Test
-//    void getNonExistentProfile() {
-//    }
-
-    // TODO: Test Handling of DB Exceptions:
-//    @Test
-//    void handleDatabaseExceptionDuringCreation() {
-//
-//    }
-
-
+        verify(profileRepository).deleteById(profileId);
+    }
 
 }

@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import java.util.Date;
 
@@ -145,6 +146,86 @@ public class ConsentServiceTest {
 
         // verify the findByProfileId method is called exactly once
         verify(consentRepository, times(1)).findByUserId("User1");
+    }
+
+    @Test
+    void testCreateConsentErrorHandling() {
+        Consent consent = new Consent("123", "User1", "A2", true, new Date());
+        when(consentRepository.save(consent)).thenReturn(Mono.error(new RuntimeException("Database error")));
+
+        Mono<Consent> result = consentService.createConsent(consent);
+
+        StepVerifier.create(result)
+                .expectErrorMatches(throwable -> throwable instanceof RuntimeException && throwable.getMessage().equals("Database error"))
+                .verify();
+
+        verify(consentRepository).save(consent);
+    }
+
+    @Test
+    void testGetConsentByIdErrorHandling() {
+        when(consentRepository.findById("123")).thenReturn(Mono.error(new RuntimeException("Database error")));
+
+        Mono<Consent> result = consentService.getConsentById("123");
+
+        StepVerifier.create(result)
+                .expectErrorMatches(throwable -> throwable instanceof RuntimeException && throwable.getMessage().equals("Database error"))
+                .verify();
+
+        verify(consentRepository).findById("123");
+    }
+
+    @Test
+    void testGetConsentByUserIdErrorHandling() {
+        when(consentRepository.findByUserId("User1")).thenReturn(Mono.error(new RuntimeException("Database error")));
+
+        Mono<Consent> result = consentService.getConsentByUserId("User1");
+
+        StepVerifier.create(result)
+                .expectErrorMatches(throwable -> throwable instanceof RuntimeException && throwable.getMessage().equals("Database error"))
+                .verify();
+
+        verify(consentRepository).findByUserId("User1");
+    }
+
+    @Test
+    void testGetConsentByProfileIdErrorHandling() {
+        when(consentRepository.findByProfileId("A2")).thenReturn(Mono.error(new RuntimeException("Database error")));
+
+        Mono<Consent> result = consentService.getConsentByProfileId("A2");
+
+        StepVerifier.create(result)
+                .expectErrorMatches(throwable -> throwable instanceof RuntimeException && throwable.getMessage().equals("Database error"))
+                .verify();
+
+        verify(consentRepository).findByProfileId("A2");
+    }
+
+    @Test
+    void testUpdateConsentErrorHandling() {
+        Consent consent = new Consent("123", "User1", "A2", true, new Date());
+        when(consentRepository.save(consent)).thenReturn(Mono.error(new RuntimeException("Database error")));
+
+        Mono<Consent> result = consentService.updateConsent(consent);
+
+        StepVerifier.create(result)
+                .expectErrorMatches(throwable -> throwable instanceof RuntimeException && throwable.getMessage().equals("Database error"))
+                .verify();
+
+        verify(consentRepository).save(consent);
+    }
+
+    @Test
+    void testDeleteConsentErrorHandling() {
+        when(consentRepository.deleteById("123")).thenReturn(Mono.error(new RuntimeException("Database error")));
+
+        Mono<Void> result = consentService.deleteConsent("123");
+
+        StepVerifier.create(result)
+                .expectErrorMatches(throwable -> throwable instanceof RuntimeException && throwable.getMessage().equals("Database error"))
+                .verify();
+
+        verify(consentRepository).deleteById("123");
     }
 }
 

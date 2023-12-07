@@ -58,7 +58,6 @@ public class MultiClientIntegrationTest {
                 .expectStatus().isOk()
                 .returnResult(LoginResponse.class)
                 .getResponseBody()
-                .doOnNext(response -> System.out.println("Login Response: " + response))
                 .blockFirst();
 
         user1Token = loginResponse1.getToken();
