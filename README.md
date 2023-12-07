@@ -19,6 +19,25 @@ Below are third party libraries included in build files.
 13. *[JSON Web Token](https://jwt.io/)*: Implementation of JWT for secure token creation and validation.
 14. *[Jacoco](https://www.jacoco.org)*: Used to generate code coverage report.
 
+## Client App
+
+### Target Audience
+Our client application, the Health Portal, offers a vital service to elderly and disabled individuals, providing a user-friendly platform for creating and viewing their health records. This portal enables users to monitor their current health profiles, receive reminders for medication intakes, and obtain personalized health advice based on their medical history and medication details. Furthermore, the portal serves as an invaluable tool for healthcare workers. By obtaining consent, these professionals can access their patients' profiles, allowing them to effectively track and manage the health records of elderly or disabled individuals, thereby facilitating improved healthcare support.
+
+### Code location
+```
+./health_portal
+```
+
+### Client Build/Run Instructions
+
+Please refer to ./health_portal/readme.txt
+
+```
+cd health_portal
+```
+
+
 ## Building and Running the Project
 
 ### GCP credential Setup
@@ -46,7 +65,7 @@ gcloud init
 gcloud auth application-default login  
 ```
 
-### To build project (Service):
+### To build project:
 ```
 mvn clean install
 ```
@@ -57,7 +76,7 @@ or
 ./mvnw clean install
 ```
 
-### Run Project (Service): 
+### Run Project: 
 
 ```
 mvn spring-boot:run
@@ -69,7 +88,7 @@ or
  ./mvnw spring-boot:run
 ```
 
-### Run All Unit Tests (Service):
+### Run All Unit Tests:
 ```
 mvn test
 ```
@@ -79,15 +98,6 @@ or
 ```
 ./mvnw test
 ```
-
-### Client Build/Run Instructions
-
-Please refer to ./health_portal/readme.txt
-
-```
-cd health_portal
-```
-
 
 ## CheckStyler
 Implemented with the Maven Checkstyle Plugin to ensure code quality. Configurations and rules are specified in the checkstyle.xml file.
@@ -150,6 +160,12 @@ CI is trigger on two events:
 
 CI reports can be views on Github Action interface. We have also attach SonarCloud report under CI.
 
+## Internal Integration Tests
+
+TODO !!!!!!
+
+Does the codebase include integration tests for the components of the service code that run automatically during CI?
+
 ## Branch Coverage
 Jacoco library was used to generated coverage report for our codebase. Each time `./mvnw test`  or `./mvnw clean install`is executed, a coverage report will be generated under `./target/site/jacoco/jacoco.xml`. 
 
@@ -175,7 +191,9 @@ checklist: TODO!!!!!!!
 
 ## External Integration Tests
 
-checklist: TODO !!!!!!
+TODO !!!!!!
+
+Are there tests for checking the interfaces to any third-party libraries and services used? Are there tests checking the interfaces to all environmental or external resources such as files and databases?
 
 ## API documentations
 

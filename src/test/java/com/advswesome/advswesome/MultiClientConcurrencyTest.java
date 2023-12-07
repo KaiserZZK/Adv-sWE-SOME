@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class MultiClientConcurrencyTest {
+class MultiClientConcurrencyTest {
     @Autowired
     private WebTestClient webTestClient;
 
