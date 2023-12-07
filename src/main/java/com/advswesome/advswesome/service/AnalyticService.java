@@ -1,19 +1,12 @@
 package com.advswesome.advswesome.service;
 
-// import com.advswesome.advswesome.repository.ProfileRepository;
-// import com.advswesome.advswesome.repository.document.Profile;
-// import jakarta.annotation.PostConstruct;
-// import org.apache.http.Header;
-// import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 // import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-// import org.springframework.web.client.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
-// import reactor.core.publisher.Flux;
-// import reactor.core.publisher.Mono;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -26,16 +19,21 @@ public class AnalyticService {
     @Value("${openai.api.key}")
     private String openaiApiKey;
 
-
-    //    @Value("${OPENAI_API_KEY}")
-//    private String openaiKey;
-//
     private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
+
+    private final RestTemplate restTemplate;
+
+
+    @Autowired
+    public AnalyticService(RestTemplate restTemplate){
+        this.restTemplate = restTemplate;
+    }
+
 
 
     public String getHealthAdvice(String prompt) {
 
-        RestTemplate restTemplate = new RestTemplate();
+//        RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -63,8 +61,6 @@ public class AnalyticService {
 //            e.printStackTrace();
             return "Error parsing response";
         }
-
-//        return createRequestBody(prompt);
 
     }
 
