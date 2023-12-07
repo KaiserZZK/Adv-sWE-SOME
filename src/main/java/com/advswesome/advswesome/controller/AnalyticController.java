@@ -9,7 +9,6 @@ import com.advswesome.advswesome.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.ErrorResponse;
 
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -79,15 +78,7 @@ public class AnalyticController {
                 "}";
 
 
-//        String prompt = "I am a 46 yo male, 140 pounds, currently taking omeprazole. Give me three health advices. Make the response in a json list where each item is an advice like {" +
-//                "  advice_1: xxxx.," +
-//                "  advice_2: xxxx.," +
-//                "  advice_3: xxxx." +
-//                "}";
-//        String prompt = "I am a 46 yo male, 140 pounds, currently taking omeprazole. Give me three health advices. Make the response in a json list";
-
         return ResponseEntity.ok(analyticService.getHealthAdvice(prompt));
-//        return ResponseEntity.ok("123");
     }
 
 
