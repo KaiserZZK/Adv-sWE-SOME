@@ -91,7 +91,6 @@ public class ConsentController {
         Mono<Consent> consentMono = consentService.getConsentByProfileId(profileId);
         Consent foundConsent  = consentMono.block();
         return ResponseEntity.status(HttpStatus.OK).body(foundConsent);
-        // return consentService.getConsentByProfileId(profileId);
     }
 
     @GetMapping("/user/{userId}")
@@ -99,6 +98,5 @@ public class ConsentController {
         Mono<Consent> consentMono = consentService.getConsentByUserId(userId);
         Consent foundConsent  = consentMono.block();
         return ResponseEntity.status(HttpStatus.OK).body(foundConsent);
-        // return consentService.getConsentByUserId(userId);
     }
 }

@@ -12,7 +12,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -158,6 +162,33 @@ public class PrescriptionControllerTest {
         try {
             mockMvc.perform(delete("/prescriptions/testId"))
                     .andExpect(status().isNotFound());
+        } catch (Exception e) {
+            fail("Exception thrown during test: " + e.getMessage());
+        }
+    }
+
+    @Test
+    @WithMockUser
+    void testGetPrescriptionsByProfileId() {
+        String profileId = "profile123";
+        Prescription mockPrescription1 = new Prescription();
+        mockPrescription1.setPrescriptionId("prescriptionId1");
+        Prescription mockPrescription2 = new Prescription();
+        mockPrescription2.setPrescriptionId("prescriptionId2");
+        List<Prescription> mockPrescriptions = Arrays.asList(
+                mockPrescription1,
+                mockPrescription2);
+
+        when(prescriptionService.getPrescriptionsByProfileId(profileId)).thenReturn(Flux.fromIterable(mockPrescriptions));
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            mockMvc.perform(get("/prescriptions/profile/" + profileId))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$[0].prescriptionId").value("prescriptionId1"))
+                    .andExpect(jsonPath("$[1].prescriptionId").value("prescriptionId2"));
+            // Add more assertions for other fields if necessary
         } catch (Exception e) {
             fail("Exception thrown during test: " + e.getMessage());
         }

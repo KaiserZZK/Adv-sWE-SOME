@@ -167,10 +167,12 @@ TODO !!!!!!
 Does the codebase include integration tests for the components of the service code that run automatically during CI?
 
 ## Branch Coverage
-Jacoco library was used to generated coverage report for our codebase. Each time `./mvnw test`  or `./mvnw clean install`is executed, a coverage report will be generated under `./target/site/jacoco/jacoco.xml`. 
+- Jacoco library was used to generated coverage report for our codebase. Each time `./mvnw test`  or `./mvnw clean install`is executed, a coverage report will be generated under `./target/site/jacoco/jacoco.xml`. 
+- You can also check the html version of the report by running the index.html file under target/site/index.html
 
-A final report was also copied and attached in `reports/coverage-report.xml`.
+- A final report was also copied and attached in `reports/coverage-report.xml`.
 ![coverage report example](readmeImages/coveragereport.png)
+![coverage report example2](readmeImages/cov2.png)
 
 Verification of 85% branch coverage was ensured. Check was added on build, when branch coverage < 85%, will fail to build.
 
@@ -185,9 +187,37 @@ SonarCloud Bug Finder and analysis report would be produced with CI for each pus
 Example: 
 ![bug finder example](readmeImages/bugfinder.png)
 
-## End-to-End Testing
 
-checklist: TODO!!!!!!!
+## End-to-End Testing Checklist
+
+### Client Registration Testing
+- Test registering new client with different clientType
+Validate response (‘clientId’, ‘apiKey’, ‘clientType’)
+Attempt registration with missing and invalid fields and validate failure response
+
+### User Authentication Testing
+- Validate successful registration returns ‘usersId’, ‘clientId’, ‘username’, ‘password’, ‘email’, ‘createdAt’, ‘updatedAt’
+Test user login with correct and incorrect credentials
+Ensure login returns a JWT token on success. (NOT SURE)
+
+### Profile Creation and Management
+- Test creating new profile with required fields and optional fields
+Validate response return correct ‘profileId’
+Attempt profile creating with incomplete data and validate failure response
+
+### Prescription Management
+- Test creating new prescription with valid ‘prescriptionId’
+Validate response (TODO)
+Attempt with duplication ‘prescriptionId’ errors with valid failure response
+
+### Consent Management
+- Test creating new consents with valid ‘userId’ and ‘profileId’
+Validate the response for success
+Attempt with duplication with valid failure response.
+
+### Analytics
+- Testing medical tracking feature display the correct medicine remainder for the given user
+Testing the health advice get relevant information to the user
 
 ## External Integration Tests
 
