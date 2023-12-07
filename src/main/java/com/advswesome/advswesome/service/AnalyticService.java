@@ -60,7 +60,7 @@ public class AnalyticService {
 
             return contentNode.asText();
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return "Error parsing response";
         }
 

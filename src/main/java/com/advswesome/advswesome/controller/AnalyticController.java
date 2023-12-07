@@ -9,6 +9,8 @@ import com.advswesome.advswesome.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.ErrorResponse;
+
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -50,6 +52,10 @@ public class AnalyticController {
 
 
         // TODO: generate prompt
+        if (foundProfile == null) {
+            return ResponseEntity.notFound().build();
+        }
+
         String prompt = "I am a " + foundProfile.getAge() + " yo " + foundProfile.getSex() + ", living in " + foundProfile.getLocation() +
                 ", with a physical fitness level of " + foundProfile.getPhysicalFitness() + " and language preference of " + foundProfile.getLanguagePreference() +
                 ". My medical history includes: ";
