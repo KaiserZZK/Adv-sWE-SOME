@@ -135,6 +135,81 @@ public class PrescriptionServiceTest {
         verify(prescriptionRepository, times(1)).findByProfileId(profileId);
     }
 
+    @Test
+    void testCreatePrescriptionErrorHandling() {
+        Prescription prescription = new Prescription();
+        prescription.setRxNumber("12345");
+        // Other prescription setup...
+
+        when(prescriptionRepository.save(prescription)).thenReturn(Mono.error(new RuntimeException("Database error")));
+
+        Mono<Prescription> result = prescriptionService.createPrescription(prescription);
+
+        StepVerifier.create(result)
+                .expectErrorMatches(throwable -> throwable instanceof RuntimeException && throwable.getMessage().equals("Database error"))
+                .verify();
+
+        verify(prescriptionRepository).save(prescription);
+    }
+
+    @Test
+    void testGetPrescriptionByIdErrorHandling() {
+        when(prescriptionRepository.findById("12345")).thenReturn(Mono.error(new RuntimeException("Database error")));
+
+        Mono<Prescription> result = prescriptionService.getPrescriptionById("12345");
+
+        StepVerifier.create(result)
+                .expectErrorMatches(throwable -> throwable instanceof RuntimeException && throwable.getMessage().equals("Database error"))
+                .verify();
+
+        verify(prescriptionRepository).findById("12345");
+    }
+
+
+    @Test
+    void testUpdatePrescriptionErrorHandling() {
+        Prescription prescription = new Prescription();
+        prescription.setRxNumber("12345");
+        // Other prescription setup...
+
+        when(prescriptionRepository.save(prescription)).thenReturn(Mono.error(new RuntimeException("Database error")));
+
+        Mono<Prescription> result = prescriptionService.updatePrescription(prescription);
+
+        StepVerifier.create(result)
+                .expectErrorMatches(throwable -> throwable instanceof RuntimeException && throwable.getMessage().equals("Database error"))
+                .verify();
+
+        verify(prescriptionRepository).save(prescription);
+    }
+
+    @Test
+    void testDeletePrescriptionErrorHandling() {
+        when(prescriptionRepository.deleteById("12345")).thenReturn(Mono.error(new RuntimeException("Database error")));
+
+        Mono<Void> result = prescriptionService.deletePrescription("12345");
+
+        StepVerifier.create(result)
+                .expectErrorMatches(throwable -> throwable instanceof RuntimeException && throwable.getMessage().equals("Database error"))
+                .verify();
+
+        verify(prescriptionRepository).deleteById("12345");
+    }
+
+    @Test
+    void testGetPrescriptionsByProfileIdErrorHandling() {
+        String profileId = "testProfileId";
+        when(prescriptionRepository.findByProfileId(profileId)).thenReturn(Flux.error(new RuntimeException("Database error")));
+
+        Flux<Prescription> result = prescriptionService.getPrescriptionsByProfileId(profileId);
+
+        StepVerifier.create(result)
+                .expectErrorMatches(throwable -> throwable instanceof RuntimeException && throwable.getMessage().equals("Database error"))
+                .verify();
+
+        verify(prescriptionRepository).findByProfileId(profileId);
+    }
+
 }
 
 

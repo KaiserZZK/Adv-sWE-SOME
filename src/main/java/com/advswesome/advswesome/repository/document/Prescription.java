@@ -3,7 +3,6 @@ package com.advswesome.advswesome.repository.document;
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
 
-import java.util.Objects;
 
 @Document(collectionName = "prescriptions")
 public class Prescription {
@@ -73,16 +72,4 @@ public class Prescription {
         this.profileId = profile_id;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Prescription that = (Prescription) o;
-        return refills == that.refills && quantity == that.quantity && Objects.equals(prescriptionId, that.prescriptionId) && Objects.equals(profileId, that.profileId) && Objects.equals(rx_number, that.rx_number) && Objects.equals(rx_provider, that.rx_provider) && Objects.equals(rx_name, that.rx_name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(prescriptionId, profileId, rx_number, rx_provider, rx_name, refills, quantity);
-    }
 }

@@ -78,14 +78,6 @@ public class ProfileController {
         @RequestBody Profile profile)
     {
         // TODO: updated the dates??
-//        return profileService.getProfileById(profileId)
-//                .flatMap(existing -> {
-//                    profile.setProfileId(profileId);
-//                    return profileService.updateProfile(profile);
-//                })
-//                .map(ResponseEntity::ok)
-//                .defaultIfEmpty(ResponseEntity.notFound().build())
-//                .block();
         return profileService.getProfileById(profileId)
                 .flatMap(existingProfile -> {
                     if (existingProfile != null && existingProfile.getUserId().equals(principal.getUserId())) {
@@ -96,6 +88,7 @@ public class ProfileController {
                     }
                 })
                 .map(ResponseEntity::ok)
+                .onErrorReturn(ResponseEntity.status(HttpStatus.FORBIDDEN).build())
                 .defaultIfEmpty(ResponseEntity.notFound().build())
                 .block();
     }
@@ -105,9 +98,6 @@ public class ProfileController {
         @AuthenticationPrincipal UserPrincipal principal,
         @PathVariable String profileId
     ) {
-//        Mono<Void> profileMono = profileService.deleteProfile(profileId);
-//        var deletedProfile = profileMono.block();
-//        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(deletedProfile);
         Profile existingProfile = profileService.getProfileById(profileId).block();
 
         if (existingProfile != null && existingProfile.getUserId().equals(principal.getUserId())) {

@@ -42,6 +42,8 @@ public class UserControllerTest {
         mockUser.setEmail("123@122.com");
         mockUser.setClientId("1");
 
+        when(userService.isEmailOrUsernameTaken("123@122.com", "123")).thenReturn(false);
+
         when(userService.createUser(any(User.class))).thenReturn(Mono.just(mockUser));
 
         webTestClient.post()
@@ -55,4 +57,24 @@ public class UserControllerTest {
                 .jsonPath("$.email").isEqualTo("123@122.com")
                 .jsonPath("$.clientId").isEqualTo("1");
     }
+    @Test
+    void createUser_EmailTaken() {
+        User mockUser = new User();
+        mockUser.setEmail("123@122.com");
+        mockUser.setUsername("123");
+        mockUser.setClientId("1");
+
+        // Ensure that this mock returns true for the specific email and username
+        when(userService.isEmailOrUsernameTaken("123@122.com", "123")).thenReturn(true);
+
+        webTestClient.post()
+                .uri("/users/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(mockUser)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .isEmpty(); // Expecting an empty body as Mono.empty() should be returned
+    }
+
 }
