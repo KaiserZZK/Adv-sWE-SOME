@@ -16,7 +16,7 @@ import java.util.Arrays;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserServiceTest {
+class UserServiceTest {
 
     @InjectMocks
     private UserService userService;
@@ -33,7 +33,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void createUserTest() {
+    void createUserTest() {
         User user = new User("userId", "clientId", "test@example.com", "username", "password", null, "createdAt", "updatedAt");
         Client client = new Client();
         client.setClientId("clientId");
@@ -52,7 +52,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void createUserRoleUserTest() {
+    void createUserRoleUserTest() {
         User user = new User("userId", "clientId", "test@example.com", "username", "password", null, "createdAt", "updatedAt");
         Client client = new Client();
         client.setClientId("clientId");
@@ -72,7 +72,7 @@ public class UserServiceTest {
 
 
     @Test
-    public void getUserByIdTest() {
+    void getUserByIdTest() {
         String userId = "testId";
         User user = new User(userId, "clientId", "test@example.com", "username", "password", null, "createdAt", "updatedAt");
 
@@ -87,7 +87,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void isEmailOrUsernameTakenTest() {
+    void isEmailOrUsernameTakenTest() {
         String userId = "testId";
         User user = new User(userId, "clientId", "test@example.com", "username", "password", null, "createdAt", "updatedAt");
         Iterable<User> users = Arrays.asList(user);
@@ -99,7 +99,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getUserByEmailTest() {
+    void getUserByEmailTest() {
         String email = "test@example.com";
         User user = new User("userId", "clientId", email, "username", "password", null, "createdAt", "updatedAt");
         Iterable<User> users = Arrays.asList(user);
@@ -115,7 +115,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void removeAllUsersTest() {
+    void removeAllUsersTest() {
         when(userRepository.deleteAll()).thenReturn(Mono.empty());
 
         userService.removeAllUsers().block();
@@ -124,7 +124,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getRoleFromClientWithUnknownTypeTest() {
+    void getRoleFromClientWithUnknownTypeTest() {
         User user = new User("userId", "clientId", "test@example.com", "username", "password", null, "createdAt", "updatedAt");
         Client client = new Client();
         client.setClientId("clientId");
@@ -139,7 +139,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getUserByEmailNotFoundTest() {
+    void getUserByEmailNotFoundTest() {
         when(userRepository.findAll()).thenReturn(Flux.empty());
 
         User foundUser = userService.getUserByEmail("nonexistent@example.com");
@@ -149,7 +149,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void isEmailOrUsernameTakenNotFoundTest() {
+    void isEmailOrUsernameTakenNotFoundTest() {
         when(userRepository.findAll()).thenReturn(Flux.empty());
 
         assertFalse(userService.isEmailOrUsernameTaken("nonexistent@example.com", "nonexistent"));
@@ -158,7 +158,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getUserByIdNotFoundTest() {
+    void getUserByIdNotFoundTest() {
         when(userRepository.findById(anyString())).thenReturn(Mono.empty());
 
         User foundUser = userService.getUserById("nonexistentId").block();
@@ -168,7 +168,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void isEmailOrUsernameNotTakenTest() {
+    void isEmailOrUsernameNotTakenTest() {
         String email = "test@example.com";
         String username = "username";
         User user = new User("userId", "clientId", email, "differentUsername", "password", null, "createdAt", "updatedAt");

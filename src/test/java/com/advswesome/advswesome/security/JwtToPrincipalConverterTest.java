@@ -10,10 +10,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class JwtToPrincipalConverterTest {
+class JwtToPrincipalConverterTest {
 
     @Test
-    public void testConvert() {
+    void testConvert() {
         DecodedJWT jwt = mock(DecodedJWT.class);
 
         var emailClaim = mock(com.auth0.jwt.interfaces.Claim.class);
@@ -36,7 +36,7 @@ public class JwtToPrincipalConverterTest {
     }
 
     @Test
-    public void testConvert_WithNullClaim() {
+    void testConvert_WithNullClaim() {
         // Create a mock DecodedJWT
         DecodedJWT jwt = Mockito.mock(DecodedJWT.class);
 

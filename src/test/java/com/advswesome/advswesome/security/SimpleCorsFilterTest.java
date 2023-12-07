@@ -11,9 +11,9 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class SimpleCorsFilterTest {
+class SimpleCorsFilterTest {
     @Test
-    public void testDoFilter() throws IOException, ServletException {
+    void testDoFilter() throws IOException, ServletException {
         // Create a SimpleCorsFilter instance
         SimpleCorsFilter corsFilter = new SimpleCorsFilter();
 
@@ -38,7 +38,7 @@ public class SimpleCorsFilterTest {
     }
 
     @Test
-    public void testDoFilterNonOptionsRequest() throws IOException, ServletException {
+    void testDoFilterNonOptionsRequest() throws IOException, ServletException {
         // Create a SimpleCorsFilter instance
         SimpleCorsFilter corsFilter = new SimpleCorsFilter();
 

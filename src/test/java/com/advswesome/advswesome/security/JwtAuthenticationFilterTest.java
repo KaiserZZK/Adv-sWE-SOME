@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
 
-public class JwtAuthenticationFilterTest {
+class JwtAuthenticationFilterTest {
 
     @Mock
     private JwtDecoder jwtDecoder;
@@ -40,7 +40,7 @@ public class JwtAuthenticationFilterTest {
     }
 
     @Test
-    public void testDoFilterInternal_SuccessfulAuthentication() throws IOException, ServletException {
+    void testDoFilterInternal_SuccessfulAuthentication() throws IOException, ServletException {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain filterChain = mock(FilterChain.class);
@@ -60,7 +60,7 @@ public class JwtAuthenticationFilterTest {
     }
 
     @Test
-    public void testDoFilterInternal_AuthenticationFailure() throws IOException, ServletException {
+    void testDoFilterInternal_AuthenticationFailure() throws IOException, ServletException {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain filterChain = mock(FilterChain.class);
@@ -79,7 +79,7 @@ public class JwtAuthenticationFilterTest {
     }
 
     @Test
-    public void testDoFilterInternal_EmptyToken() throws IOException, ServletException {
+    void testDoFilterInternal_EmptyToken() throws IOException, ServletException {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain filterChain = mock(FilterChain.class);
@@ -95,7 +95,7 @@ public class JwtAuthenticationFilterTest {
     }
 
     @Test
-    public void testDoFilterInternal_UnexpectedException() throws IOException, ServletException {
+    void testDoFilterInternal_UnexpectedException() throws IOException, ServletException {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain filterChain = mock(FilterChain.class);
@@ -114,7 +114,7 @@ public class JwtAuthenticationFilterTest {
     }
 
     @Test
-    public void testDoFilterInternal_Invalid_No_Bearer() throws IOException, ServletException {
+    void testDoFilterInternal_Invalid_No_Bearer() throws IOException, ServletException {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain filterChain = mock(FilterChain.class);
