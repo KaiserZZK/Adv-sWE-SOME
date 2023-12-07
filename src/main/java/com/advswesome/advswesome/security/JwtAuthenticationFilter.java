@@ -30,14 +30,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     try {
                         return jwtDecoder.decode(arg0);
                     } catch (JWTVerificationException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
                     } catch (IllegalArgumentException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
                     } catch (UnsupportedEncodingException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
                     }
                     return null;
                 })
