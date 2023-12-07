@@ -77,4 +77,35 @@ public class UserControllerTest {
                 .isEmpty(); // Expecting an empty body as Mono.empty() should be returned
     }
 
+    @Test
+    void getUserByIdTest() {
+        String userId = "123";
+        User mockUser = new User();
+        mockUser.setUserId(userId);
+        mockUser.setEmail("123@122.com");
+        mockUser.setClientId("1");
+
+        when(userService.getUserById(userId)).thenReturn(Mono.just(mockUser));
+
+        webTestClient.get()
+                .uri("/users/" + userId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.userId").isEqualTo(userId)
+                .jsonPath("$.email").isEqualTo("123@122.com")
+                .jsonPath("$.clientId").isEqualTo("1");
+    }
+
+    @Test
+    void removeAllUsersTest() {
+        when(userService.removeAllUsers()).thenReturn(Mono.empty());
+
+        webTestClient.get()
+                .uri("/users/admin/test/clear")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody().isEmpty();
+    }
+
 }

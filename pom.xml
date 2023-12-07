@@ -201,6 +201,10 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.11</version>
+				<configuration>
+					<!-- Rest of your configuration, if any -->
+					<formats>HTML</formats>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>

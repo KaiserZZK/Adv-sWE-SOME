@@ -148,4 +148,28 @@ public class ConsentControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    @WithMockUser
+    void testGetConsentByUserId() throws Exception {
+        String userId = "user123";
+        Consent mockConsent = new Consent("123", "User1", "A2", true, new Date());
+        when(consentService.getConsentByUserId(userId)).thenReturn(Mono.just(mockConsent));
+
+        mockMvc.perform(get("/consents/user/" + userId))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(mockConsent)));
+    }
+
+    @Test
+    @WithMockUser
+    void testGetConsentByProfileId() throws Exception {
+        String profileId = "profile123";
+        Consent mockConsent = new Consent("123", "User1", "A2", true, new Date());
+        when(consentService.getConsentByProfileId(profileId)).thenReturn(Mono.just(mockConsent));
+
+        mockMvc.perform(get("/consents/profile/" + profileId))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(mockConsent)));
+    }
+
 }

@@ -40,16 +40,17 @@ public class AnalyticController {
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable String profileId) {
 
-        // TODO: get prescription info
         Flux<Prescription> prescriptionsFlux = prescriptionService.getPrescriptionsByProfileId(profileId);
         List<Prescription> prescriptionsList = prescriptionsFlux.collectList().block();
 
         Mono<Profile> profileMono = profileService.getProfileById(profileId);
         Profile foundProfile  = profileMono.block();
 
+        if (foundProfile == null) {
+            return ResponseEntity.notFound().build();
+        }
 
 
-        // TODO: generate prompt
         String prompt = "I am a " + foundProfile.getAge() + " yo " + foundProfile.getSex() + ", living in " + foundProfile.getLocation() +
                 ", with a physical fitness level of " + foundProfile.getPhysicalFitness() + " and language preference of " + foundProfile.getLanguagePreference() +
                 ". My medical history includes: ";
@@ -73,15 +74,7 @@ public class AnalyticController {
                 "}";
 
 
-//        String prompt = "I am a 46 yo male, 140 pounds, currently taking omeprazole. Give me three health advices. Make the response in a json list where each item is an advice like {" +
-//                "  advice_1: xxxx.," +
-//                "  advice_2: xxxx.," +
-//                "  advice_3: xxxx." +
-//                "}";
-//        String prompt = "I am a 46 yo male, 140 pounds, currently taking omeprazole. Give me three health advices. Make the response in a json list";
-
         return ResponseEntity.ok(analyticService.getHealthAdvice(prompt));
-//        return ResponseEntity.ok("123");
     }
 
 

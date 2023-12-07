@@ -16,7 +16,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.fail;
@@ -85,6 +84,21 @@ class AnalyticControllerTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class).isEqualTo("mocked advice");
+    }
+
+
+    @Test
+    void getHealthAdvice_Fail() {
+        String profileId = "123";
+
+        when(profileService.getProfileById(profileId)).thenReturn(Mono.empty());
+        when(prescriptionService.getPrescriptionsByProfileId(profileId)).thenReturn(Flux.empty());
+        when(analyticService.getHealthAdvice(any(String.class))).thenReturn("mocked advice");
+
+        webTestClient.get()
+                .uri("/analytics/" + profileId)
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
 }

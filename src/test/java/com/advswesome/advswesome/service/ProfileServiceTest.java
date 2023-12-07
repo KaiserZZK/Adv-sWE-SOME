@@ -11,7 +11,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -55,6 +57,14 @@ class ProfileServiceTest {
         Profile profile = new Profile();
         profile.setProfileId("3959");
         profile.setAge(25);
+        Profile.MedicalHistory hist = new Profile.MedicalHistory();
+        hist.setDiseaseName("dd");
+        hist.setDiagnosedAt("123");
+        hist.setTreatment("none");
+        List<Profile.MedicalHistory> ml= new ArrayList<>();
+        ml.add(hist);
+
+        profile.setMedicalHistory(ml);
 
         when(profileRepository.findById("3959")).thenReturn(Mono.just(profile));
 
