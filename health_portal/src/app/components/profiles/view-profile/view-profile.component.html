@@ -1,4 +1,4 @@
-<h2>Profile Details</h2> 
+<h2>Profile Details</h2>
 
 <hr/>
 <div *ngIf="profile">
@@ -6,7 +6,7 @@
     <label><b>Age: </b></label> {{profile.age}}
   </div>
   <div>
-    <label><b>Last Name: </b></label> {{profile.sex}}
+    <label><b>Sex: </b></label> {{profile.sex}}
   </div>
   <div>
     <label><b>Location: </b></label> {{profile.location}}
@@ -16,13 +16,13 @@
   </div>
   <div>
     <label><b>Language Preference: </b></label> {{profile.languagePreference}}
-  </div>  
+  </div>
 </div>
 
 
 <!-- Add a table for medical histories -->
 <table *ngIf="profile.medicalHistory && profile.medicalHistory.length > 0" border="1">
-    <caption><b>Medical Histories</b></caption>
+    <caption><b>Medical History</b></caption>
     <thead>
       <tr>
         <th>Disease Name</th>

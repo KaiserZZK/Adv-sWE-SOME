@@ -23,7 +23,7 @@ export class CreateProfileComponent {
     private profileService: ProfileService,
     private router: Router,
     private fb: FormBuilder
-  ) { 
+  ) {
     this.medicalHistoryForm = this.fb.group({
       tableRows: this.fb.array([],[Validators.required])
     });
@@ -38,7 +38,7 @@ export class CreateProfileComponent {
     return this.fb.group({
       diseaseName: ['',[Validators.required]],
       diagnosedAt: ['',[Validators.required]],
-      treatment:[''],
+      treatment:['',[Validators.required]],
     });
   }
 
@@ -58,7 +58,7 @@ export class CreateProfileComponent {
   }
 
   save() {
-    this.profile.userId = this.userId; 
+    this.profile.userId = this.userId;
     this.profile.medicalHistory = this.medicalHistoryForm.value.tableRows;
     console.log(this.medicalHistoryForm.value)
     this.profileService.createProfile(this.profile)
@@ -80,7 +80,7 @@ export class CreateProfileComponent {
   onSubmit() {
     this.submitted = true;
     console.log(this.list);
-    this.save();    
+    this.save();
   }
 
   gotoList() {

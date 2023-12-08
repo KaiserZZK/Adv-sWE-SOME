@@ -19,24 +19,25 @@ import { UpdateConsentComponent } from "./components/consent/update-consent/upda
 import { ShowConsentComponent } from "./components/consent/show-consent/show-consent.component";
 
 import { HealthAdviceComponent } from './components/analytics/health-advice/health-advice.component';
+import { AuthGuard } from "./auth/auth.guard";
 
 
 const routes: Routes = [
   { path: 'signup',         component: SignupComponent        },
   { path: 'login',          component: LoginComponent         },
-  { path: 'dashboard',      component: DashboardComponent     },
-  { path: 'list-profiles',  component: ListProfilesComponent  },
-  { path: 'create-profile', component: CreateProfileComponent },
-  { path: 'view-profile/:profileId',    component: ViewProfileComponent   },
-  { path: 'update-profile/:profileId',  component: UpdateProfileComponent },
-  { path: 'list-prescription/:profileId',   component: ListPrescriptionComponent    },
-  { path: 'create-prescription/:profileId', component: CreatePrescriptionComponent  },
-  { path: 'view-prescription/:profileId/:prescriptionId',    component: ViewPrescriptionComponent   },
-  { path: 'update-prescription/:profileId/:prescriptionId',  component: UpdatePrescriptionComponent },
-  { path: 'health-advice/:profileId',   component: HealthAdviceComponent  },
-  { path: 'create-consent',      component: CreateConsentComponent      },
-  { path: 'update-consent',      component: UpdateConsentComponent      },
-  { path: 'show-consent',        component: ShowConsentComponent        }
+  { path: 'dashboard',      component: DashboardComponent, canActivate: [AuthGuard]     },
+  { path: 'list-profiles',  component: ListProfilesComponent, canActivate: [AuthGuard]  },
+  { path: 'create-profile', component: CreateProfileComponent, canActivate: [AuthGuard] },
+  { path: 'view-profile/:profileId',    component: ViewProfileComponent, canActivate: [AuthGuard]   },
+  { path: 'update-profile/:profileId',  component: UpdateProfileComponent, canActivate: [AuthGuard] },
+  { path: 'list-prescription/:profileId',   component: ListPrescriptionComponent, canActivate: [AuthGuard]    },
+  { path: 'create-prescription/:profileId', component: CreatePrescriptionComponent, canActivate: [AuthGuard]  },
+  { path: 'view-prescription/:profileId/:prescriptionId',    component: ViewPrescriptionComponent, canActivate: [AuthGuard]   },
+  { path: 'update-prescription/:profileId/:prescriptionId',  component: UpdatePrescriptionComponent, canActivate: [AuthGuard] },
+  { path: 'health-advice/:profileId',   component: HealthAdviceComponent, canActivate: [AuthGuard]  },
+  { path: 'create-consent',      component: CreateConsentComponent, canActivate: [AuthGuard]        },
+  { path: 'update-consent',      component: UpdateConsentComponent, canActivate: [AuthGuard]        },
+  { path: 'show-consent',        component: ShowConsentComponent, canActivate: [AuthGuard]          }
 ];
 
 @NgModule({

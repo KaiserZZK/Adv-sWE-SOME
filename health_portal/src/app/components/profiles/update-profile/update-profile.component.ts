@@ -24,7 +24,7 @@ export class UpdateProfileComponent {
     private profileService: ProfileService,
     private router: Router,
     private fb: FormBuilder
-  ) { 
+  ) {
     this.medicalHistoryForm = this.fb.group({
       tableRows: this.fb.array([],[Validators.required])
     });
@@ -50,7 +50,7 @@ export class UpdateProfileComponent {
     return this.fb.group({
       diseaseName: [medicalHistory ? medicalHistory.diseaseName : '',[Validators.required]],
       diagnosedAt: [medicalHistory ? medicalHistory.diagnosedAt : '',[Validators.required]],
-      treatment:[medicalHistory ? medicalHistory.treatment : ''],
+      treatment:[medicalHistory ? medicalHistory.treatment : '',[Validators.required]],
     });
   }
 
@@ -70,7 +70,7 @@ export class UpdateProfileComponent {
   }
 
   save() {
-    this.profile.userId = this.userId; 
+    this.profile.userId = this.userId;
     this.profile.medicalHistory = this.medicalHistoryForm.value.tableRows;
     console.log(this.medicalHistoryForm.value)
     this.profileService.createProfile(this.profile)
@@ -92,7 +92,7 @@ export class UpdateProfileComponent {
   onSubmit() {
     this.submitted = true;
     console.log(this.list);
-    this.save();    
+    this.save();
   }
 
   gotoList() {

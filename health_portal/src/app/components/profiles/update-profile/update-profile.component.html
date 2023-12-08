@@ -19,7 +19,7 @@
             <ng-container formArrayName="tableRows" *ngFor="let group of getFormControls.controls; let i=index">
               <tr [formGroupName]="i">
                 <td>
-                  <input type="text" class="form-control" formControlName="diseaseName" placeholder="Enter First" [value]="getFormControls.controls[i].get('diseaseName').value">
+                  <input type="text" class="form-control" formControlName="diseaseName" [value]="getFormControls.controls[i].get('diseaseName').value">
                   <div class="text-danger" *ngIf="getFormControls.controls[i].get('diseaseName')?.touched">
                     <span *ngIf="getFormControls.controls[i].get('diseaseName')?.errors?.['required']">Required</span>
                     <span *ngIf="getFormControls.controls[i].get('diseaseName')?.errors?.['minlength']">3 Chars
@@ -27,15 +27,15 @@
                   </div>
                 </td>
                 <td>
-                  <input type="text" class="form-control" formControlName="diagnosedAt" placeholder="Enter Last">
+                  <input type="text" class="form-control" formControlName="diagnosedAt">
                   <div class="text-danger" *ngIf="getFormControls.controls[i].get('diagnosedAt')?.touched">
                     <span *ngIf="getFormControls.controls[i].get('diagnosedAt')?.errors?.['required']">Required</span>
                   </div>
                 </td>
                 <td>
-                    <input type="text" class="form-control" formControlName="treatment" placeholder="Enter Last">
+                    <input type="text" class="form-control" formControlName="treatment">
                     <div class="text-danger" *ngIf="getFormControls.controls[i].get('treatment')?.touched">
-                        <span *ngIf="getFormControls.controls[i].get('treatment')?.errors?.['required']">Required</span>
+                      <span *ngIf="getFormControls.controls[i].get('treatment')?.errors?.['required']">Required</span>
                     </div>
                 </td>
                 <td>
@@ -44,7 +44,7 @@
               </tr>
             </ng-container>
           </tbody>
-        
+
         <div>
         <label for="age">Age</label>
         <input type="number" class="form-control" id="age" required [(ngModel)]="profile.age" name="age">
@@ -69,6 +69,8 @@
             <label for="languagePreference">Primary Language Preference</label>
             <input type="text" class="form-control" id="languagePreference" required [(ngModel)]="profile.languagePreference" name="languagePreference">
         </div>
+        <br>
+
         <button type="submit" class="btn btn-success">Submit</button>
     </form>
 </div>

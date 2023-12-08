@@ -29,14 +29,17 @@ export class LoginComponent {
 
   login() {
     this.service.login(this.loginForm.value).subscribe((response) => {
-      console.log(response);
-      if (response.token) {
+        console.log(response)
         alert("Welcome! You've been logged in :)");
         const token = response.token;
         localStorage.setItem('JWT', token);
         this.router.navigateByUrl('/dashboard');
+      },
+      (error) => {
+        console.log(error)
+        alert("Errors occurred, please check if your password and email matches");
       }
-    })
+    );
   }
-  
+
 }
