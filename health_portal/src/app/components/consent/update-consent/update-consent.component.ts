@@ -44,19 +44,22 @@ export class UpdateConsentComponent {
     consentData["userId"] = this.userId;
     consentData["profileId"] = this.profileId;
     consentData["permission"] = this.permission;
-    console.log('consent id', this.consentId);
     console.log('consent data', consentData);
-    this.ConsentService.updateConsent(this.consentId, consentData)
-      .subscribe(
-        (response) => {
-          console.log('Consent updated:', response);
-        },
-        (error) => {
-          console.error('Error updating consent:', error);
-        }
-      );
-    alert("Consent updated successfully!");
-    this.router.navigate(['/show-consent'])
+    if (this.permission === undefined) {
+      alert("Permission cannot be null.");
+    } else {
+      this.ConsentService.updateConsent(this.consentId, consentData)
+        .subscribe(
+          (response) => {
+            console.log('Consent updated:', response);
+          },
+          (error) => {
+            console.error('Error updating consent:', error);
+          }
+        );
+      alert("Consent updated successfully!");
+      this.router.navigate(['/show-consent'])
+    }
   }
 
   deleteConsent() {

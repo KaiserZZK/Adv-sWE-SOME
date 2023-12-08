@@ -11,7 +11,6 @@ import { Consent } from "../../../documents/consent";
 })
 export class CreateConsentComponent {
 
-  consent: Consent = new Consent();
   permission: boolean;
   userId: string;
   profileId: string = "1";
@@ -29,23 +28,20 @@ export class CreateConsentComponent {
   }
 
   createConsent() {
-    this.consent.consentId = this.consentId;
-    this.consent.userId = this.userId;
-    this.consent.profileId = this.profileId;
-    this.consent.permission = this.permission;
-    this.consent.updatedAt = new Date();
-    console.log('consent data', this.consent);
-    this.ConsentService.createConsent(this.consent)
-      .subscribe(
-        (response) => {
-          console.log('Consent created:', response);
-        },
-        (error) => {
-          console.error('Error creating consent:', error);
-        }
-      );
-    alert("Consent created successfully!");
-    this.router.navigate(['/show-consent'])
+    const consentData = {};
+    consentData["consentId"] = this.consentId;
+    consentData["userId"] = this.userId;
+    consentData["profileId"] = this.profileId;
+    consentData["permission"] = this.permission;
+    consentData["updatedAt"] = new Date();
+    console.log('consent data', consentData);
+    if (this.permission === undefined){
+      alert("Permission cannot be null.");
+    } else {
+      this.ConsentService.createConsent(consentData).subscribe((response) => {});
+      alert("Consent created successfully!");
+      this.router.navigate(['/show-consent'])
+    }
   }
 
 }
